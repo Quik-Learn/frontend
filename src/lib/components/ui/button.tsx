@@ -22,6 +22,8 @@ const Button = (props: ButtonType) => {
     width = '100%',
     px,
     py,
+    mx,
+    my,
     bgGradient,
     fontFamily = 'body',
     alignSelf,
@@ -54,6 +56,8 @@ const Button = (props: ButtonType) => {
       width={width}
       px={px}
       py={py}
+      mx={mx}
+      my={my}
     >
       {textProp}
     </ChakraButton>

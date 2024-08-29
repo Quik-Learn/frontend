@@ -14,6 +14,8 @@ export type ButtonType = {
   fontWeight?: number;
   px?: number;
   py?: number;
+  mx?: number;
+  my?: number;
   color?: string;
   bg?: string;
   bgHover?: string;

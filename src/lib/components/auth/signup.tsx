@@ -9,38 +9,50 @@ import {
   Text,
   Divider,
   Stack,
-  Icon,
+  IconButton,
 } from '@chakra-ui/react';
-import { TfiClose } from 'react-icons/tfi';
 
+import { MdOutlineKeyboardBackspace } from 'react-icons/md';
 import Button from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 const SignUp = () => {
+  const router = useRouter();
   return (
     <VStack
       bg="white"
-      backgroundPosition="center"
-      backgroundRepeat="no-repeat"
-      backgroundSize="cover"
-      backgroundImage="/images/background.svg"
+      //   backgroundPosition="center"
+      //   backgroundRepeat="no-repeat"
+      //   backgroundSize="cover"
+      //   backgroundImage="/images/background.svg"
     >
       <HStack justify="space-between" align="center" w="full" px={10} pt={5}>
+        <IconButton
+          icon={<MdOutlineKeyboardBackspace color="white" />}
+          aria-label="icon"
+          bg="#1F89DB"
+          borderRadius={8}
+          width="56px"
+          height="56px"
+          alignSelf="flex-start"
+          onClick={() => router.back()}
+        />
+        <Image src="/images/logo.svg" alt="logo" h={110} w={110} />
         <Text />
-        <Heading
-          fontSize={{
-            base: 20,
-            sm: 22,
-            md: 42,
-          }}
-          color="#242424"
-          fontFamily="heading"
-          fontWeight="700"
-          alignSelf="center"
-        >
-          Sign Up
-        </Heading>
-        <Icon as={TfiClose} />
       </HStack>
+      <Heading
+        fontSize={{
+          base: 20,
+          sm: 22,
+          md: 42,
+        }}
+        color="#242424"
+        fontFamily="heading"
+        fontWeight="700"
+        alignSelf="center"
+      >
+        Sign Up
+      </Heading>
       <VStack>
         <HStack>
           <Box borderRadius="10px" boxShadow="md" px={10} pb={10} width="full">
@@ -70,7 +82,12 @@ const SignUp = () => {
               </Text>
             </VStack>
             <Stack width="full" alignItems="center" marginTop={8}>
-              <Button text="Sign Up" bg="#EBDED5" width={246} color="#242424" />
+              <Button
+                text="Sign Up"
+                width={246}
+                color="#242424"
+                onClick={() => router.push('/auth/parent-signup')}
+              />
             </Stack>
           </Box>
           <Divider orientation="vertical" height={{ md: 619 }} mx={5} />
@@ -108,7 +125,12 @@ const SignUp = () => {
               </Text>
             </VStack>
             <Stack width="full" alignItems="center" marginTop={8}>
-              <Button text="Sign Up" bg="#EBDED5" width={246} color="#242424" />
+              <Button
+                text="Sign Up"
+                width={246}
+                color="#242424"
+                onClick={() => router.push('/auth/student-signup')}
+              />
             </Stack>
           </Box>
         </HStack>
@@ -123,7 +145,12 @@ const SignUp = () => {
               email us
             </Text>
           </Text>
-          <Button text="Log In" bg="#EBDED5" width={97} color="#242424" />
+          <Button
+            text="Log In"
+            width={97}
+            color="#242424"
+            onClick={() => router.push('/auth/login')}
+          />
         </HStack>
       </VStack>
     </VStack>

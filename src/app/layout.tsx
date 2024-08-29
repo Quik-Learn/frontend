@@ -35,7 +35,7 @@ export const viewport: Viewport = {
 
 const RootLayout = ({ children }: RootLayoutProps) => {
   return (
-    <html lang="en">
+    <html lang="en" style={{ fontFamily: 'heading' }}>
       <body>
         <Providers>{children}</Providers>
       </body>
