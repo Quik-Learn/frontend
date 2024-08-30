@@ -9,7 +9,7 @@ type RootLayoutProps = {
 const APP_NAME = 'quik-learn';
 
 export const metadata: Metadata = {
-  title: { default: APP_NAME, template: '%s | nextarter-chakra' },
+  title: { default: APP_NAME, template: '' },
   description: 'We share knowledge with the world',
   applicationName: APP_NAME,
   appleWebApp: {
