@@ -36,7 +36,7 @@ const TopNav = () => {
           borderWidth={1}
           borderColor="#F1F1F3"
         >
-          <InputLeftElement width="4.5rem">
+          <InputLeftElement width="3.5rem">
             <Icon as={CiSearch} />
           </InputLeftElement>
           <Input
@@ -44,7 +44,7 @@ const TopNav = () => {
             value={search}
             fontSize={14}
             borderRadius={700}
-            pl={10}
+            pl={12}
             _active={{
               border: 'none',
               outlineColor: 'transparent',

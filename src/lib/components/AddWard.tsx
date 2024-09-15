@@ -24,24 +24,31 @@ import Button from './ui/button';
 
 export const AddWard = ({ setNew }: any) => {
   return (
-    <ModalContent>
-      <ModalHeader>Add Ward</ModalHeader>
-      <ModalCloseButton />
+    <ModalContent bg={'white'} p={6}>
+      <ModalHeader
+        color={'#5F5F5F'}
+        fontSize={32}
+        fontWeight={700}
+        textAlign={'center'}
+      >
+        Add Ward
+      </ModalHeader>
+      <ModalCloseButton borderColor={'#fff'} />
       <ModalBody>
-        <Text>
+        <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
           Create a ward account or Add your already registered ward. You stay in
           control of payment and are able to track their progress.
         </Text>
       </ModalBody>
 
-      <ModalFooter>
+      <ModalFooter flexDir={'column'} gap={5}>
         <Button
-          color="#0A52A8"
+          bg="#0A52A8"
           text="Create new ward"
           onClick={() => setNew('new')}
         />
         <Button
-          color="#0A52A8"
+          bg="#0A52A8"
           text="Add already registered Ward"
           onClick={() => setNew('old')}
         />
@@ -59,10 +66,17 @@ export const NewWard = ({
 }: any) => {
   return (
     <ModalContent>
-      <ModalHeader>Create New Ward</ModalHeader>
+      <ModalHeader
+        color={'#5F5F5F'}
+        fontSize={32}
+        fontWeight={700}
+        textAlign={'center'}
+      >
+        Create New Ward
+      </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Text>
+        <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
           Form Builder is free to use. Sign up using your email address or phone
           number below to get started.
         </Text>
@@ -88,7 +102,7 @@ export const NewWard = ({
               spacing={4}
               alignItems="flex-end"
               justifyContent="space-between"
-              width="80%"
+              width="100%"
             >
               <FormControl gridColumn={{ base: 'span 2', md: 'span 2' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
@@ -140,8 +154,8 @@ export const NewWard = ({
                   borderColor="#F1F1F3"
                   fontSize={14}
                   value={values.phone}
-                  p={5}
                   color="#1D2026"
+                  w={'100%'}
                   _placeholder={{ color: '#8C94A3' }}
                   onSelect={(e) => console.log(e)}
                 >
@@ -155,13 +169,13 @@ export const NewWard = ({
                   Gender
                 </FormLabel>
                 <Select
-                  placeholder="Select"
+                  placeholder=""
                   bg="#FCFCFD"
                   borderWidth={1}
                   borderColor="#F1F1F3"
                   fontSize={14}
                   value={values.phone}
-                  p={5}
+                  w={'100%'}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
                   onSelect={(e) => console.log(e)}
@@ -216,24 +230,36 @@ export const NewWard = ({
         <Button
           text="Add"
           width={'100%'}
-          bg="##0A52A8"
+          bg="#0A52A8"
           onClick={() => successFunction()}
         />
       </ModalFooter>
     </ModalContent>
   );
 };
-export const AddRegistered = ({ value, setValue, data }: any) => {
+export const AddRegistered = ({
+  value,
+  setValue,
+  data,
+  successFunction,
+}: any) => {
   return (
     <ModalContent>
-      <ModalHeader>Add already Registered Ward</ModalHeader>
+      <ModalHeader
+        color={'#5F5F5F'}
+        fontSize={22}
+        fontWeight={700}
+        textAlign={'center'}
+      >
+        Add already Registered Ward
+      </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Text>
+        <Text color={'#5F5F5F'} fontSize={18} textAlign={'center'} mb={5}>
           Form Builder is free to use. Sign up using your email address or phone
           number below to get started.
         </Text>
-        <FormControl>
+        <FormControl mb={5}>
           <Input
             placeholder="Enter Name or email address to search"
             bg="#FCFCFD"
@@ -254,25 +280,26 @@ export const AddRegistered = ({ value, setValue, data }: any) => {
             spacing={2}
             justifyContent={'space-between'}
             alignItems={'center'}
+            gap={3}
           >
             <Avatar />
-            <VStack flex={1}>
-              <Text>{item.name}</Text>
-              <Text>{item.email}</Text>
+            <VStack flex={1} alignItems={'flex-start'}>
+              <Text fontWeight={500} fontSize={18} color={'#000000'}>
+                {item.name}
+              </Text>
+              <Text fontWeight={400} fontSize={14} color={'#BCC2CC'} mt={-2}>
+                {item.email}
+              </Text>
             </VStack>
-            <Button width={86} text="Add" />
+            <Button
+              width={86}
+              bg="#0A52A8"
+              text="Add"
+              onClick={() => successFunction()}
+            />
           </HStack>
         ))}
       </ModalBody>
-
-      <ModalFooter>
-        <Button color="#0A52A8" text="Create new ward" onClick={() => {}} />
-        <Button
-          color="#0A52A8"
-          text="Add already registered Ward"
-          onClick={() => {}}
-        />
-      </ModalFooter>
     </ModalContent>
   );
 };

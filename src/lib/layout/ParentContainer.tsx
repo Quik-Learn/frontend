@@ -7,7 +7,7 @@ const ParentContainer = ({ children }: any) => {
   return (
     <Flex minH={'100vh'}>
       <ParentNav />
-      <Box flex="1" bg="#f0f0f0">
+      <Box flex="1" bg={'#fafafa'}>
         <TopNav />
         {children}
       </Box>

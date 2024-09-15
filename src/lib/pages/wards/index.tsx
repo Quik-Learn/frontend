@@ -18,24 +18,45 @@ import {
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
 import * as yup from 'yup';
-import { AddWard, NewWard } from '~/lib/components/AddWard';
+import { AddRegistered, AddWard, NewWard } from '~/lib/components/AddWard';
 import Button from '~/lib/components/ui/button';
+import SuccessModal from '~/lib/components/ui/success-modal';
 
 import ParentContainer from '~/lib/layout/ParentContainer';
+import { useAppDispatch, useAppSelector } from '~/lib/store';
+import {
+  clearSuccess,
+  setSuccess,
+  uiState,
+} from '~/lib/store/reducers/ui-slice';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
 ];
 const oldData = [
-  { id: 1, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 2, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 3, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
+  { id: 1, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
+  { id: 2, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
+  { id: 3, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
 ];
 const Wards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const formRef = useRef(null);
+  const [successData, setSuccessData] = useState({
+    title: '',
+    description: '',
+    buttonText: '',
+  });
   const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
+  const {
+    isOpen: isOpenn,
+    onOpen: onOpenn,
+    onClose: onClosee,
+  } = useDisclosure();
+  const dispatch = useAppDispatch();
+  const {
+    isSuccess: { title, description, buttonText },
+  } = useAppSelector(uiState);
+
   const [value, setValue] = useState('');
   const signInSchema = yup.object().shape({
     first_name: yup.string().required('Please confirm password'),
@@ -76,13 +97,7 @@ const Wards = () => {
           </VStack>
         </VStack>
       ) : (
-        <Grid
-          templateColumns="repeat(3, 1fr)"
-          bg={'#f0f0f0'}
-          gap={6}
-          my={6}
-          px={6}
-        >
+        <Grid templateColumns="repeat(3, 1fr)" gap={6} my={6} px={6}>
           {/* Welcome Section */}
           <GridItem
             colSpan={[3, 2, 1]}
@@ -92,7 +107,10 @@ const Wards = () => {
             borderRadius={29}
             boxShadow={'base'}
             display={'flex'}
-            onClick={onOpen}
+            onClick={() => {
+              setNew('');
+              onOpen();
+            }}
             flexDirection={'column'}
             justifyContent={'space-around'}
             padding={5}
@@ -150,25 +168,46 @@ const Wards = () => {
             signInSchema={signInSchema}
             formRef={formRef}
             successFunction={() => {
-              setSuccess(true);
               setNew('');
               onClose();
+
+              setSuccessData({
+                title: 'Successful!',
+                description:
+                  'An email as been sent to ward with his login details',
+                buttonText: 'Close',
+              });
+              onOpenn();
             }}
           />
         ) : null}
         {neww === 'old' ? (
-          <NewWard
+          <AddRegistered
             value={value}
             setValue={setValue}
             data={oldData}
             successFunction={() => {
-              setSuccess(true);
               setNew('');
               onClose();
+
+              setSuccessData({
+                title: 'Successful!',
+                description:
+                  'An email as been sent to ward with his login details',
+                buttonText: 'Close',
+              });
+              onOpenn();
             }}
           />
         ) : null}
       </Modal>
+      <SuccessModal
+        onClose={onClosee}
+        isOpen={isOpenn}
+        title={successData?.title}
+        description={successData?.description}
+        buttonText={successData?.buttonText}
+      />
     </ParentContainer>
   );
 };

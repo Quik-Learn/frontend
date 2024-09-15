@@ -1,0 +1,324 @@
+'use client';
+
+import {
+  Grid,
+  GridItem,
+  Image,
+  Stack,
+  Text,
+  VStack,
+  useDisclosure,
+  HStack,
+  FormControl,
+  Input,
+  InputGroup,
+  InputRightElement,
+  Select,
+  SimpleGrid,
+  Box,
+  Heading,
+  Icon,
+  Tooltip,
+  List,
+  ListItem,
+  ListIcon,
+  Button as ChakraButton,
+  IconButton,
+} from '@chakra-ui/react';
+import { useRef, useState } from 'react';
+import { CiSearch } from 'react-icons/ci';
+import { FiClock } from 'react-icons/fi';
+import * as yup from 'yup';
+import { PiStudent } from 'react-icons/pi';
+import { LuDot } from 'react-icons/lu';
+import ParentContainer from '~/lib/layout/ParentContainer';
+import { coursesArray } from '~/lib/utils/nav';
+import {
+  MdKeyboardDoubleArrowLeft,
+  MdKeyboardDoubleArrowRight,
+} from 'react-icons/md';
+import { useRouter } from 'next/navigation';
+const data = [
+  { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
+  { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
+];
+const oldData = [
+  { id: 1, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
+  { id: 2, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
+  { id: 3, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
+];
+const Courses = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const formRef = useRef(null);
+  const router = useRouter();
+  const [neww, setNew] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [value, setValue] = useState('');
+  const signInSchema = yup.object().shape({
+    first_name: yup.string().required('Please confirm password'),
+
+    last_name: yup.string().required('Please confirm password'),
+    age: yup.string().required('Please confirm password'),
+    gender: yup.string().required('Please confirm password'),
+    email_address: yup.string().required('Please confirm password'),
+  });
+
+  const initialValues: any = {
+    first_name: '',
+    last_name: '',
+    age: '',
+    gender: '',
+    email_address: '',
+  };
+  const CourseCard = ({
+    title,
+    description,
+    imageSrc,
+    duration,
+    learners,
+    router,
+  }: any) => (
+    <Box borderRadius="md" boxShadow="md" overflow="hidden" bg="white" mb={10}>
+      <Image src={imageSrc} alt={title} w="100%" h={320} objectFit="cover" />
+      <VStack p={4} align="start" gap={4}>
+        <Heading size="md" fontWeight="medium">
+          {title}
+        </Heading>
+
+        <HStack justify="space-between" w="100%">
+          <HStack spacing={1}>
+            <Icon as={FiClock} />
+            <Text fontSize="base" color="#4D4C5C" fontWeight="semibold">
+              {duration}
+            </Text>
+          </HStack>
+          <HStack spacing={1}>
+            <Icon as={PiStudent} />
+            <Tooltip hasArrow label="Phone number" fontSize="md">
+              <Text fontSize="base" color="#4D4C5C" fontWeight="semibold">
+                {learners} Learners
+              </Text>
+            </Tooltip>
+          </HStack>
+        </HStack>
+        <Tooltip
+          hasArrow
+          bg="white"
+          label={
+            <Box
+              p={2}
+              borderRadius={12}
+              boxShadow="5px 5px 18px rgba(0, 0, 0, 0.03)"
+            >
+              <VStack p={4} align="start" gap={4}>
+                <Heading size="base" fontWeight="medium" color="black">
+                  {title}
+                </Heading>
+
+                <HStack justify="space-between" w="100%">
+                  <HStack spacing={1}>
+                    <Icon as={FiClock} />
+                    <Text fontSize="sm" color="#4D4C5C" fontWeight="semibold">
+                      {duration}
+                    </Text>
+                  </HStack>
+                  <HStack spacing={1}>
+                    <Icon as={PiStudent} />
+
+                    <Text fontSize="sm" color="#4D4C5C" fontWeight="semibold">
+                      {learners} Learners
+                    </Text>
+                  </HStack>
+                </HStack>
+                <Text fontSize="xs" color="#59595A">
+                  Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam
+                  eget elit id imperdiet{' '}
+                </Text>
+                <List spacing={3}>
+                  <ListItem fontSize="xs" color="#59595A">
+                    <ListIcon as={LuDot} color="green.500" />
+                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
+                    in velit fringilla feugiat senectus in.
+                  </ListItem>
+                  <ListItem fontSize="xs" color="#59595A">
+                    <ListIcon as={LuDot} color="green.500" />
+                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
+                    in velit fringilla feugiat senectus in.
+                  </ListItem>
+                  <ListItem fontSize="xs" color="#59595A">
+                    <ListIcon as={LuDot} color="green.500" />
+                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
+                    in velit fringilla feugiat senectus in.
+                  </ListItem>
+                </List>
+              </VStack>
+            </Box>
+          }
+          placement="top"
+          fontSize="md"
+        >
+          <ChakraButton
+            width="full"
+            bg="#C6C6C6"
+            variant="outline"
+            color="white"
+            borderRadius={10}
+            onClick={() => router.push('parent/courses/1')}
+          >
+            View Details
+          </ChakraButton>
+        </Tooltip>
+      </VStack>
+    </Box>
+  );
+
+  return (
+    <ParentContainer>
+      <HStack p={4} bg={'#fff'} borderRadius={'14px'} m={6}>
+        <Text color={'black'} fontSize={'26px'} fontWeight={500}>
+          All Courses
+        </Text>
+      </HStack>
+
+      <Grid templateColumns="repeat(4, 1fr)" w={'100%'} gap={4} m={6}>
+        <GridItem borderRadius={10} flex={1} colSpan={2}>
+          <InputGroup
+            color="#1D2026"
+            _placeholder={{ color: '#8C94A3' }}
+            bg="#F9F9F9"
+            borderRadius={10}
+            borderWidth={1}
+            borderColor="#F1F1F3"
+          >
+            <Input
+              placeholder={'Enter a course title'}
+              value={''}
+              fontSize={14}
+              borderRadius={10}
+              pl={10}
+              _active={{
+                border: 'none',
+                outlineColor: 'transparent',
+                outline: 0,
+              }}
+              _focus={{
+                border: 'none',
+                outlineColor: 'transparent',
+                outline: 0,
+              }}
+              onChange={(e) => {
+                console.log(e);
+              }}
+              border="none"
+            />
+            <InputRightElement width="4.5rem">
+              <Icon as={CiSearch} />
+            </InputRightElement>
+          </InputGroup>
+        </GridItem>{' '}
+        <GridItem borderRadius={10} flex={1} colSpan={1}>
+          <InputGroup
+            color="#1D2026"
+            _placeholder={{ color: '#8C94A3' }}
+            bg="#F9F9F9"
+            borderRadius={10}
+            borderWidth={1}
+            borderColor="#F1F1F3"
+          >
+            <Select
+              placeholder={'Search'}
+              value={'K2 - K5'}
+              fontSize={14}
+              borderRadius={10}
+              pl={10}
+              _active={{
+                border: 'none',
+                outlineColor: 'transparent',
+                outline: 0,
+              }}
+              _focus={{
+                border: 'none',
+                outlineColor: 'transparent',
+                outline: 0,
+              }}
+              onChange={(e) => console.log(e)}
+              border="none"
+            />
+          </InputGroup>
+        </GridItem>
+      </Grid>
+      <Box m={6}>
+        <Grid
+          templateColumns={{
+            base: '90vw',
+            lg: 'repeat(auto-fill, minmax(300px, 1fr))',
+          }}
+          gap={4}
+        >
+          {coursesArray.map((course, index) => (
+            <GridItem key={index}>
+              <CourseCard
+                title={course.title}
+                description={course.description}
+                imageSrc={course.imageSrc}
+                duration={course.duration}
+                learners={course.learners}
+                router={router}
+              />
+            </GridItem>
+          ))}
+        </Grid>
+      </Box>
+      <HStack
+        justify="space-between"
+        mt={8}
+        width="full"
+        flexDirection={{ base: 'column', lg: 'row' }}
+      >
+        <HStack spacing={2}>
+          <ChakraButton
+            leftIcon={<Text as="span">&larr;</Text>}
+            colorScheme="gray"
+            variant="outline"
+          >
+            Prev
+          </ChakraButton>
+
+          <ChakraButton
+            rightIcon={<Text as="span">&rarr;</Text>}
+            colorScheme="gray"
+            variant="outline"
+          >
+            Next
+          </ChakraButton>
+        </HStack>
+        <HStack spacing={2}>
+          <IconButton
+            aria-label="Previous page"
+            icon={<MdKeyboardDoubleArrowLeft />}
+            colorScheme="gray"
+            variant="ghost"
+            isDisabled
+          />
+          {Array.from({ length: 3 }).map((_, index) => (
+            <ChakraButton
+              key={index}
+              colorScheme={index === 0 ? 'blue' : 'gray'}
+              variant={index === 0 ? 'solid' : 'outline'}
+            >
+              {index + 1}
+            </ChakraButton>
+          ))}
+          <IconButton
+            aria-label="Next page"
+            icon={<MdKeyboardDoubleArrowRight />}
+            colorScheme="blue"
+            variant="ghost"
+          />
+        </HStack>
+      </HStack>
+    </ParentContainer>
+  );
+};
+
+export default Courses;

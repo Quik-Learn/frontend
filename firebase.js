@@ -1,6 +1,10 @@
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+} from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {

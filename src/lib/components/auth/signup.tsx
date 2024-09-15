@@ -132,7 +132,7 @@ const SignUp = () => {
             </Stack>
           </Box>
         </HStack>
-        <HStack justify="space-between" align="center" w="full">
+        {/* <HStack justify="space-between" align="center" w="full">
           <Text color="#666666" fontSize={13.5}>
             Need help? Call us on{' '}
             <Text as="span" color="#2C2C2C" fontWeight="semibold">
@@ -148,7 +148,7 @@ const SignUp = () => {
             width={97}
             onClick={() => router.push('/auth/login')}
           />
-        </HStack>
+        </HStack> */}
       </VStack>
     </VStack>
   );

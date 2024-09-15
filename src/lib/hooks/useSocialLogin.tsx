@@ -1,22 +1,25 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { signInWithPopup, getIdToken } from 'firebase/auth';
 import {
   authProvider,
   googleProvider,
   facebookProvider,
 } from '../../../firebase'; // Import Firebase auth and providers
+import { useLazyGetUserQuery } from '../services/user-service';
 
 const useSocialLogin = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const [trigger, { data, isLoading }] = useLazyGetUserQuery();
+
   // Middleware to redirect based on user role
   const redirectToDashboard = (role: string) => {
     if (role === 'student') {
-      router.push('/dashboard/student');
-    } else if (role === 'teacher') {
-      router.push('/dashboard/teacher');
+      router.push('/student');
+    } else if (role === 'parent') {
+      router.push('/parent');
     } else if (role === 'tutor') {
       router.push('/dashboard/tutor');
     } else {
@@ -29,6 +32,7 @@ const useSocialLogin = () => {
   const getUserRole = async (userId: string) => {
     // Fetch the user's role from your backend or Firebase Firestore
     // For now, return a dummy role
+    trigger(userId);
     const role = 'student'; // Replace with actual role fetching logic
     return role;
   };
@@ -36,7 +40,7 @@ const useSocialLogin = () => {
   const handleSocialLogin = async (provider: 'google' | 'facebook') => {
     setLoading(true);
     try {
-      let providerInstance = null;
+      let providerInstance: any = null;
       if (provider === 'google') {
         providerInstance = googleProvider;
       } else if (provider === 'facebook') {
