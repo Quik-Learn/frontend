@@ -1,0 +1,10 @@
+import type { Metadata } from 'next';
+import Forgot from '~/lib/pages/forgot';
+import Login from '~/lib/pages/login';
+import Verify from '~/lib/pages/verify';
+
+export const metadata: Metadata = {
+  title: 'Verify Email',
+};
+
+export default Verify;
