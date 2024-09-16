@@ -27,8 +27,8 @@ const Linecharts = () => {
         <YAxis />
         <Tooltip />
         <Legend align="right" verticalAlign="top" />
-        <Bar dataKey="Jacob" stackId="a" widths={30} fill="#FFC727" />
-        <Bar dataKey="Sarah" stackId="a" width={30} fill="#0065FF" />
+        <Bar dataKey="Jacob" stackId="a" barSize={10} fill="#FFC727" />
+        <Bar dataKey="Sarah" stackId="a" barSize={10} fill="#0065FF" />
       </BarChart>
     </ResponsiveContainer>
   );
