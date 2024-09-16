@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Image,
   VStack,
@@ -9,17 +11,22 @@ import {
 import React from 'react';
 import { parentNav } from '../utils/nav';
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 const ParentNav = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const path =
+    pathname.split('/').length > 2 ? pathname.split('/')[2] : 'dashboard';
+  console.log(pathname, path);
   return (
     <VStack bg="#fff" padding={{ base: 5, md: 8, lg: 10 }} width={{ lg: 261 }}>
       <Image src="./images/logo.svg" alt="logo" />
 
       <VStack mt={30} p={5}>
         {parentNav?.map((item) => (
-          <Link href={item.route} key={item.id}>
+          <Link href={item.route} key={item.id} passHref>
             <ChakraLink
-              color={'#5F5F5F'}
               display={'flex'}
               gap={10}
               bg={'white'}
@@ -38,8 +45,16 @@ const ParentNav = () => {
                 borderColor: '#0A52A8',
                 color: '#0A52A8',
               }}
+              borderColor={path === item.value ? '#0A52A8' : 'transparent'}
+              color={path === item.value ? '#0A52A8' : '#5F5F5F'}
+              borderLeftWidth={path === item.value ? '3px' : '0px'}
             >
-              <Image src={item.icon} w={6} h={6} alt="icon" />
+              <Image
+                src={path === item.value ? item.active : item.icon}
+                w={6}
+                h={6}
+                alt="icon"
+              />
 
               <Text>{item.name}</Text>
             </ChakraLink>

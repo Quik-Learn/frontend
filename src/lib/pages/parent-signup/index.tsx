@@ -27,11 +27,11 @@ import {
   Icon,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
+import * as yup from 'yup';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
-import * as yup from 'yup';
 import PasswordInput from '~/lib/components/ui/password-input';
 import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';

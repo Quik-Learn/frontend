@@ -1,21 +1,60 @@
 export const parentNav = [
-  { id: 1, name: 'Dashboard', route: '/parent', icon: '/images/dash.svg' },
+  {
+    id: 1,
+    name: 'Dashboard',
+    route: '/parent',
+    value: 'dashboard',
+    icon: '/images/dash.svg',
+    active: '/images/dash-active.svg',
+  },
   {
     id: 2,
     name: 'My Wards',
     route: '/parent/wards',
+    value: 'wards',
     icon: '/images/wards.svg',
+    active: '/images/ward-active.svg',
   },
-  { id: 3, name: 'Courses', route: 'courses', icon: '/images/course.svg' },
-  { id: 4, name: 'Payment', route: 'payment', icon: '/images/pay.svg' },
+  {
+    id: 3,
+    name: 'Courses',
+    value: 'courses',
+    route: '/parent/courses',
+    icon: '/images/course.svg',
+    active: '/images/course-active.svg',
+  },
+  {
+    id: 4,
+    name: 'Payment',
+    value: 'payment',
+    route: '/parent/payment',
+    icon: '/images/pay.svg',
+    active: '/images/pay-active.svg',
+  },
   {
     id: 5,
     name: 'Resources',
     route: 'resources',
+    value: 'resources',
     icon: '/images/resource.svg',
+    active: '/images/resource-active.svg',
   },
-  { id: 6, name: 'Support', route: 'support', icon: '/images/support.svg' },
-  { id: 7, name: 'My Account', route: 'account', icon: '/images/account.svg' },
+  {
+    id: 6,
+    name: 'Support',
+    value: 'support',
+    route: '/parent/support',
+    icon: '/images/support.svg',
+    active: '/images/support-active.svg',
+  },
+  {
+    id: 7,
+    name: 'My Account',
+    value: 'account',
+    route: '/parent/account',
+    icon: '/images/account.svg',
+    active: '/images/account-active.svg',
+  },
 ];
 export const lineData = [
   {
@@ -181,7 +220,7 @@ export const cardsData = [
       'This year, we have produced our complete guide to applying to university.',
     date: 'December 19, 2023',
     readTime: '1 min read',
-    image: '/images/guide.jpg',
+    image: '/images/source.svg',
   },
   {
     id: 2,
@@ -191,7 +230,7 @@ export const cardsData = [
       'Summer is a good time to brush up on your life skills. We point you...',
     date: 'July 22, 2022',
     readTime: '1 min read',
-    image: '/images/lifeskills.jpg',
+    image: '/images/source-2.svg',
   },
   {
     id: 3,
@@ -201,7 +240,7 @@ export const cardsData = [
       'We offer advice on activities to build your CV for 16-18 year olds.',
     date: 'July 22, 2022',
     readTime: '2 min read',
-    image: '/images/cv-building.jpg',
+    image: '/images/source-3.svg',
   },
   {
     id: 4,
@@ -211,7 +250,7 @@ export const cardsData = [
       'This year, we have produced our complete guide to applying to university.',
     date: 'December 19, 2023',
     readTime: '1 min read',
-    image: '/images/guide.jpg',
+    image: '/images/source-2.svg',
   },
   {
     id: 5,
@@ -221,7 +260,7 @@ export const cardsData = [
       'Summer is a good time to brush up on your life skills. We point you...',
     date: 'July 22, 2022',
     readTime: '1 min read',
-    image: '/images/lifeskills.jpg',
+    image: '/images/source.svg',
   },
   {
     id: 6,
@@ -231,6 +270,6 @@ export const cardsData = [
       'We offer advice on activities to build your CV for 16-18 year olds.',
     date: 'July 22, 2022',
     readTime: '2 min read',
-    image: '/images/cv-building.jpg',
+    image: '/images/source-3.svg',
   },
 ];

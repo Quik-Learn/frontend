@@ -36,8 +36,12 @@ const Resources = () => {
 
               <Box p={4}>
                 <Badge
-                  colorScheme={card.category === 'Guide' ? 'blue' : 'orange'}
+                  bg={'#FBA333'}
                   mb={2}
+                  fontSize={10}
+                  p={3}
+                  fontWeight={400}
+                  textTransform={'capitalize'}
                 >
                   {card.category}
                 </Badge>
@@ -46,20 +50,21 @@ const Resources = () => {
                   as="h3"
                   size="md"
                   mb={2}
+                  color={'#5F5F5F'}
                   _hover={{ textDecoration: 'underline' }}
                 >
                   {card.title}
                 </Heading>
 
-                <Text color="gray.600" fontSize="sm" noOfLines={2} mb={4}>
+                <Text color="#242424" fontSize="sm" noOfLines={2} mb={4}>
                   {card.description}
                 </Text>
 
-                <HStack justify="space-between">
-                  <Text fontSize="sm" color="gray.500">
+                <HStack justify="space-between" mt={10}>
+                  <Text fontSize="sm" color="#515151">
                     {card.date}
                   </Text>
-                  <Text fontSize="sm" color="gray.500">
+                  <Text fontSize="sm" color="#515151">
                     {card.readTime}
                   </Text>
                 </HStack>
