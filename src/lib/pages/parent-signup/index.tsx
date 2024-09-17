@@ -76,7 +76,7 @@ const ParentSignup = () => {
     }
   };
   return (
-    <SignupWrapper img="/images/big-parent.svg" bg="#FF8C00">
+    <SignupWrapper img="/images/big-parent.png" bg="#FF8C00">
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"

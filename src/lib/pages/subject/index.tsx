@@ -41,6 +41,7 @@ const Subject = () => {
   const [year, setYear] = useState('');
   const router = useRouter();
   const formRef = useRef<any>(null);
+  const [selected, setSelected] = useState([]);
   const signInSchema = yup.object().shape({
     first_name: yup.string().required('Please enter your firstname'),
     last_name: yup.string().required('Please enter your last name'),
@@ -101,7 +102,7 @@ const Subject = () => {
     }
   };
   return (
-    <SignupWrapper img="/images/student.svg">
+    <SignupWrapper img="/images/big-student.png" bg="#0A52A8">
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
@@ -109,7 +110,7 @@ const Subject = () => {
       >
         <Heading
           fontSize={{ base: '28px', lg: '40px' }}
-          color="#1D2026"
+          color="#fff"
           fontWeight="semibold"
           my={6}
           textAlign="center"
@@ -127,52 +128,13 @@ const Subject = () => {
           validationSchema={signInSchema}
         >
           {({ errors, setFieldValue, values }) => (
-            <SimpleGrid
-              p={4}
-              columns={{
-                sm: 3,
-                md: 3,
-                lg: 3,
-              }}
-              spacing={4}
-              alignItems="flex-end"
-              justifyContent="space-between"
-            >
-              <FormControl
-                gridColumn="span 3"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                mb={5}
-              >
+            <>
+              <FormControl mb={5}>
                 <FormLabel fontSize={14} color="#1D2026">
-                  Select a Subject of Interest
-                </FormLabel>
-
-                <Select
-                  placeholder="Select a Subject"
-                  borderWidth={1}
-                  bg="#ffffff"
-                  outline="none"
-                  size="md"
-                  borderColor="#E9EAF0"
-                  color="#1D2026"
-                  _placeholder={{ color: '#8C94A3' }}
-                >
-                  <option value="" disabled>
-                    Select option
-                  </option>
-                  <option value="option1">Option 1</option>
-                  <option value="option2">Option 2</option>
-                  <option value="option3">Option 3</option>
-                </Select>
-                <Text>{errors.first_name || ''}</Text>
-              </FormControl>
-              <FormControl gridColumn="span 3" mb={5}>
-                <FormLabel fontSize={14} color="#1D2026">
-                  Enter your address
+                  Enter your location
                 </FormLabel>
                 <Input
-                  placeholder="Enter your Address"
+                  placeholder="Enter your location"
                   bg="#ffffff"
                   borderWidth={1}
                   borderColor="#E9EAF0"
@@ -184,52 +146,125 @@ const Subject = () => {
                 />
                 <Text>{errors.last_name || ''}</Text>
               </FormControl>
-              <FormControl gridColumn="span 3" mb={5}>
+              <FormControl mb={5}>
                 <FormLabel fontSize={14} color="#1D2026">
                   Select your Date of Birth
                 </FormLabel>
-                <HStack spacing={4}>
-                  <Select
-                    placeholder="DD"
-                    borderWidth={1}
-                    borderColor="#E9EAF0"
-                    value={day}
-                    onChange={(e) => setDay(e.target.value)}
-                  >
-                    {generateDayOptions()}
-                  </Select>
-                  <Select
-                    placeholder="MM"
-                    borderWidth={1}
-                    borderColor="#E9EAF0"
-                    value={month}
-                    onChange={(e) => setMonth(e.target.value)}
-                  >
-                    {generateMonthOptions()}
-                  </Select>
-                  <Select
-                    placeholder="YYYY"
-                    borderWidth={1}
-                    borderColor="#E9EAF0"
-                    value={year}
-                    onChange={(e) => setYear(e.target.value)}
-                  >
-                    {generateYearOptions()}
-                  </Select>
-                </HStack>
-              </FormControl>
-              <Stack />
-              <Stack />
-              <Stack mt={5}>
-                <Button
-                  text="Submit"
-                  iconPosition="right"
-                  icon={<FaArrowRightLong color="white" />}
-                  width={200}
-                  onClick={() => router.push('/auth/success?type=student')}
+                <Input
+                  placeholder="Enter your date of birth"
+                  bg="#ffffff"
+                  borderWidth={1}
+                  type="date"
+                  borderColor="#E9EAF0"
+                  value={values.last_name}
+                  p={5}
+                  color="#1D2026"
+                  _placeholder={{ color: '#8C94A3' }}
+                  onChange={(e) => setFieldValue('last_name', e.target.value)}
                 />
-              </Stack>
-            </SimpleGrid>
+              </FormControl>
+              <HStack
+                flexWrap={'wrap'}
+                gap={4}
+                mb={10}
+                justifyContent={'flex-start'}
+                alignItems={'flex-start'}
+                alignSelf={'flex-start'}
+              >
+                {selected?.map((item) => (
+                  <Stack
+                    onClick={() => {}}
+                    borderWidth={1.5}
+                    bgColor={'#FBA333'}
+                    bg={'white'}
+                    px={'14px'}
+                    py={'10px'}
+                    borderRadius={20}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                  >
+                    <Text color={'#FBA333'}>{item}</Text>
+                  </Stack>
+                ))}
+              </HStack>
+              <FormControl
+                gridColumn="span 3"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                mb={5}
+              >
+                <FormLabel fontSize={14} color="#1D2026">
+                  Select 5 Subject of Interest
+                </FormLabel>
+
+                <Input
+                  placeholder="Search"
+                  bg="#ffffff"
+                  borderWidth={1}
+                  borderColor="#E9EAF0"
+                  value={values.last_name}
+                  p={5}
+                  color="#1D2026"
+                  _placeholder={{ color: '#8C94A3' }}
+                  onChange={(e) => setFieldValue('last_name', e.target.value)}
+                />
+                <Text>{errors.first_name || ''}</Text>
+              </FormControl>
+              <HStack flexWrap={'wrap'} gap={4} mb={10}>
+                {[
+                  'Mathematics',
+                  'English',
+                  'Geography',
+                  'Physics',
+                  'Chemistry',
+                  'Art and Culture',
+                  'Computer Science',
+                  'Music',
+                ]?.map((item) => (
+                  <Stack
+                    onClick={() => {
+                      if (selected.find((itemm) => itemm === item)) {
+                        const lastSelectedIndex = selected.lastIndexOf(item);
+                        const updatedSelected = [...selected];
+                        updatedSelected.splice(lastSelectedIndex, 1); // Remove the last selected item
+                        setSelected(updatedSelected);
+                      } else {
+                        setSelected((prev) => [...prev, item]);
+                      }
+                    }}
+                    borderWidth={1.5}
+                    bgColor={'#5F5F5F'}
+                    bg={
+                      selected.find((itemm) => itemm === item)
+                        ? '#0065FF'
+                        : 'white'
+                    }
+                    px={'14px'}
+                    py={'10px'}
+                    borderRadius={20}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      color={
+                        selected.find((itemm) => itemm === item)
+                          ? 'white'
+                          : '#5F5F5F'
+                      }
+                    >
+                      {item}
+                    </Text>
+                  </Stack>
+                ))}
+              </HStack>
+
+              <Button
+                text="Submit"
+                bg="#0065FF"
+                width={'100%'}
+                onClick={() => router.push('/auth/success?type=student')}
+              />
+            </>
           )}
         </Formik>
       </VStack>

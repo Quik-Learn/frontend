@@ -89,7 +89,7 @@ const StudentSignup = () => {
     }
   };
   return (
-    <SignupWrapper img="/images/big-student.svg" bg="#0A52A8">
+    <SignupWrapper img="/images/big-student.png" bg="#0A52A8">
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
