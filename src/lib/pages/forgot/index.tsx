@@ -1,11 +1,3 @@
-/* eslint-disable no-useless-escape */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @ts-nocheck
-
 'use client';
 
 import {
@@ -34,20 +26,17 @@ import {
   ModalBody,
   ModalFooter,
 } from '@chakra-ui/react';
-import Link from 'next/link';
+
 import { Formik } from 'formik';
-import { MdArrowOutward } from 'react-icons/md';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
-import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
-import { FaArrowRightLong } from 'react-icons/fa6';
+
 import * as yup from 'yup';
-import { signInWithGoogle, signInWithFacebook } from '../../services/Aurh';
+
 import Button from '~/lib/components/ui/button';
-import SignupWrapper from '~/lib/components/ui/signup-wrapper';
-import { useAuth } from '~/lib/hooks/useAuth';
-import { useLoginAccountMutation } from '~/lib/services/auth-service';
-import { useForgotHook } from '../reset/useForgot.hook';
+
+import useForgotPassword from '../reset/forgot-password';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const Forgot = () => {
@@ -59,7 +48,7 @@ const Forgot = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const { forgotPassword, isLoading } = useForgotHook(
+  const { forgotPassword, isLoading } = useForgotPassword(
     () => {},
     () => onOpen()
   );
@@ -67,27 +56,6 @@ const Forgot = () => {
   const signInSchema = yup.object().shape({
     email: yup.string().required('Please enter your email'),
   });
-  const googleLogin = async () => {
-    try {
-      await signInWithGoogle();
-
-      // setShowToast({
-      //   show: true,
-      //   status: 'success',
-      //   title: 'Google Login Successful',
-      //   desc: 'You have successfully logged in with Google.',
-      // });
-      // router.push('/auth/select-user');
-    } catch (err) {
-      setShowToast({
-        show: true,
-        status: 'error',
-        title: 'Google Login Failed',
-        desc: 'An error occurred during Google login. Please try again.',
-      });
-      console.error(err);
-    }
-  };
 
   const initialValues: any = {
     email: '',
@@ -163,9 +131,7 @@ const Forgot = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('email', e.target.value)}
                 />
-                <Text fontSize={10} color={'red'}>
-                  {errors.email || ''}
-                </Text>
+                <Text fontSize={10} color={'red'}></Text>
               </FormControl>
 
               <Stack mt={5} gridColumn={{ base: 'span 2', md: 'span 2' }}>
@@ -175,7 +141,7 @@ const Forgot = () => {
                   bg="#FF8C00"
                   isDisabled={isLoading}
                   isLoading={isLoading}
-                  onClick={handleSubmit}
+                  onClick={onOpen}
                 />
                 <Modal isOpen={isOpen} onClose={onClose} isCentered>
                   <ModalOverlay />
@@ -199,10 +165,10 @@ const Forgot = () => {
                         text="Close"
                         bg="#02659C"
                         color="#fff"
-                        mr={3}
+                        mx={3}
                         onClick={() => {
-                          // router.push('/auth/reset-password');
                           onClose();
+                          router.push('/auth/reset-password');
                         }}
                       />
                     </ModalFooter>

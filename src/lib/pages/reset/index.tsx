@@ -48,7 +48,7 @@ import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import { useAuth } from '~/lib/hooks/useAuth';
 import { useLoginAccountMutation } from '~/lib/services/auth-service';
-import { useForgotHook } from './useForgot.hook';
+import useForgotPassword from '../reset/forgot-password';
 import PasswordInput from '~/lib/components/ui/password-input';
 import { FaCheckCircle } from 'react-icons/fa';
 const Reset = () => {
@@ -59,7 +59,7 @@ const Reset = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
 
-  const { verifyPassword, isLoading } = useForgotHook(
+  const { verifyPassword, isLoading } = useForgotPassword(
     () => onOpen(),
     () => {}
   );
@@ -84,27 +84,6 @@ const Reset = () => {
     password: '',
   };
 
-  const googleLogin = async () => {
-    try {
-      await signInWithGoogle();
-
-      // setShowToast({
-      //   show: true,
-      //   status: 'success',
-      //   title: 'Google Login Successful',
-      //   desc: 'You have successfully logged in with Google.',
-      // });
-      // router.push('/auth/select-user');
-    } catch (err) {
-      setShowToast({
-        show: true,
-        status: 'error',
-        title: 'Google Login Failed',
-        desc: 'An error occurred during Google login. Please try again.',
-      });
-      console.error(err);
-    }
-  };
   const handleSubmit = () => {
     if (formRef.current) {
       formRef?.current?.handleSubmit();
@@ -189,7 +168,7 @@ const Reset = () => {
                   bg="#FF8C00"
                   isDisabled={isLoading}
                   isLoading={isLoading}
-                  onClick={handleSubmit}
+                  onClick={onOpen}
                 />
                 <Modal isOpen={isOpen} onClose={onClose} isCentered>
                   <ModalOverlay />

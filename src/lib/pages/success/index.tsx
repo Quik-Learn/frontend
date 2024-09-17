@@ -15,7 +15,12 @@ const Success = () => {
   const type = searchParams.get('type');
   return (
     <SignupWrapper
-      img={type === 'student' ? '/images/student.svg' : '/images/parent.svg'}
+      img={
+        type === 'student'
+          ? '/images/big-student.png'
+          : '/images/big-parent.png'
+      }
+      bg={type === 'student' ? '#0A52A8' : '#FF8C00'}
     >
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
@@ -29,6 +34,7 @@ const Success = () => {
           color="#59595A"
           fontSize={{ base: 20, lg: 24 }}
           textAlign="center"
+          mt={20}
         >
           We have sent you a link, visit your email and click on the link to
           verify you account!

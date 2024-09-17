@@ -74,7 +74,7 @@ const Login = () => {
     }
   };
   return (
-    <SignupWrapper img="/images/login.svg" flexDirection="row-reverse">
+    <SignupWrapper img="/images/login.png" flexDirection="row-reverse">
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
