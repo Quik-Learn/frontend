@@ -9,6 +9,7 @@ import {
   FetchArgs,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
+import { RootState } from '../store';
 
 interface CustomErr {
   data: {
@@ -19,33 +20,39 @@ interface CustomErr {
   status: number;
 }
 
-const baseUrl = 'http://backend.quiklearn.co.uk:8000/';
+const baseUrl = 'https://backend.codemunsta.co/';
 
 export const userService = createApi({
   reducerPath: 'userService',
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      // headers.set('x-api-key', 'aXA7DdqHKemWwXO5maT1hiLuWbOYTyFB');
+      const token = (getState() as RootState).app.token;
+      // console.log(token, getState());
       headers.set('Accept', 'application/json');
       headers.set('Content-Type', 'application/json');
-      // if (token) {
-      //   headers.set('Authorization', `${token}`);
-      // }
+      if (token) {
+        headers.set('Authorization', `${token}`);
+      }
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomErr, {}>,
   endpoints: (builder) => ({
     getUser: builder.query({
-      query: (body: any) => {
+      query: () => {
         return {
-          url: 'accounts/user/register/',
-          method: 'post',
-          body,
+          url: `accounts/user/`,
+        };
+      },
+    }),
+    getSubjects: builder.query({
+      query: () => {
+        return {
+          url: `subjects/get_base_subjects/`,
         };
       },
     }),
   }),
 });
 
-export const { useLazyGetUserQuery } = userService;
+export const { useLazyGetUserQuery, useGetSubjectsQuery } = userService;

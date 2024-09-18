@@ -38,35 +38,32 @@ import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import { MdArrowOutward } from 'react-icons/md';
 import Link from 'next/link';
 import { signInWithGoogle, signInWithFacebook } from '../../services/Auth';
+import useSignup from '../parent-signup/useSignup';
 const StudentSignup = () => {
   const router = useRouter();
   const formRef = useRef<any>(null);
+  const { registerAccount, isLoading } = useSignup();
   const signInSchema = yup.object().shape({
-    first_name: yup.string().required('Please enter your firstname'),
-    last_name: yup.string().required('Please enter your last name'),
+    firstname: yup.string().required('Please enter your firstname'),
+    lastname: yup.string().required('Please enter your last name'),
     phone: yup.string().required('Please enter your phone number'),
     email: yup.string().required('Please enter your email'),
-    new_password: yup
+    password: yup
       .string()
       .required('Please enter your password')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
         'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
       ),
-    confirm_password: yup
-      .string()
-      .required('Please confirm password')
-      // @ts-ignore
-      .oneOf([yup.ref('new_password'), null], 'Passwords must match'),
   });
 
   const initialValues: any = {
-    first_name: '',
-    last_name: '',
+    firstname: '',
+    lastname: '',
     phone: '',
     email: '',
-    new_password: '',
-    confirm_password: '',
+    password: '',
+    account_type: 'Student',
   };
 
   const googleLogin = async () => {
@@ -112,7 +109,7 @@ const StudentSignup = () => {
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
-            console.log(values);
+            registerAccount(values);
           }}
           validateOnChange={false}
           validateOnBlur={false}
@@ -138,14 +135,14 @@ const StudentSignup = () => {
                   placeholder="First Name"
                   bg="#ffffff"
                   borderWidth={1}
-                  value={values.first_name}
+                  value={values.firstname}
                   borderColor="#E9EAF0"
                   p={5}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onChange={(e) => setFieldValue('first_name', e.target.value)}
+                  onChange={(e) => setFieldValue('firstname', e.target.value)}
                 />
-                <Text>{errors.first_name || ''}</Text>
+                <Text>{errors.firstname || ''}</Text>
               </FormControl>
               <FormControl>
                 {/* <FormLabel color="white"> .</FormLabel> */}
@@ -154,13 +151,13 @@ const StudentSignup = () => {
                   bg="#F7F7F8"
                   borderWidth={1}
                   borderColor="#E9EAF0"
-                  value={values.last_name}
+                  value={values.lastname}
                   p={5}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onChange={(e) => setFieldValue('last_name', e.target.value)}
+                  onChange={(e) => setFieldValue('lastname', e.target.value)}
                 />
-                <Text>{errors.last_name || ''}</Text>
+                <Text>{errors.lastname || ''}</Text>
               </FormControl>
               <FormControl gridColumn={{ sm: '1', md: 'span 2' }}>
                 <FormLabel fontSize={14} color="#1D2026">
@@ -173,6 +170,7 @@ const StudentSignup = () => {
                   borderColor="#E9EAF0"
                   value={values.phone}
                   p={5}
+                  maxLength={11}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('phone', e.target.value)}
@@ -199,13 +197,11 @@ const StudentSignup = () => {
 
               <Stack gridColumn="span 2">
                 <PasswordInput
-                  value={values.new_password}
-                  onChange={(e) =>
-                    setFieldValue('new_password', e.target.value)
-                  }
+                  value={values.password}
+                  onChange={(e) => setFieldValue('password', e.target.value)}
                   label="Password"
-                  error={errors.new_password}
-                  placeholder="Re-enter Password"
+                  error={errors.password}
+                  placeholder="Enter Password"
                 />
               </Stack>
               <Checkbox
@@ -224,11 +220,12 @@ const StudentSignup = () => {
                   Privacy Policy
                 </Text>{' '}
               </Checkbox>
-              <Stack mt={5} gridColumn="span 2">
+              <Stack gridColumn="span 2">
                 <Button
                   text="Sign Up"
                   bg="#0065FF"
-                  onClick={() => router.push('/auth/subject')}
+                  isLoading={isLoading}
+                  onClick={handleSubmit}
                 />
               </Stack>
             </SimpleGrid>

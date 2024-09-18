@@ -36,36 +36,20 @@ import { FaArrowRightLong } from 'react-icons/fa6';
 import * as yup from 'yup';
 import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
+import useLoginHook from './useLogin';
 
 const Login = () => {
   const router = useRouter();
   const formRef = useRef<any>(null);
+  const { loginAccount, isLoading } = useLoginHook();
   const signInSchema = yup.object().shape({
-    first_name: yup.string().required('Please enter your firstname'),
-    last_name: yup.string().required('Please enter your last name'),
-    phone: yup.string().required('Please enter your phone number'),
     email: yup.string().required('Please enter your email'),
-    new_password: yup
-      .string()
-      .required('Please enter your password')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
-        'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
-      ),
-    confirm_password: yup
-      .string()
-      .required('Please confirm password')
-      // @ts-ignore
-      .oneOf([yup.ref('new_password'), null], 'Passwords must match'),
+    password: yup.string().required('Please enter your password'),
   });
 
   const initialValues: any = {
-    first_name: '',
-    last_name: '',
-    phone: '',
     email: '',
-    new_password: '',
-    confirm_password: '',
+    password: '',
   };
 
   const handleSubmit = () => {
@@ -80,7 +64,6 @@ const Login = () => {
         maxHeight="100vh"
         overflowY="auto"
         alignSelf={'center'}
-        w={'80%'}
       >
         <Heading
           fontSize={{ base: '28px', lg: '40px' }}
@@ -98,26 +81,15 @@ const Login = () => {
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
-            console.log(values);
+            loginAccount(values);
           }}
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={signInSchema}
         >
           {({ errors, setFieldValue, values }) => (
-            <SimpleGrid
-              p={4}
-              columns={{
-                sm: 1,
-                md: 2,
-                lg: 2,
-              }}
-              spacing={4}
-              alignItems="flex-end"
-              justifyContent="space-between"
-              width="100%"
-            >
-              <FormControl gridColumn={{ sm: '1', md: 'span 2' }}>
+            <>
+              <FormControl>
                 <FormLabel fontSize={14} color="#1D2026">
                   Email
                 </FormLabel>
@@ -135,7 +107,7 @@ const Login = () => {
                 <Text>{errors.email || ''}</Text>
               </FormControl>
 
-              <FormControl gridColumn={{ sm: '1', md: 'span 2' }}>
+              <FormControl>
                 <FormLabel fontSize={14} color="#1D2026">
                   Password
                 </FormLabel>
@@ -145,20 +117,15 @@ const Login = () => {
                   borderWidth={1}
                   type="password"
                   borderColor="#E9EAF0"
-                  value={values.new_password}
+                  value={values.password}
                   p={5}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onChange={(e) =>
-                    setFieldValue('new_password', e.target.value)
-                  }
+                  onChange={(e) => setFieldValue('password', e.target.value)}
                 />
-                <Text>{errors.new_password || ''}</Text>
+                <Text>{errors.password || ''}</Text>
               </FormControl>
-              <Stack
-                gridColumn={{ sm: '1', md: 'span 2' }}
-                alignItems={'flex-end'}
-              >
+              <Stack alignItems={'flex-end'} w={'100%'}>
                 <Link href="/auth/forgot-password">
                   <ChakraLink color={'#4C4C4D'} fontSize={14}>
                     Forgot Password?
@@ -171,17 +138,13 @@ const Login = () => {
                 mt={5}
                 flex={1}
                 color="#1D2026"
-                gridColumn={{ sm: '1', md: 'span 2' }}
+                w={'100%'}
               >
                 Remember me
               </Checkbox>
-              <Stack gridColumn={{ sm: '1', md: 'span 2' }}>
-                <Button
-                  text="Sign In"
-                  onClick={() => router.push('/auth/success?type=parent')}
-                />
-              </Stack>
-            </SimpleGrid>
+
+              <Button text="Sign In" onClick={handleSubmit} width={'100%'} />
+            </>
           )}
         </Formik>
 

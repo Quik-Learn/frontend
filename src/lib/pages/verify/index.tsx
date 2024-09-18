@@ -15,10 +15,13 @@ import {
   useRegisterAccountMutation,
   useVerifyOTPMutation,
 } from '~/lib/services/auth-service';
+import { useAppDispatch } from '~/lib/store';
+import { setToken } from '~/lib/store/reducers/token-slice';
 
 const Verify = () => {
   const router = useRouter();
   const toast = useToast();
+  const dispatch = useAppDispatch();
   const [loading, setLoading] = useState(true);
   const searchParams = useSearchParams();
   const [verifyOTP, { data, isSuccess, isLoading, isError, error }] =
@@ -30,23 +33,37 @@ const Verify = () => {
   console.log('first', token, email);
   useEffect(() => {
     if (token && email) verifyOTP({ token, email });
-  }, []);
+  }, [token, email]);
   useEffect(() => {
     if (isSuccess) {
+      toast({
+        title: 'Verified Successfully',
+        description: 'You have successfully verified your email address',
+        status: 'success',
+        duration: 9000,
+        position: 'top',
+        isClosable: true,
+      });
+      console.log(data);
+      dispatch(setToken(data?.data?.auth_token));
       if (data?.data?.user?.account_type === 'Parent') {
-        toast({
-          title: 'Verified Successfully',
-          description: 'You have successfully logged in with Facebook',
-          status: 'success',
-          duration: 9000,
-          isClosable: true,
-        });
-        router.push('/auth/login');
+        router.push('/parent');
       } else {
         router.push('/auth/subject');
       }
     }
-  }, [isSuccess, router]);
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message,
+        description: 'An error occured, try again',
+        status: 'success',
+        duration: 9000,
+        position: 'top',
+        isClosable: true,
+      });
+    }
+  }, [isSuccess, router, data?.data, isError, error]);
 
   return (
     <SignupWrapper img="/images/login.svg" bg="#FF8C00">
@@ -71,8 +88,9 @@ const Verify = () => {
               textAlign="center"
               mt={20}
             >
-              Your account has been verified successfully! You will be
-              redirected to the login page in few seconds
+              {data?.data?.user?.account_type === 'Parent'
+                ? 'Your account has been verified successfully! You will be redirected to your dashboard in a few seconds'
+                : 'Your account has been verified successfully! You will be  redirected shortly'}
             </Text>
             <Image
               src="/images/success.svg"

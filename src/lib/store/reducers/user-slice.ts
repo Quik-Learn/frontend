@@ -17,4 +17,4 @@ const userSlice = createSlice({
 const { reducer, actions } = userSlice;
 export const { setUser, clearUser } = actions;
 export default reducer;
-export const userState = (state: any) => state.user;
+export const userState = (state: any) => state.app.user;

@@ -13,6 +13,7 @@ const Success = () => {
   const searchParams = useSearchParams();
 
   const type = searchParams.get('type');
+
   return (
     <SignupWrapper
       img={

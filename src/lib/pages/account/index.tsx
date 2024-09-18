@@ -16,8 +16,10 @@ import {
 import React from 'react';
 import Button from '~/lib/components/ui/button';
 import ParentContainer from '~/lib/layout/ParentContainer';
+import useDashboardHook from '../parent/useDashboard';
 
 const Account = () => {
+  const { data, isLoading } = useDashboardHook();
   return (
     <ParentContainer>
       <VStack p={6} w={'100%'} alignItems={'flex-start'}>
@@ -49,24 +51,45 @@ const Account = () => {
           </VStack>
         </VStack>
         <Divider />
+        <HStack w={'100%'}>
+          <FormControl my={4}>
+            <FormLabel fontSize={14} color="#4C535F">
+              First name
+            </FormLabel>
+            <Input
+              placeholder="Please enter your full name"
+              bg="#EDF2F6"
+              borderWidth={1}
+              borderColor="#F1F1F3"
+              w={'100%'}
+              color="#4C535F"
+              value={data?.firstname || ''}
+              _placeholder={{ color: '#656567' }}
+              onChange={(e) => {}}
+            />
 
-        <FormControl my={4}>
-          <FormLabel fontSize={14} color="#4C535F">
-            Full name
-          </FormLabel>
-          <Input
-            placeholder="Please enter your full name"
-            bg="#EDF2F6"
-            borderWidth={1}
-            borderColor="#F1F1F3"
-            w={'100%'}
-            color="#4C535F"
-            _placeholder={{ color: '#656567' }}
-            onChange={(e) => {}}
-          />
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+          <FormControl my={4}>
+            <FormLabel fontSize={14} color="#4C535F">
+              Last name
+            </FormLabel>
+            <Input
+              placeholder="Please enter your full name"
+              bg="#EDF2F6"
+              borderWidth={1}
+              borderColor="#F1F1F3"
+              w={'100%'}
+              value={data?.lastname || ''}
+              color="#4C535F"
+              _placeholder={{ color: '#656567' }}
+              onChange={(e) => {}}
+            />
 
-          <FormErrorMessage></FormErrorMessage>
-        </FormControl>
+            <FormErrorMessage></FormErrorMessage>
+          </FormControl>
+        </HStack>
+
         <HStack w={'100%'}>
           <FormControl mb={4}>
             <FormLabel fontSize={14} color="#4C535F">
@@ -79,6 +102,7 @@ const Account = () => {
               borderColor="#F1F1F3"
               w={'100%'}
               color="#4C535F"
+              value={data?.email || ''}
               _placeholder={{ color: '#656567' }}
               onChange={(e) => {}}
             />
@@ -96,6 +120,7 @@ const Account = () => {
               borderColor="#F1F1F3"
               w={'100%'}
               color="#4C535F"
+              value={data?.email || ''}
               _placeholder={{ color: '#656567' }}
               onChange={(e) => {}}
             />
@@ -143,6 +168,7 @@ const Account = () => {
               borderWidth={1}
               borderColor="#F1F1F3"
               w={'100%'}
+              value={data?.address || ''}
               color="#4C535F"
               _placeholder={{ color: '#656567' }}
               onChange={(e) => {}}

@@ -34,7 +34,7 @@ export const parentNav = [
   {
     id: 5,
     name: 'Resources',
-    route: 'resources',
+    route: '/parent/resources',
     value: 'resources',
     icon: '/images/resource.svg',
     active: '/images/resource-active.svg',

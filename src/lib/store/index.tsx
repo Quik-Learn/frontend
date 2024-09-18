@@ -57,9 +57,9 @@ export const store: any = configureStore({
 });
 
 setupListeners(store.dispatch);
-
+export type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
-type RootState = ReturnType<typeof store.getState>;
+
 export type AppThunk<ReturnType = void> = ThunkAction<
   ReturnType,
   RootState,

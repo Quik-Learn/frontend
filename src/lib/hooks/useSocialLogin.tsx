@@ -7,14 +7,16 @@ import {
   facebookProvider,
 } from '../../../firebase'; // Import Firebase auth and providers
 import { useLazyGetUserQuery } from '../services/user-service';
+import useDashboardHook from '../pages/parent/useDashboard';
+import { useSetTypeFromSocialMutation } from '../services/auth-service';
 
 const useSocialLogin = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { data, isLoading } = useDashboardHook();
+  // const [setTypeFromSocial, { data: socialData, isLoading: isSocialLoading }] =
+  //   useSetTypeFromSocialMutation();
 
-  const [trigger, { data, isLoading }] = useLazyGetUserQuery();
-
-  // Middleware to redirect based on user role
   const redirectToDashboard = (role: string) => {
     if (role === 'student') {
       router.push('/student');
@@ -23,17 +25,12 @@ const useSocialLogin = () => {
     } else if (role === 'tutor') {
       router.push('/dashboard/tutor');
     } else {
-      router.push('/unauthorized'); // Handle unknown roles
+      router.push('/unauthorized');
     }
   };
 
-  // This is a sample function that determines the user's role
-  // You should customize this based on your actual backend or user data
   const getUserRole = async (userId: string) => {
-    // Fetch the user's role from your backend or Firebase Firestore
-    // For now, return a dummy role
-    trigger(userId);
-    const role = 'student'; // Replace with actual role fetching logic
+    const role = 'student';
     return role;
   };
 

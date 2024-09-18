@@ -15,9 +15,11 @@ import {
 import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
+import useDashboardHook from '../pages/parent/useDashboard';
 
 const TopNav = () => {
   const [search, setSearch] = useState('');
+  const { data, isLoading } = useDashboardHook();
   return (
     <HStack
       justify="space-between"
@@ -67,13 +69,18 @@ const TopNav = () => {
       />
 
       <HStack>
-        <Avatar bg={'#0065FF'} color={'#fff'} size="sm" name="Julian Doe" />
+        <Avatar
+          bg={'#0065FF'}
+          color={'#fff'}
+          size="sm"
+          name={`${data?.firstname} ${data?.lastname}`}
+        />
         <Box>
           <Text color={'#5F5F5F'} fontSize={14}>
-            Julian Doe
+            {data?.firstname} {data?.lastname}
           </Text>
           <Text fontSize={14} color="#5F5F5F" fontWeight={700}>
-            Parent
+            {data?.account_type}
           </Text>
         </Box>
       </HStack>

@@ -21,8 +21,8 @@ interface CustomErr {
 
 const baseUrl = 'https://backend.codemunsta.co/';
 
-export const authService = createApi({
-  reducerPath: 'authService',
+export const parentService = createApi({
+  reducerPath: 'parentService',
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
@@ -38,69 +38,53 @@ export const authService = createApi({
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomErr, {}>,
   endpoints: (builder) => ({
-    registerAccount: builder.mutation({
+    addWard: builder.mutation({
       query: (body: any) => {
         return {
-          url: 'accounts/user/register/',
+          url: 'accounts/parent/manage/ward/',
           method: 'post',
           body,
         };
       },
     }),
-
-    loginAccount: builder.mutation({
+    addSubjectForWard: builder.mutation({
       query: (body: any) => {
         return {
-          url: 'accounts/user/login/',
-          method: 'post',
+          url: `accounts/parent/add/interested-subjects/ward/${body.id}`,
+          method: 'put',
+          body: body.body,
+        };
+      },
+    }),
+    getAWard: builder.query({
+      query: (id) => {
+        return {
+          url: `accounts/parent/manage/ward/${id}`,
+        };
+      },
+    }),
+    editWard: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: `accounts/parent/manage/ward/${body.id}`,
+          method: 'put',
+          body: body.body,
+        };
+      },
+    }),
+    connectWard: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: `accounts/parent/manage/ward/${body.id}`,
+          method: 'patch',
           body,
         };
       },
     }),
-    verifyOTP: builder.mutation({
-      query: (body: any) => {
+    getWards: builder.query({
+      query: () => {
         return {
-          url: 'accounts/user/verify-otp/',
-          method: 'post',
-          body,
-        };
-      },
-    }),
-    onboardStudent: builder.mutation({
-      query: (body: any) => {
-        return {
-          url: 'accounts/student/onboarding/',
-          method: 'post',
-          body,
-        };
-      },
-    }),
-
-    forgotPassword: builder.mutation({
-      query: (body: any) => {
-        return {
-          url: 'accounts/user/forgot-password/',
-          method: 'post',
-          body,
-        };
-      },
-    }),
-    verifyPassword: builder.mutation({
-      query: (body: any) => {
-        return {
-          url: 'accounts/user/verify-forgot-password/',
-          method: 'post',
-          body,
-        };
-      },
-    }),
-
-    setTypeFromSocial: builder.mutation({
-      query: (body: any) => {
-        return {
-          url: 'accounts/user/set/account/type/from/social/',
-          method: 'post',
-          body,
+          url: `accounts/parent/get/wards/`,
         };
       },
     }),
@@ -108,10 +92,10 @@ export const authService = createApi({
 });
 
 export const {
-  useRegisterAccountMutation,
-  useLoginAccountMutation,
-  useOnboardStudentMutation,
-  useVerifyOTPMutation,
-  useVerifyPasswordMutation,
-  useForgotPasswordMutation,
-} = authService;
+  useAddWardMutation,
+  useAddSubjectForWardMutation,
+  useConnectWardMutation,
+  useEditWardMutation,
+  useGetAWardQuery,
+  useGetWardsQuery,
+} = parentService;

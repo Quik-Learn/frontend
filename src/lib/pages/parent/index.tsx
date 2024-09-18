@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Box,
   SimpleGrid,
@@ -10,6 +12,7 @@ import {
   Grid,
   GridItem,
   Progress,
+  useDisclosure,
 } from '@chakra-ui/react';
 
 import Button from '~/lib/components/ui/button';
@@ -17,8 +20,17 @@ import Button from '~/lib/components/ui/button';
 import { BsThreeDots } from 'react-icons/bs';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import Linecharts from '~/lib/components/Linecharts';
+import useDashboardHook from './useDashboard';
+import { useState } from 'react';
+import AddWardComponent from '~/lib/components/AddWardComponent';
+import { useRouter } from 'next/navigation';
 
 const Dashboard = () => {
+  const { data, isLoading } = useDashboardHook();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const router = useRouter();
+
+  const [neww, setNew] = useState('');
   return (
     <ParentContainer>
       <Grid
@@ -39,7 +51,9 @@ const Dashboard = () => {
             borderRadius="md"
             alignItems={'flex-start'}
           >
-            <Text fontSize="2xl">Welcome, Julian Doe!</Text>
+            <Text fontSize="2xl">
+              Welcome, {data?.firstname} {data?.lastname}!
+            </Text>
             <Text mb="4">
               Enroll your ward in Courses and find the best Tutors!
             </Text>
@@ -49,11 +63,16 @@ const Dashboard = () => {
                 fontWeight={500}
                 bg="white"
                 text="View Courses"
+                onClick={() => router?.push('/parent/courses')}
               />
               <Button
                 fontWeight={500}
                 color="#5F5F5F"
                 bg="white"
+                onClick={() => {
+                  setNew('');
+                  onOpen();
+                }}
                 text="Add a Ward"
               />
             </HStack>
@@ -179,20 +198,25 @@ const Dashboard = () => {
             spacing={5}
             p={6}
           >
-            <Avatar bg={'#0065FF'} color={'#fff'} size="lg" name="Julian Doe" />
+            <Avatar
+              bg={'#0065FF'}
+              color={'#fff'}
+              size="lg"
+              name={`${data?.firstname} ${data?.lastname}`}
+            />
 
             <Text color={'#5F5F5F'} fontSize={14}>
-              Julian Doe
+              {data?.firstname} {data?.lastname}
             </Text>
             <Text fontSize={14} color="#5F5F5F" fontWeight={700}>
-              Parent
+              {data?.account_type}
             </Text>
 
             <Text color={'#5F5F5F'} fontSize={14}>
-              julian.doe@quiklearn.com
+              {data?.email}
             </Text>
             <Text color={'#5F5F5F'} fontSize={14}>
-              +44-8995-5678-6789
+              {data?.phone}
             </Text>
           </VStack>
         </GridItem>
@@ -403,6 +427,13 @@ const Dashboard = () => {
           </VStack>
         </GridItem>
       </Grid>
+      <AddWardComponent
+        onClose={onClose}
+        onOpen={onOpen}
+        isOpen={isOpen}
+        neww={neww}
+        setNew={setNew}
+      />
     </ParentContainer>
   );
 };
