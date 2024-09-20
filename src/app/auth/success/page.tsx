@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Success from '~/lib/pages/success';
+import Success from '~/lib/pages/auth/success';
 
 export const metadata: Metadata = {
   title: 'Sign Up',

@@ -99,7 +99,7 @@ export const authService = createApi({
       query: (body: any) => {
         return {
           url: 'accounts/user/set/account/type/from/social/',
-          method: 'post',
+          method: 'patch',
           body,
         };
       },
@@ -114,4 +114,5 @@ export const {
   useVerifyOTPMutation,
   useVerifyPasswordMutation,
   useForgotPasswordMutation,
+  useSetTypeFromSocialMutation
 } = authService;

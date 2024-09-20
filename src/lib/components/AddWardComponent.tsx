@@ -110,6 +110,7 @@ const AddWardComponent = ({
     if (isSuccess) {
       setNew('');
       onClose();
+      
 
       setSuccessData({
         title: 'Successful!',
