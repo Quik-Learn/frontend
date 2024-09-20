@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
-import Forgot from '~/lib/pages/forgot';
-import Login from '~/lib/pages/login';
+import Forgot from '~/lib/pages/auth/forgot';
 
 export const metadata: Metadata = {
   title: 'Forgot Password',

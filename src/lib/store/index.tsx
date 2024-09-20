@@ -25,20 +25,24 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import tokenReducer from './reducers/token-slice';
 import userReducer from './reducers/user-slice';
 import uiReducer from './reducers/ui-slice';
+import typeReducer from './reducers/type-slice';
 import { authService } from '../services/auth-service';
 import { userService } from '../services/user-service';
+import { parentService } from '../services/parent-mutation';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['token', 'user', 'ui'],
+  whitelist: ['token', 'user', 'ui', 'type'],
 };
 
 const rootReducer = combineReducers({
   token: tokenReducer,
   user: userReducer,
   ui: uiReducer,
+  type: typeReducer,
   [authService.reducerPath]: authService.reducer,
   [userService.reducerPath]: userService.reducer,
+  [parentService.reducerPath]: parentService.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -47,13 +51,18 @@ export const store: any = configureStore({
     app: persistedReducer,
     [authService.reducerPath]: authService.reducer,
     [userService.reducerPath]: userService.reducer,
+    [parentService.reducerPath]: parentService.reducer,
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat([authService.middleware, userService.middleware]),
+    }).concat([
+      authService.middleware,
+      userService.middleware,
+      parentService.middleware,
+    ]),
 });
 
 setupListeners(store.dispatch);

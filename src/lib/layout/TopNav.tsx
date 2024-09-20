@@ -15,7 +15,7 @@ import {
 import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
-import useDashboardHook from '../pages/parent/useDashboard';
+import useDashboardHook from '../pages/parent-page/parent/useDashboard';
 
 const TopNav = () => {
   const [search, setSearch] = useState('');

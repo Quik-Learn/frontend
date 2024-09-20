@@ -26,14 +26,14 @@ export const parentService = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl,
     prepareHeaders: (headers, { getState }) => {
-      // const token = (getState() as any).app.token;
+      const token = (getState() as any).app.token;
       // console.log(token, getState());
       // headers.set('x-api-key', 'aXA7DdqHKemWwXO5maT1hiLuWbOYTyFB');
       headers.set('Accept', 'application/json');
       headers.set('Content-Type', 'application/json');
-      // if (token) {
-      //   headers.set('Authorization', `${token}`);
-      // }
+      if (token) {
+        headers.set('Authorization', `${token}`);
+      }
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomErr, {}>,
@@ -75,7 +75,7 @@ export const parentService = createApi({
     connectWard: builder.mutation({
       query: (body: any) => {
         return {
-          url: `accounts/parent/manage/ward/${body.id}`,
+          url: `accounts/parent/manage/ward/`,
           method: 'patch',
           body,
         };

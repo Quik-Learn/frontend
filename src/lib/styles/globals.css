@@ -9,3 +9,11 @@ body {
 * {
   font-family: 'Satoshi';
 }
+
+.react-calendar {
+  border: 'none';
+  background-color: aquamarine;
+}
+.tile {
+  background: #000;
+}

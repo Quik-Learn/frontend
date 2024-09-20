@@ -56,6 +56,65 @@ export const parentNav = [
     active: '/images/account-active.svg',
   },
 ];
+export const studentNav = [
+  {
+    id: 1,
+    name: 'Dashboard',
+    route: '/student',
+    value: 'dashboard',
+    icon: '/images/dash.svg',
+    active: '/images/dash-active.svg',
+  },
+  {
+    id: 2,
+    name: 'My Session',
+    route: '/student/my-sessions',
+    value: 'session',
+    icon: '/images/wards.svg',
+    active: '/images/ward-active.svg',
+  },
+  {
+    id: 3,
+    name: 'Courses',
+    value: 'courses',
+    route: '/student/courses',
+    icon: '/images/course.svg',
+    active: '/images/course-active.svg',
+  },
+  {
+    id: 5,
+    name: 'Resources',
+    route: '/student/resources',
+    value: 'resources',
+    icon: '/images/resource.svg',
+    active: '/images/resource-active.svg',
+  },
+  {
+    id: 4,
+    name: 'Progress',
+    value: 'progress',
+    route: '/student/progress',
+    icon: '/images/pay.svg',
+    active: '/images/pay-active.svg',
+  },
+
+  {
+    id: 6,
+    name: 'Support',
+    value: 'support',
+    route: '/student/support',
+    icon: '/images/support.svg',
+    active: '/images/support-active.svg',
+  },
+  {
+    id: 7,
+    name: 'My Account',
+    value: 'account',
+    route: '/student/account',
+    icon: '/images/account.svg',
+    active: '/images/account-active.svg',
+  },
+];
 export const lineData = [
   {
     name: 'Page A',
@@ -150,6 +209,29 @@ export const coursesArray = [
     title: 'Mathematics - K2 to K5 level, (Intermediate Mathematics)',
     description: 'Intermediate Mathematics',
     imageSrc: '/images/course-2.svg',
+    duration: '5 - 7 hours',
+    learners: 547,
+  },
+];
+export const sessionArray = [
+  {
+    title: 'Mathematics - K2 to K5 level, (Basic Mathematics)',
+    description: 'Basic Mathematics',
+    imageSrc: '/images/session-1.svg',
+    duration: '5 - 7 hours',
+    learners: 547,
+  },
+  {
+    title: 'Mathematics - K2 to K5 level, (Intermediate Mathematics)',
+    description: 'Intermediate Mathematics',
+    imageSrc: '/images/session-2.svg',
+    duration: '5 - 7 hours',
+    learners: 547,
+  },
+  {
+    title: 'Mathematics - K2 to K5 level, (Advanced Mathematics)',
+    description: 'Advanced Mathematics',
+    imageSrc: '/images/session-3.svg',
     duration: '5 - 7 hours',
     learners: 547,
   },

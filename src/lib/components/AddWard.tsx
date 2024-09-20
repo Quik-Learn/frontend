@@ -21,6 +21,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import Button from './ui/button';
+import PasswordInput from './ui/password-input';
 
 export const AddWard = ({ setNew }: any) => {
   return (
@@ -61,8 +62,8 @@ export const NewWard = ({
   initialValues,
   signInSchema,
   formRef,
-  setSuccess,
-  successFunction,
+  addWard,
+  isLoading,
 }: any) => {
   return (
     <ModalContent>
@@ -85,13 +86,13 @@ export const NewWard = ({
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
-            console.log('first', { ...values });
+            addWard(values);
           }}
           validateOnChange={false}
           validateOnBlur={false}
           validationSchema={signInSchema}
         >
-          {({ errors, setFieldValue, values }) => (
+          {({ errors, setFieldValue, values }: any) => (
             <SimpleGrid
               p={4}
               columns={{
@@ -120,7 +121,9 @@ export const NewWard = ({
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('firstname', e.target.value)}
                 />
-                <Text fontSize={10} color={'red'}></Text>
+                <Text fontSize={10} color={'red'}>
+                  {errors?.firstname}
+                </Text>
               </FormControl>
               <FormControl gridColumn={{ base: 'span 2', md: 'span 2' }}>
                 <FormLabel
@@ -140,10 +143,12 @@ export const NewWard = ({
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('lastname', e.target.value)}
                 />
-                <Text fontSize={10} color={'red'}></Text>
+                <Text fontSize={10} color={'red'}>
+                  {errors?.lastname}
+                </Text>
               </FormControl>
 
-              <FormControl gridColumn={{ base: 'span 3', md: 'span 3' }}>
+              {/* <FormControl gridColumn={{ base: 'span 3', md: 'span 3' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
                   Age (Level)
                 </FormLabel>
@@ -163,8 +168,8 @@ export const NewWard = ({
                   <option value="K2">K2</option>
                 </Select>
                 <Text fontSize={10} color={'red'}></Text>
-              </FormControl>
-              <FormControl gridColumn={{ base: 'span 1', md: 'span 1' }}>
+              </FormControl> */}
+              <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
                   Gender
                 </FormLabel>
@@ -174,16 +179,18 @@ export const NewWard = ({
                   borderWidth={1}
                   borderColor="#F1F1F3"
                   fontSize={14}
-                  value={values.phone}
+                  value={values.sex}
                   w={'100%'}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onSelect={(e) => console.log(e)}
+                  onChange={(e) => setFieldValue('sex', e.target.value)}
                 >
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </Select>
-                <Text fontSize={10} color={'red'}></Text>
+                <Text fontSize={10} color={'red'}>
+                  {errors?.sex || ''}
+                </Text>
               </FormControl>
               <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
@@ -213,14 +220,48 @@ export const NewWard = ({
                   borderWidth={1}
                   borderColor="#F1F1F3"
                   fontSize={14}
-                  value={values.email}
+                  value={values.address}
                   p={5}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onChange={(e) => setFieldValue('email', e.target.value)}
+                  onChange={(e) => setFieldValue('address', e.target.value)}
                 />
-                <Text fontSize={10} color={'red'}></Text>
+                <Text fontSize={10} color={'red'}>
+                  {errors?.address || ''}
+                </Text>
               </FormControl>
+              <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
+                <FormLabel fontSize={14} color="#262626" fontWeight={500}>
+                  Date Of Birth
+                </FormLabel>
+                <Input
+                  placeholder="Enter date of birth"
+                  bg="#FCFCFD"
+                  borderWidth={1}
+                  borderColor="#F1F1F3"
+                  fontSize={14}
+                  value={values.DOB}
+                  p={5}
+                  type="date"
+                  color="#1D2026"
+                  _placeholder={{ color: '#8C94A3' }}
+                  onChange={(e) => setFieldValue('DOB', e.target.value)}
+                />
+                <Text fontSize={10} color={'red'}>
+                  {errors?.DOB || ''}
+                </Text>
+              </FormControl>
+              <Stack gridColumn={{ base: 'span 4', md: 'span 4' }}>
+                <PasswordInput
+                  value={values.password}
+                  onChange={(e: any) =>
+                    setFieldValue('password', e.target.value)
+                  }
+                  label="Password"
+                  error={errors.password}
+                  placeholder="Enter Password"
+                />
+              </Stack>
             </SimpleGrid>
           )}
         </Formik>
@@ -231,7 +272,10 @@ export const NewWard = ({
           text="Add"
           width={'100%'}
           bg="#0A52A8"
-          onClick={() => successFunction()}
+          isLoading={isLoading}
+          onClick={() => {
+            formRef?.current?.handleSubmit();
+          }}
         />
       </ModalFooter>
     </ModalContent>
@@ -241,6 +285,8 @@ export const AddRegistered = ({
   value,
   setValue,
   data,
+  wards,
+  connectWard,
   successFunction,
 }: any) => {
   return (
@@ -285,17 +331,23 @@ export const AddRegistered = ({
             <Avatar />
             <VStack flex={1} alignItems={'flex-start'}>
               <Text fontWeight={500} fontSize={18} color={'#000000'}>
-                {item.name}
+                {item?.user?.firstname || item?.name}
               </Text>
               <Text fontWeight={400} fontSize={14} color={'#BCC2CC'} mt={-2}>
-                {item.email}
+                {item?.user?.email || item.email}
               </Text>
             </VStack>
             <Button
               width={86}
               bg="#0A52A8"
               text="Add"
-              onClick={() => successFunction()}
+              onClick={() => {
+                connectWard({
+                  email: item?.user?.email,
+                  firstname: item?.user?.firstname,
+                  lastname: item?.user?.lastname,
+                });
+              }}
             />
           </HStack>
         ))}

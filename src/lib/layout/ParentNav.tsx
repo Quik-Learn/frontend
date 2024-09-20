@@ -8,23 +8,36 @@ import {
   Text,
   Icon,
 } from '@chakra-ui/react';
-import React from 'react';
-import { parentNav } from '../utils/nav';
+import React, { useEffect, useState } from 'react';
+import { parentNav, studentNav } from '../utils/nav';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useAppSelector } from '../store';
+import { typeState } from '../store/reducers/type-slice';
 
 const ParentNav = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [nav, setNav] = useState<any[]>([]);
+  // const type = useAppSelector(typeState);
   const path =
     pathname.split('/').length > 2 ? pathname.split('/')[2] : 'dashboard';
+  const type = pathname.split('/')[1] || 'parent';
   console.log(pathname, path);
+  useEffect(() => {
+    if (type === 'student') {
+      setNav(studentNav);
+    } else {
+      setNav(parentNav);
+    }
+  }, [type]);
+
   return (
     <VStack bg="#fff" padding={{ base: 5, md: 8, lg: 10 }} width={{ lg: 261 }}>
       <Image src="./images/logo.svg" alt="logo" />
 
       <VStack mt={30} p={5}>
-        {parentNav?.map((item) => (
+        {nav?.map((item) => (
           <Link href={item.route} key={item.id} passHref>
             <ChakraLink
               display={'flex'}

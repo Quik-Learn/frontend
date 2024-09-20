@@ -10,16 +10,14 @@ import {
   SimpleGrid,
   Heading,
   Select,
-  Input,
   Stack,
   Icon,
   VStack,
   Link as ChakraLink,
   HStack,
   IconButton,
-  Divider,
+  useDisclosure,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import React from 'react';
 import { GiGraduateCap } from 'react-icons/gi';
 import { RiUser4Line } from 'react-icons/ri';
@@ -30,6 +28,7 @@ import {
   MdKeyboardDoubleArrowRight,
   MdKeyboardDoubleArrowLeft,
 } from 'react-icons/md';
+import BookLesson from './BookLesson';
 
 function Rating({ rating }: any) {
   return (
@@ -67,7 +66,7 @@ function Rating({ rating }: any) {
     </Box>
   );
 }
-const TutorCard = () => {
+const TutorCard = ({ onOpen }: any) => {
   return (
     <Box
       borderWidth="1px"
@@ -157,6 +156,7 @@ const TutorCard = () => {
               text="Book trial lesson"
               width={244}
               color="#121117"
+              onClick={onOpen}
             />
           </Flex>
         </VStack>
@@ -176,6 +176,7 @@ const tutors = Array(6).fill({
 });
 
 const Tutor = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <VStack>
       <SimpleGrid width="full" columns={{ base: 1, md: 4 }} spacing={4} mb={10}>
@@ -199,7 +200,7 @@ const Tutor = () => {
       >
         <SimpleGrid columns={1} spacing={4} alignSelf="flex-start">
           {tutors.map((tutor, index) => (
-            <TutorCard key={index} />
+            <TutorCard key={index} onOpen={onOpen} />
           ))}
         </SimpleGrid>
         <VStack
@@ -266,6 +267,7 @@ const Tutor = () => {
           />
         </HStack>
       </HStack>
+      <BookLesson isOpen={isOpen} onClose={onClose} />
     </VStack>
   );
 };

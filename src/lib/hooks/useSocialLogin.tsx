@@ -7,7 +7,7 @@ import {
   facebookProvider,
 } from '../../../firebase'; // Import Firebase auth and providers
 import { useLazyGetUserQuery } from '../services/user-service';
-import useDashboardHook from '../pages/parent/useDashboard';
+import useDashboardHook from '../pages/parent-page/parent/useDashboard';
 import { useSetTypeFromSocialMutation } from '../services/auth-service';
 
 const useSocialLogin = () => {
