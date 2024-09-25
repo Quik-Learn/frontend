@@ -134,7 +134,14 @@ const Events = ({ event }: any) => {
                 Please rate your experience with our Tutor below
               </Text>
               <Rating rate={4} />
-              <Text mb="8px">Additional feedback</Text>
+              <Text
+                mb="2px"
+                textAlign={'left'}
+                alignSelf={'flex-start'}
+                color={'#6B7280'}
+              >
+                Additional feedback
+              </Text>
               <Textarea
                 value={''}
                 onChange={() => {}}
