@@ -11,6 +11,7 @@ import {
   InputLeftElement,
   Icon,
   FormControl,
+  calc,
 } from '@chakra-ui/react';
 import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
@@ -28,6 +29,10 @@ const TopNav = () => {
       bg="white"
       boxShadow="sm"
       gap={17}
+      left={261}
+      width={`calc(100vw - 261px)`}
+      position={'fixed'}
+      zIndex={100}
     >
       <FormControl borderRadius={70} flex={1}>
         <InputGroup

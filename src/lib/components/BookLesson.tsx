@@ -9,12 +9,15 @@ import {
   Text,
   Stack,
   HStack,
+  Box,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import SuccessModal from './ui/success-modal';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Button from './ui/button';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { GrFormNext } from 'react-icons/gr';
 const BookLesson = ({ isOpen, onClose }: any) => {
   const {
     isOpen: isOpenn,
@@ -51,7 +54,62 @@ const BookLesson = ({ isOpen, onClose }: any) => {
               Select a Date
             </Text>
             <Stack w={'100%'} justifyContent={'center'} alignItems={'center'}>
-              <Calendar className="calender-body" />
+              <Box
+                w={'490px'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                sx={{
+                  '.react-calendar': {
+                    width: '100%',
+                    background: 'white',
+                    borderRadius: 'md',
+                    border: 'none',
+                  },
+                  '.react-calendar__navigation': {
+                    mb: 4, // Add margin to the bottom
+                    fontSize: '17px',
+                    color: '#7D8DA6',
+                  },
+                  '.react-calendar__tile': {
+                    padding: '10px',
+
+                    color: '#141736',
+                    fontSize: '13px',
+                    transition: 'background-color 0.3s',
+                    _hover: {
+                      bg: '#367BF5',
+                    },
+                  },
+                  '.react-calendar__tile--active': {
+                    bg: '#E0CAE0',
+                    color: '#141736',
+                  },
+                  '.react-calendar__tile--now': {
+                    bg: '#367BF5',
+                    color: '#141736',
+                    borderRadius: '50%',
+                  },
+                  '.react-calendar__month-view__weekdays': {
+                    color: '#141736',
+                    fontSize: '13px',
+                    textTransform: 'capitalize',
+                    borderBottom: 'none',
+                    fontWeight: '300',
+                    paddingBottom: 2,
+                    textDecoration: 'no-line',
+                  },
+                }}
+              >
+                <Calendar
+                  onChange={() => {}}
+                  value={''}
+                  selectRange
+                  prevLabel={<IoChevronBackOutline />}
+                  nextLabel={<GrFormNext />}
+                  next2Label={<GrFormNext color="white" />}
+                  prev2Label={<IoChevronBackOutline color="white" />}
+                />
+              </Box>
             </Stack>
             <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
               Select a Date

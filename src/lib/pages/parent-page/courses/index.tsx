@@ -78,96 +78,45 @@ const Courses = () => {
     learners,
     router,
   }: any) => (
-    <Box borderRadius="md" boxShadow="md" overflow="hidden" bg="white" mb={10}>
-      <Image src={imageSrc} alt={title} w="100%" h={320} objectFit="cover" />
-      <VStack p={4} align="start" gap={4}>
-        <Heading size="md" fontWeight="medium">
+    <Box
+      borderRadius="md"
+      display={'flex'}
+      boxShadow="md"
+      overflow="hidden"
+      bg="white"
+      mb={10}
+      h={176}
+      gap={5}
+      p={2}
+      onClick={() => router.push('/parent/courses/1')}
+    >
+      <Image
+        src={imageSrc}
+        alt={title}
+        w="154px"
+        h={'100%'}
+        objectFit="cover"
+      />
+      <VStack p={4} align="center" justify={'center'} gap={4} h={'100%'}>
+        <Heading fontSize={13} fontWeight="medium" color={'black'}>
           {title}
         </Heading>
 
-        <HStack justify="space-between" w="100%">
-          <HStack spacing={1}>
-            <Icon as={FiClock} />
-            <Text fontSize="base" color="#4D4C5C" fontWeight="semibold">
+        <HStack justifyContent="space-between" w={'100%'}>
+          <HStack spacing={1} justifyContent={'center'} alignItems={'center'}>
+            <Icon as={FiClock} size={'sm'} color={'#4D4C5C'} />
+            <Text fontSize={10} color="#4D4C5C" fontWeight="semibold">
               {duration}
             </Text>
           </HStack>
-          <HStack spacing={1}>
-            <Icon as={PiStudent} />
-            <Tooltip hasArrow label="Phone number" fontSize="md">
-              <Text fontSize="base" color="#4D4C5C" fontWeight="semibold">
-                {learners} Learners
-              </Text>
-            </Tooltip>
+          <HStack spacing={1} justifyContent={'center'} alignItems={'center'}>
+            <Icon as={PiStudent} color={'#4D4C5C'} />
+
+            <Text fontSize={10} color="#4D4C5C" fontWeight="semibold">
+              {learners} Students
+            </Text>
           </HStack>
         </HStack>
-        <Tooltip
-          hasArrow
-          bg="white"
-          label={
-            <Box
-              p={2}
-              borderRadius={12}
-              boxShadow="5px 5px 18px rgba(0, 0, 0, 0.03)"
-            >
-              <VStack p={4} align="start" gap={4}>
-                <Heading size="base" fontWeight="medium" color="black">
-                  {title}
-                </Heading>
-
-                <HStack justify="space-between" w="100%">
-                  <HStack spacing={1}>
-                    <Icon as={FiClock} />
-                    <Text fontSize="sm" color="#4D4C5C" fontWeight="semibold">
-                      {duration}
-                    </Text>
-                  </HStack>
-                  <HStack spacing={1}>
-                    <Icon as={PiStudent} />
-
-                    <Text fontSize="sm" color="#4D4C5C" fontWeight="semibold">
-                      {learners} Learners
-                    </Text>
-                  </HStack>
-                </HStack>
-                <Text fontSize="xs" color="#59595A">
-                  Lorem ipsum dolor sit amet consectetur. Tempus tincidunt etiam
-                  eget elit id imperdiet{' '}
-                </Text>
-                <List spacing={3}>
-                  <ListItem fontSize="xs" color="#59595A">
-                    <ListIcon as={LuDot} color="green.500" />
-                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
-                    in velit fringilla feugiat senectus in.
-                  </ListItem>
-                  <ListItem fontSize="xs" color="#59595A">
-                    <ListIcon as={LuDot} color="green.500" />
-                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
-                    in velit fringilla feugiat senectus in.
-                  </ListItem>
-                  <ListItem fontSize="xs" color="#59595A">
-                    <ListIcon as={LuDot} color="green.500" />
-                    Cras eu sit dignissim lorem nibh et. Ac cum eget habitasse
-                    in velit fringilla feugiat senectus in.
-                  </ListItem>
-                </List>
-              </VStack>
-            </Box>
-          }
-          placement="top"
-          fontSize="md"
-        >
-          <ChakraButton
-            width="full"
-            bg="#C6C6C6"
-            variant="outline"
-            color="white"
-            borderRadius={10}
-            onClick={() => router.push('parent/courses/1')}
-          >
-            View Details
-          </ChakraButton>
-        </Tooltip>
       </VStack>
     </Box>
   );
@@ -185,7 +134,7 @@ const Courses = () => {
           <InputGroup
             color="#1D2026"
             _placeholder={{ color: '#8C94A3' }}
-            bg="#F9F9F9"
+            bg="#fff"
             borderRadius={10}
             borderWidth={1}
             borderColor="#F1F1F3"
@@ -220,7 +169,7 @@ const Courses = () => {
           <InputGroup
             color="#1D2026"
             _placeholder={{ color: '#8C94A3' }}
-            bg="#F9F9F9"
+            bg="#fff"
             borderRadius={10}
             borderWidth={1}
             borderColor="#F1F1F3"
@@ -278,7 +227,7 @@ const Courses = () => {
         <HStack spacing={2}>
           <ChakraButton
             leftIcon={<Text as="span">&larr;</Text>}
-            colorScheme="gray"
+            bg="#4D4C5C"
             variant="outline"
           >
             Prev
@@ -286,7 +235,7 @@ const Courses = () => {
 
           <ChakraButton
             rightIcon={<Text as="span">&rarr;</Text>}
-            colorScheme="gray"
+            bg="#4D4C5C"
             variant="outline"
           >
             Next

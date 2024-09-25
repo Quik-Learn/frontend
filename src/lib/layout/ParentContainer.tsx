@@ -5,10 +5,10 @@ import ParentNav from './ParentNav';
 
 const ParentContainer = ({ children }: any) => {
   return (
-    <Flex minH={'100vh'} maxH={'100vh'}>
+    <Flex minH={'100vh'} maxH={'100vh'} bg={'#fafafa'} overflowY={'scroll'}>
+      <TopNav />
       <ParentNav />
-      <Box flex="1" bg={'#fafafa'}>
-        <TopNav />
+      <Box flex="1" ml={261} mt={98}>
         {children}
       </Box>
     </Flex>

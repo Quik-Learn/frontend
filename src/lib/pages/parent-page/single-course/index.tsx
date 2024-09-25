@@ -41,6 +41,7 @@ import {
 import { useRouter } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Tutor from '~/lib/components/tutor';
+import TutorParent from '~/lib/components/tutor-parent';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -78,13 +79,6 @@ const oldData = [
   },
 ];
 const SingleCourses = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formRef = useRef(null);
-  const router = useRouter();
-  const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [value, setValue] = useState('');
-
   return (
     <ParentContainer>
       <Stack alignItems={'center'}>
@@ -238,7 +232,7 @@ const SingleCourses = () => {
               </TabPanel>
 
               <TabPanel py={8}>
-                <Tutor />
+                <TutorParent />
               </TabPanel>
             </TabPanels>
           </Tabs>

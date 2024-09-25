@@ -24,6 +24,7 @@ import useDashboardHook from './useDashboard';
 import { useState } from 'react';
 import AddWardComponent from '~/lib/components/AddWardComponent';
 import { useRouter } from 'next/navigation';
+import ProgressBar from '~/lib/components/ui/progress-bar';
 
 const Dashboard = () => {
   const { data, isLoading } = useDashboardHook();
@@ -299,13 +300,11 @@ const Dashboard = () => {
                   Basic Plan
                 </Text>
                 <Box mb="2" w={'100%'}>
-                  <Progress
-                    value={true ? 70 : 30}
-                    size="lg"
-                    bg={true ? '#FFC727' : '#0065FF'}
-                    borderRadius="8px"
-                    transition="all 0.3s ease-in-out"
+                  <ProgressBar
+                    firstPercentage={'70%'}
+                    secondPercentage={'30%'}
                   />
+
                   <HStack justifyContent={'space-between'}>
                     <Text
                       fontWeight="bold"
@@ -327,12 +326,9 @@ const Dashboard = () => {
                     </Text>
                   </HStack>
 
-                  <Progress
-                    value={true ? 20 : 80}
-                    size="lg"
-                    bg={true ? '#FFC727' : '#0065FF'}
-                    borderRadius="8px"
-                    transition="all 0.3s ease-in-out"
+                  <ProgressBar
+                    firstPercentage={'20%'}
+                    secondPercentage={'80%'}
                   />
                   <HStack justifyContent={'space-between'}>
                     <Text
@@ -367,12 +363,9 @@ const Dashboard = () => {
                 </Text>
                 <Box mb="2" w={'100%'}>
                   <Text>Jacob Doe (20/30hrs)</Text>
-                  <Progress
-                    value={true ? 40 : 60}
-                    size="lg"
-                    bg={true ? '#FFC727' : '#0065FF'}
-                    borderRadius="8px"
-                    transition="all 0.3s ease-in-out"
+                  <ProgressBar
+                    firstPercentage={'40%'}
+                    secondPercentage={'60%'}
                   />
                   <HStack justifyContent={'space-between'}>
                     <Text
@@ -394,12 +387,9 @@ const Dashboard = () => {
                       (20/30hrs)
                     </Text>
                   </HStack>
-                  <Progress
-                    value={true ? 50 : 50}
-                    size="lg"
-                    bg={true ? '#FFC727' : '#0065FF'}
-                    borderRadius="8px"
-                    transition="all 0.3s ease-in-out"
+                  <ProgressBar
+                    firstPercentage={'50%'}
+                    secondPercentage={'50%'}
                   />
                   <HStack justifyContent={'space-between'}>
                     <Text

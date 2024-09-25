@@ -254,9 +254,7 @@ const SingleCourses = () => {
                 </Stack>
               </TabPanel>
 
-              <TabPanel py={8}>
-                <Tutor />
-              </TabPanel>
+              <TabPanel py={8}></TabPanel>
             </TabPanels>
           </Tabs>
         </VStack>

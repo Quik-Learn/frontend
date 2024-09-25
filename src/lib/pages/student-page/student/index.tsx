@@ -14,6 +14,7 @@ import {
   Stack,
   Link,
   IconButton,
+  css,
 } from '@chakra-ui/react';
 
 import Button from '~/lib/components/ui/button';
@@ -31,6 +32,8 @@ import 'react-calendar/dist/Calendar.css';
 import { BsBook } from 'react-icons/bs';
 import PieChartComponent from '~/lib/components/piechart';
 import { activities, events } from '~/lib/utils/data';
+import { IoChevronBackOutline } from 'react-icons/io5';
+import { GrFormNext } from 'react-icons/gr';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -230,21 +233,63 @@ const Dashboard = () => {
               </Text>
               <BsThreeDots color={'#000000'} />
             </HStack>
-            <VStack
+            <Box
               boxShadow={'base'}
               bg={'#fff'}
               borderRadius={10}
-              spacing={5}
               p={6}
+              sx={{
+                '.react-calendar': {
+                  width: '100%',
+                  background: 'white',
+                  borderRadius: 'md',
+                  border: 'none',
+                },
+                '.react-calendar__navigation': {
+                  mb: 4, // Add margin to the bottom
+                  fontSize: '17px',
+                  color: '#7D8DA6',
+                },
+                '.react-calendar__tile': {
+                  padding: '10px',
+
+                  color: '#141736',
+                  fontSize: '13px',
+                  transition: 'background-color 0.3s',
+                  _hover: {
+                    bg: '#367BF5',
+                  },
+                },
+                '.react-calendar__tile--active': {
+                  bg: '#E0CAE0',
+                  color: '#141736',
+                },
+                '.react-calendar__tile--now': {
+                  bg: '#367BF5',
+                  color: '#141736',
+                  borderRadius: '50%',
+                },
+                '.react-calendar__month-view__weekdays': {
+                  color: '#141736',
+                  fontSize: '13px',
+                  textTransform: 'capitalize',
+                  borderBottom: 'none',
+                  fontWeight: '300',
+                  paddingBottom: 2,
+                  textDecoration: 'no-line',
+                },
+              }}
             >
               <Calendar
                 onChange={onChange}
                 value={value}
                 selectRange
-                className="calender"
-                tileClassName="tile"
+                prevLabel={<IoChevronBackOutline />}
+                nextLabel={<GrFormNext />}
+                next2Label={<GrFormNext color="white" />}
+                prev2Label={<IoChevronBackOutline color="white" />}
               />
-            </VStack>
+            </Box>
           </GridItem>
 
           {/* Wards Engagements Section */}
@@ -561,12 +606,12 @@ const Dashboard = () => {
                     text="Book A Session"
                     onClick={() => router?.push('/student/book-session')}
                   />{' '}
-                  <Button
+                  {/* <Button
                     color="#5F5F5F"
                     fontWeight={500}
                     bg="white"
                     text="Add a Parent/Guardian "
-                  />
+                  /> */}
                 </HStack>
               </VStack>
               <HStack alignItems={'flex-end'} gap={0} justifyContent={'center'}>
@@ -646,12 +691,12 @@ const Dashboard = () => {
                     mt={2}
                   >
                     <HStack gap={2}>
-                      <Icon as={BsBook} />
-                      <Text>0</Text>
+                      <Icon as={BsBook} color={'#161736'} />
+                      <Text color={'#161736'}>0</Text>
                     </HStack>
                     <HStack>
-                      <Icon as={LuClock} />
-                      <Text>13h</Text>
+                      <Icon as={LuClock} color={'#161736'} />
+                      <Text color={'#161736'}>13h</Text>
                     </HStack>
                   </HStack>
                 </GridItem>
@@ -692,12 +737,12 @@ const Dashboard = () => {
                     mt={2}
                   >
                     <HStack gap={2}>
-                      <Icon as={BsBook} />
-                      <Text>0</Text>
+                      <Icon as={BsBook} color={'#161736'} />
+                      <Text color={'#161736'}>0</Text>
                     </HStack>
                     <HStack>
-                      <Icon as={LuClock} />
-                      <Text>13h</Text>
+                      <Icon as={LuClock} color={'#161736'} />
+                      <Text color={'#161736'}>13h</Text>
                     </HStack>
                   </HStack>
                 </GridItem>
@@ -738,12 +783,12 @@ const Dashboard = () => {
                     mt={2}
                   >
                     <HStack gap={2}>
-                      <Icon as={BsBook} />
-                      <Text>0</Text>
+                      <Icon as={BsBook} color={'#161736'} />
+                      <Text color={'#161736'}>0</Text>
                     </HStack>
                     <HStack>
-                      <Icon as={LuClock} />
-                      <Text>13h</Text>
+                      <Icon as={LuClock} color={'#161736'} />
+                      <Text color={'#161736'}>13h</Text>
                     </HStack>
                   </HStack>
                 </GridItem>
@@ -814,21 +859,64 @@ const Dashboard = () => {
               </Text>
               <BsThreeDots color={'#000000'} />
             </HStack>
-            <VStack
+
+            <Box
               boxShadow={'base'}
               bg={'#fff'}
               borderRadius={10}
-              spacing={5}
               p={6}
+              sx={{
+                '.react-calendar': {
+                  width: '100%',
+                  background: 'white',
+                  borderRadius: 'md',
+                  border: 'none',
+                },
+                '.react-calendar__navigation': {
+                  mb: 4, // Add margin to the bottom
+                  fontSize: '17px',
+                  color: '#7D8DA6',
+                },
+                '.react-calendar__tile': {
+                  padding: '10px',
+
+                  color: '#141736',
+                  fontSize: '13px',
+                  transition: 'background-color 0.3s',
+                  _hover: {
+                    bg: '#367BF5',
+                  },
+                },
+                '.react-calendar__tile--active': {
+                  bg: '#E0CAE0',
+                  color: '#141736',
+                },
+                '.react-calendar__tile--now': {
+                  bg: '#367BF5',
+                  color: '#141736',
+                  borderRadius: '50%',
+                },
+                '.react-calendar__month-view__weekdays': {
+                  color: '#141736',
+                  fontSize: '13px',
+                  textTransform: 'capitalize',
+                  borderBottom: 'none',
+                  fontWeight: '300',
+                  paddingBottom: 2,
+                  textDecoration: 'no-line',
+                },
+              }}
             >
               <Calendar
                 onChange={onChange}
                 value={value}
                 selectRange
-                className="calender"
-                tileClassName="tile"
+                prevLabel={<IoChevronBackOutline />}
+                nextLabel={<GrFormNext />}
+                next2Label={<GrFormNext color="white" />}
+                prev2Label={<IoChevronBackOutline color="white" />}
               />
-            </VStack>
+            </Box>
           </GridItem>
 
           {/* Wards Engagements Section */}

@@ -182,7 +182,12 @@ const MySessions = () => {
       <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
         My Sessions
       </Text>
-      <HStack justifyContent={'space-between'} alignItems={'center'} px={6}>
+      {/* <HStack
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        px={6}
+        mb={6}
+      >
         <HStack>
           <Text mx={6} color={'#5F5F5F'} fontSize={20}>
             02 - 08 March
@@ -193,7 +198,7 @@ const MySessions = () => {
           </HStack>
         </HStack>
         <Button width={'262px'} text="Book a session" bg="#0177FB" />
-      </HStack>
+      </HStack> */}
       <CalenderComponent />
     </ParentContainer>
   );

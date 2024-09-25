@@ -355,3 +355,9 @@ export const cardsData = [
     image: '/images/source-3.svg',
   },
 ];
+export const button = [
+  { id: 1, name: 'All', color: '#0A52A8' },
+  { id: 1, name: 'Education', color: '#FF8C00' },
+  { id: 1, name: 'Viewpoint', color: '#027300' },
+  { id: 1, name: 'News', color: '#0065FF' },
+];

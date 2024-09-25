@@ -42,6 +42,7 @@ import { useRouter } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Tutor from '~/lib/components/tutor';
 import Button from '~/lib/components/ui/button';
+import Review from '~/lib/components/Review';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -239,9 +240,7 @@ const SingleSession = () => {
               </TabPanel>
 
               <TabPanel py={8}>
-                <Stack>
-                  <Text>Coming Soon</Text>
-                </Stack>
+                <Review />
               </TabPanel>
             </TabPanels>
           </Tabs>

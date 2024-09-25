@@ -29,9 +29,45 @@ import {
   MdKeyboardDoubleArrowLeft,
 } from 'react-icons/md';
 import BookLesson from './BookLesson';
-import Rating from './Rating';
+import { useRouter } from 'next/navigation';
 
-const TutorCard = ({ onOpen }: any) => {
+function Rating({ rating }: any) {
+  return (
+    <Box display="flex" alignItems="center" justifyContent="center">
+      {Array(5)
+        .fill('')
+        .map((_, i) => {
+          const roundedRating = Math.round(rating * 2) / 2;
+          if (roundedRating - i >= 1) {
+            return (
+              <BsStarFill
+                key={i}
+                style={{ marginLeft: '1' }}
+                color={i < rating ? '#E9AB2B' : '#fff'}
+              />
+            );
+          }
+          if (roundedRating - i === 0.5) {
+            return (
+              <BsStarHalf
+                key={i}
+                style={{ marginLeft: '1' }}
+                color={i < rating ? '#E9AB2B' : '#fff'}
+              />
+            );
+          }
+          return (
+            <BsStar
+              key={i}
+              style={{ marginLeft: '1' }}
+              color={i < rating ? '#E9AB2B' : '#E9AB2B'}
+            />
+          );
+        })}
+    </Box>
+  );
+}
+const TutorCard = ({ onOpen, router }: any) => {
   return (
     <Box
       borderWidth="1px"
@@ -40,7 +76,7 @@ const TutorCard = ({ onOpen }: any) => {
       p={4}
       bg="white"
       boxShadow="sm"
-      width={{ base: '100%', lg: '752px' }}
+      width={{ base: '100%', lg: '682px' }}
     >
       <Flex alignItems="flex-start">
         <Image
@@ -67,6 +103,7 @@ const TutorCard = ({ onOpen }: any) => {
                 px={2}
                 color={'#121117'}
                 fontWeight={700}
+                fontSize={14}
                 textTransform="capitalize"
               >
                 Super Tutor
@@ -91,7 +128,7 @@ const TutorCard = ({ onOpen }: any) => {
               </HStack>
             </Box>
             <VStack alignItems="flex-start">
-              <Rating rate={5} />
+              <Rating rating={5} />
               <HStack>
                 <Text ml={2} fontSize="sm">
                   14 reviews
@@ -109,7 +146,7 @@ const TutorCard = ({ onOpen }: any) => {
             width="full"
           >
             <Stack maxW="380px">
-              <Text fontSize={16} fontWeight="semibold" color="#121117">
+              <Text fontSize="md" fontWeight="semibold" color="#121117">
                 Bio: Experienced Math Tutor
               </Text>
               {/* <Link href="/more">
@@ -120,10 +157,10 @@ const TutorCard = ({ onOpen }: any) => {
             </Stack>
             <Button
               bg="#FFD700"
-              text="Book trial lesson"
+              text="View Profile"
               width={244}
               color="#121117"
-              onClick={onOpen}
+              onClick={() => router.push('/parent/tutor/098765456')}
             />
           </Flex>
         </VStack>
@@ -142,7 +179,8 @@ const tutors = Array(6).fill({
   image: '/images/student.svg',
 });
 
-const Tutor = () => {
+const TutorParent = () => {
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <VStack>
@@ -171,7 +209,7 @@ const Tutor = () => {
       >
         <SimpleGrid columns={1} spacing={4} alignSelf="flex-start">
           {tutors.map((tutor, index) => (
-            <TutorCard key={index} onOpen={onOpen} />
+            <TutorCard key={index} onOpen={onOpen} router={router} />
           ))}
         </SimpleGrid>
         <VStack
@@ -243,4 +281,4 @@ const Tutor = () => {
   );
 };
 
-export default Tutor;
+export default TutorParent;

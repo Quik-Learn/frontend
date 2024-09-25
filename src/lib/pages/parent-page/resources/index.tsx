@@ -10,14 +10,24 @@ import {
   Badge,
   HStack,
 } from '@chakra-ui/react';
-import { cardsData } from '~/lib/utils/nav';
+import { button, cardsData } from '~/lib/utils/nav';
 import ParentContainer from '~/lib/layout/ParentContainer';
+import Button from '~/lib/components/ui/button';
 
 const Resources = () => {
   return (
     <ParentContainer>
-      <Box p={8} bg="gray.50" minH="100vh">
-        <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
+      <Box p={8} bg="gray.50" minH="100vh" mt={5}>
+        <HStack justifyContent={'center'} alignItems={'center'} gap={5}>
+          {button?.map((item) => (
+            <Button bg={item.color} width={145} text={item.name} />
+          ))}
+        </HStack>
+        <Grid
+          templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+          gap={6}
+          mt={8}
+        >
           {cardsData.map((card) => (
             <Box
               key={card.id}
@@ -38,9 +48,11 @@ const Resources = () => {
                 <Badge
                   bg={'#FBA333'}
                   mb={2}
-                  fontSize={10}
-                  p={3}
+                  fontSize={17}
+                  p={2}
+                  color={'#242424'}
                   fontWeight={400}
+                  borderRadius={9}
                   textTransform={'capitalize'}
                 >
                   {card.category}
