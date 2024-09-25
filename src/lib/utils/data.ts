@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { FaBookOpen, FaCamera, FaClipboardCheck } from 'react-icons/fa';
 
 export const data01 = [
@@ -78,4 +79,49 @@ export const activities = [
     icon: '/images/cc.svg',
     color: '#16D03B',
   },
+];
+export const myEventsList = [
+  // Biology: Recurring event from Monday to Sunday at 3 PM - 4 PM
+  ...Array.from({ length: 7 }, (_, i) => ({
+    start: moment()
+      .day(i + 1)
+      .set({ hour: 15, minute: 0 })
+      .toDate(), // 3 PM start
+
+    end: moment()
+      .day(i + 1)
+      .set({ hour: 16, minute: 0 })
+      .toDate(), // 4 PM end
+    title: 'Biology',
+    color: '#FE6470',
+    desc: 'Biology Year 6 to 7',
+  })),
+  // Mathematics: Recurring event from Tuesday to Thursday at 1 PM - 2 PM
+  ...Array.from({ length: 3 }, (_, i) => ({
+    start: moment()
+      .day(i + 2)
+      .set({ hour: 13, minute: 0 })
+      .toDate(), // 1 PM start (Tuesday to Thursday)
+    end: moment()
+      .day(i + 2)
+      .set({ hour: 14, minute: 0 })
+      .toDate(), // 2 PM end
+    title: 'Mathematics',
+    color: '#0177FB',
+    desc: 'Mathematics Year 6 to 7',
+  })),
+  // Mathematics: Recurring event from Tuesday to Thursday at 1 PM - 2 PM
+  ...Array.from({ length: 3 }, (_, i) => ({
+    start: moment()
+      .day(i + 2)
+      .set({ hour: 9, minute: 0 })
+      .toDate(), // 1 PM start (Tuesday to Thursday)
+    end: moment()
+      .day(i + 2)
+      .set({ hour: 10, minute: 0 })
+      .toDate(), // 2 PM end
+    title: 'English',
+    color: '#FF8C00',
+    desc: 'English Year 6 to 7',
+  })),
 ];
