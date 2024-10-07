@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Verify from '~/lib/pages/auth/verify';
+import verifyWard from '~/lib/pages/auth/verify-ward';
 
 export const metadata: Metadata = {
   title: 'Verify Email',
 };
 
-export default Verify;
+export default verifyWard;

@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import useDashboardHook from '../parent/useDashboard';
+
 import { useUpdateUserProfileMutation } from '~/lib/services/parent-mutation';
 import { useToast } from '@chakra-ui/react';
-import { useLazyGetUserQuery } from '~/lib/services/user-service';
+import {
+  useLazyGetAuthUserQuery,
+  useLazyGetConnectionQuery,
+  useReceieveConnectionMutation,
+} from '~/lib/services/student-mutation';
 
-const useAccount = () => {
-  const [trigger, { data, isLoading, isSuccess }] = useLazyGetUserQuery();
+const useAccount = (callbackRecieve: any, onOpen: any) => {
+  const [trigger, { data, isLoading, isSuccess }] = useLazyGetAuthUserQuery();
+  const [getConnection, getConnectionData] = useLazyGetConnectionQuery();
   const [updateUserProfile, responseData] = useUpdateUserProfileMutation();
+  const [receieveConnection, receieveConnectionData] =
+    useReceieveConnectionMutation();
   const toast = useToast();
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter your firstname'),
@@ -26,6 +33,7 @@ const useAccount = () => {
     email: '',
     province: '',
     address: '',
+    parentName: '',
   });
   useEffect(() => {
     trigger({});
@@ -34,16 +42,39 @@ const useAccount = () => {
   useEffect(() => {
     if (isSuccess) {
       setInitialData({
-        firstname: data?.data?.firstname || '',
-        lastname: data?.data?.lastname || '',
-        phone: data?.data?.phone || '',
-        email: data?.data?.email || '',
-        province: data?.data?.province || '',
-        address: data?.data?.address || '',
+        firstname: data?.data?.user?.firstname || '',
+        lastname: data?.data?.user?.lastname || '',
+        phone: data?.data?.user?.phone || '',
+        email: data?.data?.user?.email || '',
+        province: data?.data?.user?.state || '',
+        address: data?.data?.user?.address || '',
+        parentName: data?.data?.bio?.parent || '',
       });
     }
   }, [data, isSuccess]);
-
+  useEffect(() => {
+    const { isSuccess, isError, error } = receieveConnectionData;
+    if (isSuccess) {
+      trigger({});
+      callbackRecieve();
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [receieveConnectionData]);
+  useEffect(() => {
+    if (getConnectionData.isSuccess) {
+      onOpen();
+    }
+  }, [getConnectionData.isSuccess]);
   useEffect(() => {
     if (responseData.isSuccess) {
       toast({
@@ -78,6 +109,11 @@ const useAccount = () => {
     updateUserProfile,
     isLoading,
     buttonLoading: responseData?.isLoading,
+    receieveConnection,
+    recieveLoading: receieveConnectionData?.isLoading,
+    getConnection,
+    isConnectionLoading: getConnectionData?.isLoading,
+    connectionData: getConnectionData?.data?.data,
   };
 };
 

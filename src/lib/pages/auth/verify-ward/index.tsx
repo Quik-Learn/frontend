@@ -52,6 +52,7 @@ const VerifyWard = () => {
       });
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
+
       dispatch(setType('Student'));
       router.push('/student');
     }

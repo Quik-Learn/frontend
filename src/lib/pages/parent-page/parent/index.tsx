@@ -13,6 +13,9 @@ import {
   GridItem,
   Progress,
   useDisclosure,
+  Skeleton,
+  SkeletonText,
+  Stack,
 } from '@chakra-ui/react';
 
 import Button from '~/lib/components/ui/button';
@@ -27,7 +30,7 @@ import { useRouter } from 'next/navigation';
 import ProgressBar from '~/lib/components/ui/progress-bar';
 
 const Dashboard = () => {
-  const { data, isLoading } = useDashboardHook();
+  const { data, isLoading, dashboardData } = useDashboardHook();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
 
@@ -41,7 +44,6 @@ const Dashboard = () => {
         my={6}
         px={6}
       >
-        {/* Welcome Section */}
         <GridItem colSpan={[12, 12, 8]}>
           <VStack
             bg="#0065FF"
@@ -64,7 +66,7 @@ const Dashboard = () => {
                 fontWeight={500}
                 bg="white"
                 text="View Courses"
-                onClick={() => router?.push('/parent/courses')}
+                onClick={() => router?.push('parent/courses')}
               />
               <Button
                 fontWeight={500}
@@ -99,7 +101,7 @@ const Dashboard = () => {
                 textAlign={'center'}
                 color={'#0065FF'}
               >
-                0
+                {dashboardData?.ward_count || 0}
               </Text>
               <Text
                 fontSize="15px"
@@ -130,7 +132,7 @@ const Dashboard = () => {
                 textAlign={'center'}
                 color={'#FF8C00'}
               >
-                0{' '}
+                {dashboardData?.ongoing_courses || 0}
               </Text>
               <Text
                 fontSize="15px"
@@ -161,7 +163,7 @@ const Dashboard = () => {
                 textAlign={'center'}
                 color={'#5F5F5F'}
               >
-                0{' '}
+                {dashboardData?.notifications || 0}
               </Text>
               <Text
                 fontSize="15px"
@@ -174,7 +176,6 @@ const Dashboard = () => {
             </GridItem>
           </Grid>
         </GridItem>
-
         {/* Profile Card */}
         <GridItem colSpan={[12, 12, 4]}>
           <HStack
@@ -239,17 +240,44 @@ const Dashboard = () => {
             </Text>
             <BsThreeDots color={'#000000'} />
           </HStack>
-
-          <Box
-            borderRadius={10}
-            boxShadow={'base'}
-            bg={'#fff'}
-            height={'350px'}
-          >
-            <Linecharts />
-          </Box>
+          {dashboardData?.weekly_stats?.length ? (
+            <Box
+              borderRadius={10}
+              boxShadow={'base'}
+              bg={'#fff'}
+              height={'350px'}
+            >
+              <Linecharts />
+            </Box>
+          ) : (
+            <Box
+              borderRadius={10}
+              boxShadow={'base'}
+              bg={'#fff'}
+              w={'100%'}
+              height={'300px'}
+            >
+              {true ? (
+                <Stack
+                  w={'100%'}
+                  justifyContent={'center'}
+                  alignItems={'center'}
+                  height={'300px'}
+                >
+                  <Text
+                    my="4"
+                    fontWeight={700}
+                    textAlign={'center'}
+                    color={'#5F5F5F'}
+                    fontSize={25}
+                  >
+                    No Recent Activity !
+                  </Text>
+                </Stack>
+              ) : null}
+            </Box>
+          )}
         </GridItem>
-
         {/* Subscriptions Section */}
         <GridItem colSpan={[12, 12, 4]}>
           <HStack
@@ -267,6 +295,7 @@ const Dashboard = () => {
             </Text>
             <BsThreeDots color={'#000000'} />
           </HStack>
+
           <VStack
             bg={'#fff'}
             px={3}
@@ -274,19 +303,28 @@ const Dashboard = () => {
             mb={3}
             borderRadius={10}
             boxShadow={'base'}
+            minHeight={'300px'}
           >
-            {false ? (
+            {dashboardData?.subscriptions?.length === 0 || !dashboardData ? (
               <>
                 <Text
                   my="4"
                   fontWeight={700}
                   textAlign={'center'}
                   color={'#5F5F5F'}
-                  fontSize={36}
+                  fontSize={25}
                 >
                   No Active Subscription
                 </Text>
-                <Button width={'225px'} bg="#0065FF" text="Add a Ward" />
+                <Button
+                  onClick={() => {
+                    setNew('');
+                    onOpen();
+                  }}
+                  width={'225px'}
+                  bg="#0065FF"
+                  text="Add a Ward"
+                />
               </>
             ) : (
               <>
@@ -305,7 +343,7 @@ const Dashboard = () => {
                     secondPercentage={'30%'}
                   />
 
-                  <HStack justifyContent={'space-between'}>
+                  {/* <HStack justifyContent={'space-between'}>
                     <Text
                       fontWeight="bold"
                       textAlign={'left'}
@@ -349,7 +387,7 @@ const Dashboard = () => {
                       {' '}
                       (20/30hrs)
                     </Text>
-                  </HStack>
+                  </HStack> */}
                 </Box>
 
                 <Text
@@ -417,6 +455,7 @@ const Dashboard = () => {
           </VStack>
         </GridItem>
       </Grid>
+
       <AddWardComponent
         onClose={onClose}
         onOpen={onOpen}

@@ -211,7 +211,7 @@ const Login = () => {
         <HStack width="full" justify="center" align="center">
           <Text color="#262626" fontSize={15}>
             Don’t have an account?{' '}
-            <Link href="/">
+            <Link href="/auth/sign-up">
               <ChakraLink
                 color="#262626"
                 fontSize={15}

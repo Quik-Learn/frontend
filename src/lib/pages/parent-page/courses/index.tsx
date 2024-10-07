@@ -40,37 +40,14 @@ import {
 import { useRouter } from 'next/navigation';
 import { useGetSubjectsQuery } from '~/lib/services/user-service';
 import useGetCourses from './getCourses';
-const data = [
-  { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
-  { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
-];
-const oldData = [
-  { id: 1, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 2, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 3, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-];
+import { baseUrl } from '~/lib/services/parent-mutation';
+import Pagination from '~/lib/components/ui/pagination';
+
 const Courses = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formRef = useRef(null);
   const router = useRouter();
-  const { courses } = useGetCourses();
+  const { courses, count, next, previous, isLoading } = useGetCourses();
+  console.log(courses, 'courses');
 
-  const signInSchema = yup.object().shape({
-    first_name: yup.string().required('Please confirm password'),
-
-    last_name: yup.string().required('Please confirm password'),
-    age: yup.string().required('Please confirm password'),
-    gender: yup.string().required('Please confirm password'),
-    email_address: yup.string().required('Please confirm password'),
-  });
-
-  const initialValues: any = {
-    first_name: '',
-    last_name: '',
-    age: '',
-    gender: '',
-    email_address: '',
-  };
   const CourseCard = ({
     title,
     description,
@@ -78,6 +55,7 @@ const Courses = () => {
     duration,
     learners,
     router,
+    id,
   }: any) => (
     <Box
       borderRadius="md"
@@ -89,7 +67,7 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push('/parent/courses/1')}
+      onClick={() => router.push(`/parent/courses/${id}`)}
     >
       <Image
         src={imageSrc}
@@ -205,15 +183,16 @@ const Courses = () => {
           }}
           gap={4}
         >
-          {coursesArray.map((course, index) => (
+          {courses?.map((course: any, index: number) => (
             <GridItem key={index}>
               <CourseCard
-                title={course.title}
-                description={course.description}
-                imageSrc={course.imageSrc}
-                duration={course.duration}
-                learners={course.learners}
+                title={course?.title}
+                description={course?.short_description}
+                imageSrc={course?.thumbnail}
+                duration={course?.lesson_hours}
+                learners={course?.learners}
                 router={router}
+                id={course?.id}
               />
             </GridItem>
           ))}
@@ -266,6 +245,16 @@ const Courses = () => {
             variant="ghost"
           />
         </HStack>
+        {/* <Pagination
+          totalPages={count}
+          pageSize={10} // Optional: Change page size dynamically if needed
+          isLoading={isLoading}
+          next={next}
+          previous={previous}
+          onPageChange={(newPage) => {
+            console.log('Page changed to:', newPage);
+          }} // Optional: Callback if you need to handle page change externally
+        /> */}
       </HStack>
     </ParentContainer>
   );

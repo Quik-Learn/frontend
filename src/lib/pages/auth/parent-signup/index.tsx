@@ -52,7 +52,6 @@ const ParentSignup = () => {
     () => {}
   );
 
-  console.log(token);
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter your firstname'),
     lastname: yup.string().required('Please enter your last name'),
@@ -136,11 +135,11 @@ const ParentSignup = () => {
                   placeholder="First Name"
                   bg="#ffffff"
                   borderWidth={1}
-                  value={values.firstname}
                   borderColor="#E9EAF0"
                   p={5}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
+                  value={values.firstname}
                   onChange={(e) => setFieldValue('firstname', e.target.value)}
                 />
                 <Text>{errors.firstname || ''}</Text>

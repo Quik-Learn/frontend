@@ -7,7 +7,7 @@ import {
   facebookProvider,
   appleProvider,
 } from '../../../firebase'; // Import Firebase auth and providers
-import { useLazyGetUserQuery } from '../services/user-service';
+import { useLazyGetUserQuery, userService } from '../services/user-service';
 import useDashboardHook from '../pages/parent-page/parent/useDashboard';
 import { useSetTypeFromSocialMutation } from '../services/parent-mutation';
 import { setToken } from '../store/reducers/token-slice';
@@ -47,6 +47,18 @@ const useSocialLogin = () => {
       router.push('/unauthorized');
     }
   };
+  const redirectToDashboardOnLogin = (role: string) => {
+    console.log(role);
+    if (role?.toLowerCase() === 'student') {
+      router.push('/student');
+    } else if (role?.toLowerCase() === 'parent') {
+      router.push('/parent');
+    } else if (role?.toLowerCase() === 'tutor') {
+      router.push('/tutor');
+    } else {
+      router.push('/unauthorized');
+    }
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -67,9 +79,14 @@ const useSocialLogin = () => {
   }, [isSuccess, isError, error]);
   useEffect(() => {
     if (isUserSuccess) {
-      console.log(userData);
+      console.log(userData?.data?.account_type);
       dispatch(setType(userData?.data?.account_type));
-      redirectToDashboard(userData?.data?.account_type);
+      redirectToDashboardOnLogin(userData?.data?.account_type);
+
+      setTimeout(() => {
+        // handleInvalidateAndRefetch();
+        dispatch(userService.util.resetApiState());
+      }, 1000);
     }
     if (isUserError) {
       toast({
@@ -81,8 +98,12 @@ const useSocialLogin = () => {
         isClosable: true,
         position: 'top',
       });
+      setTimeout(() => {
+        // handleInvalidateAndRefetch();
+        dispatch(userService.util.resetApiState());
+      }, 1000);
     }
-  }, [isUserError, isUserSuccess, userError]);
+  }, [isUserError, isUserSuccess, userError, userData]);
 
   const handleSocialLogin = async (
     provider: 'google' | 'facebook',

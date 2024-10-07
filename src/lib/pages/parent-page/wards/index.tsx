@@ -18,6 +18,7 @@ import {
   useToast,
   Avatar,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { AddRegistered, AddWard, NewWard } from '~/lib/components/AddWard';
@@ -34,6 +35,7 @@ const data = [
 const Wards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const router = useRouter();
   const [wardData, setWardData] = useState<any>([]);
   const {
     data: wards,
@@ -67,7 +69,7 @@ const Wards = () => {
 
   return (
     <ParentContainer>
-      {false ? (
+      {wardData.length === 0 ? (
         <VStack
           w={'100%'}
           h={'80%'}
@@ -83,7 +85,15 @@ const Wards = () => {
             >
               You Currently have no Ward Register
             </Text>
-            <Button width={{ lg: 386 }} text="Add a Ward " bg="#0A52A8" />
+            <Button
+              width={{ lg: 386 }}
+              text="Add a Ward "
+              bg="#0A52A8"
+              onClick={() => {
+                setNew('');
+                onOpen();
+              }}
+            />
           </VStack>
         </VStack>
       ) : (
@@ -148,6 +158,7 @@ const Wards = () => {
                 color="#0A52A8"
                 text="Manage"
                 variant="outline"
+                onClick={() => router.push('/parent/subscription')}
               />
             </GridItem>
           ))}

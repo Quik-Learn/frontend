@@ -47,7 +47,44 @@ export const studentService = createApi({
         };
       },
     }),
+    getStudentDashboard: builder.query({
+      query: (id) => {
+        return {
+          url: `student/get/general_stats/`,
+        };
+      },
+    }),
+    receieveConnection: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: 'accounts/user/process/connection/request/',
+          method: 'PATCH',
+          body,
+        };
+      },
+    }),
+    getConnection: builder.query({
+      query: () => {
+        return {
+          url: 'accounts/user/get/connection/request/',
+        };
+      },
+    }),
+
+    getAuthUser: builder.query({
+      query() {
+        return {
+          url: 'accounts/user/authenticated/user/',
+        };
+      },
+    }),
   }),
 });
 
-export const { useOnboardStudentMutation } = studentService;
+export const {
+  useOnboardStudentMutation,
+  useLazyGetStudentDashboardQuery,
+  useReceieveConnectionMutation,
+  useLazyGetAuthUserQuery,
+  useLazyGetConnectionQuery,
+} = studentService;

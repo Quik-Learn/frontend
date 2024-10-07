@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { useGetSubjectsQuery } from '~/lib/services/user-service';
+import { useLazyGetSubjectsQuery } from '~/lib/services/parent-mutation';
 
 const useGetCourses = () => {
-  const [courses, setCourses] = useState([]);
-  const { data, isSuccess, isError, error, isLoading } = useGetSubjectsQuery(
-    null,
-    {
-      refetchOnFocus: true,
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const [courses, setCourses] = useState<any>([]);
+  const [getSubjects, { data, isSuccess, isError, error, isLoading }] =
+    useLazyGetSubjectsQuery();
 
   useEffect(() => {
     if (isSuccess) {
       setCourses(data?.data);
     }
   }, [isSuccess]);
+  useEffect(() => {
+    getSubjects(1);
+  }, []);
 
-  return { courses };
+  return {
+    courses,
+    count: data?.count,
+    next: data?.next,
+    previous: data?.previous,
+    isLoading,
+  };
 };
 
 export default useGetCourses;

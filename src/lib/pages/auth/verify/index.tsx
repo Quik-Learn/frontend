@@ -52,6 +52,7 @@ const Verify = () => {
       });
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
+
       dispatch(setType(data?.data?.user?.account_type));
       if (data?.data?.user?.account_type === 'Parent') {
         router.push('/parent');
@@ -60,15 +61,15 @@ const Verify = () => {
       }
     }
     if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.error?.message,
-        description: 'An error occured, try again',
-        status: 'error',
-        duration: 9000,
-        position: 'top',
-        isClosable: true,
-      });
+      // toast({
+      //   //@ts-ignore
+      //   title: error?.error?.message,
+      //   description: 'An error occured, try again',
+      //   status: 'error',
+      //   duration: 9000,
+      //   position: 'top',
+      //   isClosable: true,
+      // });
     }
   }, [isSuccess, data?.data, isError, error]);
 
