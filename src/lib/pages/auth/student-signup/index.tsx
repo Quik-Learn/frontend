@@ -37,12 +37,14 @@ import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import { MdArrowOutward } from 'react-icons/md';
 import Link from 'next/link';
-import { signInWithGoogle, signInWithFacebook } from '../../../services/Auth';
+
+import useSocialLogin from '../../../hooks/useSocialLogin';
 import useSignup from '../parent-signup/useSignup';
 const StudentSignup = () => {
   const router = useRouter();
   const formRef = useRef<any>(null);
   const { registerAccount, isLoading } = useSignup();
+  const { handleSocialLogin, loading } = useSocialLogin();
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter your firstname'),
     lastname: yup.string().required('Please enter your last name'),
@@ -64,20 +66,6 @@ const StudentSignup = () => {
     email: '',
     password: '',
     account_type: 'Student',
-  };
-
-  const googleLogin = async () => {
-    try {
-      await signInWithGoogle();
-    } catch (err) {
-      setShowToast({
-        show: true,
-        status: 'error',
-        title: 'Google Login Failed',
-        desc: 'An error occurred during Google login. Please try again.',
-      });
-      console.error(err);
-    }
   };
 
   const handleSubmit = () => {
@@ -254,10 +242,20 @@ const StudentSignup = () => {
           </Text>
 
           <HStack spacing={4} justify="center">
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('google', 'Student')}
+            >
               <Image src="/images/google.svg" alt="google" w="20px" h="20px" />
             </HStack>
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('facebook', 'Student')}
+            >
               <Image
                 src="/images/facebook.svg"
                 alt="google"
@@ -265,7 +263,12 @@ const StudentSignup = () => {
                 h="20px"
               />
             </HStack>
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('apple', 'Student')}
+            >
               <Image src="/images/apple.svg" alt="google" w="20px" h="20px" />
             </HStack>
           </HStack>

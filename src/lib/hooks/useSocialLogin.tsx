@@ -5,36 +5,111 @@ import {
   authProvider,
   googleProvider,
   facebookProvider,
+  appleProvider,
 } from '../../../firebase'; // Import Firebase auth and providers
-import { useLazyGetUserQuery } from '../services/user-service';
+import { useLazyGetUserQuery, userService } from '../services/user-service';
 import useDashboardHook from '../pages/parent-page/parent/useDashboard';
-import { useSetTypeFromSocialMutation } from '../services/auth-service';
+import { useSetTypeFromSocialMutation } from '../services/parent-mutation';
+import { setToken } from '../store/reducers/token-slice';
+import { setType } from '../store/reducers/type-slice';
+import { useAppDispatch } from '../store';
+import { useToast } from '@chakra-ui/react';
+import { setCookie } from 'nookies';
+// import { useSetTypeFromSocialMutation } from '../services/auth-service';
 
 const useSocialLogin = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { data, isLoading } = useDashboardHook();
-  // const [setTypeFromSocial, { data: socialData, isLoading: isSocialLoading }] =
-  //   useSetTypeFromSocialMutation();
+  const dispatch = useAppDispatch();
+  const toast = useToast();
+  const [
+    setTypeFromSocial,
+    { data: socialData, isLoading: isSocialLoading, isSuccess, isError, error },
+  ] = useSetTypeFromSocialMutation();
+  const [
+    getUser,
+    {
+      data: userData,
+      isLoading: isUserLoading,
+      isSuccess: isUserSuccess,
+      isError: isUserError,
+      error: userError,
+    },
+  ] = useLazyGetUserQuery();
 
   const redirectToDashboard = (role: string) => {
-    if (role === 'student') {
-      router.push('/student');
-    } else if (role === 'parent') {
+    if (role?.toLowerCase() === 'student') {
+      router.push('/auth/subject');
+    } else if (role?.toLowerCase() === 'parent') {
       router.push('/parent');
-    } else if (role === 'tutor') {
+    } else if (role?.toLowerCase() === 'tutor') {
       router.push('/dashboard/tutor');
     } else {
       router.push('/unauthorized');
     }
   };
-
-  const getUserRole = async (userId: string) => {
-    const role = 'student';
-    return role;
+  const redirectToDashboardOnLogin = (role: string) => {
+    console.log(role);
+    if (role?.toLowerCase() === 'student') {
+      router.push('/student');
+    } else if (role?.toLowerCase() === 'parent') {
+      router.push('/parent');
+    } else if (role?.toLowerCase() === 'tutor') {
+      router.push('/tutor');
+    } else {
+      router.push('/unauthorized');
+    }
   };
 
-  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(setType(socialData?.data?.user?.account_type));
+      redirectToDashboard(socialData?.data?.user?.account_type);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, isError, error]);
+  useEffect(() => {
+    if (isUserSuccess) {
+      console.log(userData?.data?.account_type);
+      dispatch(setType(userData?.data?.account_type));
+      redirectToDashboardOnLogin(userData?.data?.account_type);
+
+      setTimeout(() => {
+        // handleInvalidateAndRefetch();
+        dispatch(userService.util.resetApiState());
+      }, 1000);
+    }
+    if (isUserError) {
+      toast({
+        //@ts-ignore
+        title: userError?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      setTimeout(() => {
+        // handleInvalidateAndRefetch();
+        dispatch(userService.util.resetApiState());
+      }, 1000);
+    }
+  }, [isUserError, isUserSuccess, userError, userData]);
+
+  const handleSocialLogin = async (
+    provider: 'google' | 'facebook',
+    role: any
+  ) => {
     setLoading(true);
     try {
       let providerInstance: any = null;
@@ -42,24 +117,22 @@ const useSocialLogin = () => {
         providerInstance = googleProvider;
       } else if (provider === 'facebook') {
         providerInstance = facebookProvider;
+      } else if (provider === 'apple') {
+        providerInstance = appleProvider;
       }
 
       // Sign in with the selected provider
-      const result = await signInWithPopup(authProvider, providerInstance);
+      const result: any = await signInWithPopup(authProvider, providerInstance);
       const user = result.user;
+      console.log(result);
 
-      // Get the Firebase ID token
-      const token = await getIdToken(user);
+      dispatch(setToken(result?.user?.accessToken));
 
-      // Assuming you fetch user role from your backend or Firestore
-      const role = await getUserRole(user.uid);
-
-      // Save token and role (You can store in context, localStorage, or manage it your way)
-      localStorage.setItem('token', token);
-      localStorage.setItem('role', role);
-
-      // Redirect to the appropriate dashboard
-      redirectToDashboard(role);
+      if (result?._tokenResponse?.isNewUser) {
+        setTypeFromSocial({ account_type: role });
+      } else {
+        getUser({});
+      }
     } catch (error) {
       console.error('Error during social login:', error);
     } finally {
@@ -69,7 +142,7 @@ const useSocialLogin = () => {
 
   return {
     handleSocialLogin,
-    loading,
+    loading: loading || isSocialLoading,
   };
 };
 

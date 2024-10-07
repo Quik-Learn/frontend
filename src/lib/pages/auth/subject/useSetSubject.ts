@@ -1,7 +1,7 @@
 import { useToast } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useOnboardStudentMutation } from '~/lib/services/auth-service';
+import { useOnboardStudentMutation } from '~/lib/services/student-mutation';
 import { useGetSubjectsQuery } from '~/lib/services/user-service';
 
 export const useSetSubjectHook = () => {

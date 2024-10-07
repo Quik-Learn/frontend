@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import {
   useAddWardMutation,
   useConnectWardMutation,
+  useLazySearchWardQuery,
 } from '../services/parent-mutation';
 
 const AddWardComponent = ({
@@ -21,6 +22,7 @@ const AddWardComponent = ({
   const [addWard, { data, isSuccess, isError, error, isLoading }] =
     useAddWardMutation();
   const [connectWard, connectWardDetails] = useConnectWardMutation();
+  const [searchWard, serachWardData] = useLazySearchWardQuery();
   const [filteredWards, setFilteredWards] = useState([]);
   const [successData, setSuccessData] = useState({
     title: '',
@@ -37,7 +39,7 @@ const AddWardComponent = ({
     firstname: yup.string().required('Please enter first name'),
 
     lastname: yup.string().required('Please enter last name'),
-    // age: yup.string().required('Please enter age '),
+    state: yup.string().required('Please enter state '),
     sex: yup.string().required('Please enter  gender'),
     email: yup.string().required('Please enter  email address'),
     DOB: yup.string().required('Please enter date of birth '),
@@ -48,7 +50,7 @@ const AddWardComponent = ({
   const initialValues: any = {
     firstname: '',
     lastname: '',
-    // age: '',
+    state: '',
     sex: '',
     email: '',
     DOB: '',
@@ -77,7 +79,7 @@ const AddWardComponent = ({
   );
   useEffect(() => {
     if (value) {
-      filterSubjects(value);
+      searchWard({ Ward: value });
     }
   }, [value]);
 
@@ -110,7 +112,6 @@ const AddWardComponent = ({
     if (isSuccess) {
       setNew('');
       onClose();
-      
 
       setSuccessData({
         title: 'Successful!',
@@ -132,6 +133,26 @@ const AddWardComponent = ({
     }
   }, [connectWardDetails]);
 
+  useEffect(() => {
+    const { data, isSuccess, isError, error, isLoading } = serachWardData;
+    if (isSuccess) {
+      console.log(data);
+
+      setFilteredWards(data?.data);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [serachWardData]);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -150,7 +171,6 @@ const AddWardComponent = ({
           <AddRegistered
             value={value}
             setValue={setValue}
-            data={oldData}
             wards={filteredWards}
             connectWard={connectWard}
           />

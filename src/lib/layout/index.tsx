@@ -1,7 +1,8 @@
 'use client';
 
 import { Box } from '@chakra-ui/react';
-import type { ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
+import { useAppSelector } from '../store';
 
 type LayoutProps = {
   children: ReactNode;
@@ -17,7 +18,7 @@ const Layout = ({ children }: LayoutProps) => {
     >
       <Box margin="8">
         {/* <Header /> */}
-        <Box as="main" marginY={22}>
+        <Box as="main" marginY={22} maxW={'100vw'}>
           {children}
         </Box>
         {/* <Footer /> */}

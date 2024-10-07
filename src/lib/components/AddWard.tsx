@@ -17,6 +17,7 @@ import {
   HStack,
   Avatar,
   VStack,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -66,7 +67,7 @@ export const NewWard = ({
   isLoading,
 }: any) => {
   return (
-    <ModalContent>
+    <ModalContent bg={'#fff'}>
       <ModalHeader
         color={'#5F5F5F'}
         fontSize={32}
@@ -86,6 +87,7 @@ export const NewWard = ({
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
+            console.log('submit');
             addWard(values);
           }}
           validateOnChange={false}
@@ -185,6 +187,7 @@ export const NewWard = ({
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('sex', e.target.value)}
                 >
+                  <option value="">Select Gender</option>
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                 </Select>
@@ -209,6 +212,26 @@ export const NewWard = ({
                   onChange={(e) => setFieldValue('email', e.target.value)}
                 />
                 <Text fontSize={10} color={'red'}></Text>
+              </FormControl>
+              <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
+                <FormLabel fontSize={14} color="#1D2026">
+                  State of Residence
+                </FormLabel>
+                <Select
+                  placeholder="Enter your state"
+                  bg="#ffffff"
+                  borderWidth={1}
+                  borderColor="#E9EAF0"
+                  value={values.state}
+                  color="#1D2026"
+                  _placeholder={{ color: '#8C94A3' }}
+                  onChange={(e: any) => setFieldValue('state', e.target.value)}
+                >
+                  <option value="Lagos">Lagos</option>
+                </Select>
+                <FormErrorMessage fontSize={10} color={'#f00'}>
+                  {errors.state || ''}
+                </FormErrorMessage>
               </FormControl>
               <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
@@ -274,6 +297,7 @@ export const NewWard = ({
           bg="#0A52A8"
           isLoading={isLoading}
           onClick={() => {
+            console.log('clicked');
             formRef?.current?.handleSubmit();
           }}
         />
@@ -281,16 +305,9 @@ export const NewWard = ({
     </ModalContent>
   );
 };
-export const AddRegistered = ({
-  value,
-  setValue,
-  data,
-  wards,
-  connectWard,
-  successFunction,
-}: any) => {
+export const AddRegistered = ({ value, setValue, wards, connectWard }: any) => {
   return (
-    <ModalContent>
+    <ModalContent bg={'#fff'}>
       <ModalHeader
         color={'#5F5F5F'}
         fontSize={22}
@@ -301,10 +318,6 @@ export const AddRegistered = ({
       </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Text color={'#5F5F5F'} fontSize={18} textAlign={'center'} mb={5}>
-          Form Builder is free to use. Sign up using your email address or phone
-          number below to get started.
-        </Text>
         <FormControl mb={5}>
           <Input
             placeholder="Enter Name or email address to search"
@@ -319,7 +332,7 @@ export const AddRegistered = ({
             onChange={(e) => setValue(e.target.value)}
           />
         </FormControl>
-        {data?.map((item: any) => (
+        {wards?.map((item: any) => (
           <HStack
             w={'100%'}
             mb={5}
@@ -331,10 +344,10 @@ export const AddRegistered = ({
             <Avatar />
             <VStack flex={1} alignItems={'flex-start'}>
               <Text fontWeight={500} fontSize={18} color={'#000000'}>
-                {item?.user?.firstname || item?.name}
+                {item?.firstname || ''} {item?.lastname || ''}
               </Text>
               <Text fontWeight={400} fontSize={14} color={'#BCC2CC'} mt={-2}>
-                {item?.user?.email || item.email}
+                {item?.email || ''}
               </Text>
             </VStack>
             <Button
@@ -343,9 +356,9 @@ export const AddRegistered = ({
               text="Add"
               onClick={() => {
                 connectWard({
-                  email: item?.user?.email,
-                  firstname: item?.user?.firstname,
-                  lastname: item?.user?.lastname,
+                  email: item?.email,
+                  firstname: item?.firstname,
+                  lastname: item?.lastname,
                 });
               }}
             />

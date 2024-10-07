@@ -19,7 +19,7 @@ interface CustomErr {
   status: number;
 }
 
-const baseUrl = 'https://backend.codemunsta.co/';
+export const baseUrl = 'https://backend.codemunsta.co/';
 
 export const parentService = createApi({
   reducerPath: 'parentService',
@@ -56,6 +56,23 @@ export const parentService = createApi({
         };
       },
     }),
+    getParentDashboard: builder.query({
+      query: (id) => {
+        return {
+          url: `accounts/parent/dashboard/`,
+        };
+      },
+    }),
+
+    updateUserProfile: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: `/accounts/user/`,
+          method: 'put',
+          body,
+        };
+      },
+    }),
     getAWard: builder.query({
       query: (id) => {
         return {
@@ -67,7 +84,7 @@ export const parentService = createApi({
       query: (body: any) => {
         return {
           url: `accounts/parent/manage/ward/${body.id}`,
-          method: 'put',
+          method: 'PUT',
           body: body.body,
         };
       },
@@ -76,7 +93,7 @@ export const parentService = createApi({
       query: (body: any) => {
         return {
           url: `accounts/parent/manage/ward/`,
-          method: 'patch',
+          method: 'PATCH',
           body,
         };
       },
@@ -85,6 +102,92 @@ export const parentService = createApi({
       query: () => {
         return {
           url: `accounts/parent/get/wards/`,
+        };
+      },
+    }),
+    getAllWards: builder.query({
+      query: () => {
+        return {
+          url: `finance/subscription/ward-page/`,
+        };
+      },
+    }),
+    getSubjects: builder.query({
+      query: (page_size) => {
+        return {
+          url: `subjects?page_size=${page_size}`,
+        };
+      },
+    }),
+    searchWard: builder.query({
+      query: (params) => {
+        return {
+          url: `accounts/parent/search/ward/`,
+          params,
+        };
+      },
+    }),
+
+    setTypeFromSocial: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: 'accounts/user/set/account/type/from/social/',
+          method: 'PATCH',
+          body,
+        };
+      },
+    }),
+    subscribe: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: `finance/subscription/subscribe/${body?.ward_id}/${body?.plan_id}/`,
+          method: 'post',
+          body: {},
+        };
+      },
+    }),
+    getAllPlans: builder.query({
+      query: () => {
+        return {
+          url: `finance/plans/all/`,
+        };
+      },
+    }),
+    verifyPayment: builder.mutation({
+      query: (transaction_id: string) => {
+        return {
+          url: `finance/subscription/verify/${transaction_id}/`,
+          method: 'PUT',
+          body: {},
+        };
+      },
+    }),
+
+    getAPayment: builder.query({
+      query: (ward_id) => {
+        return {
+          url: `finance/subscription/ward/subscription/page/${ward_id}/`,
+        };
+      },
+    }),
+    getACourse: builder.query({
+      query: (subject_id) => {
+        return {
+          url: `subjects/${subject_id}/`,
+        };
+      },
+    }),
+    getCourseTutor: builder.query({
+      query: (subject_id) => {
+        return {
+          url: `instructor/get/subject/${subject_id}/`,
+        };
+      },
+    }),
+    getResources: builder.query({
+      query: () => {
+        return {
+          url: `multimedia/materials/all/open/`,
         };
       },
     }),
@@ -98,4 +201,17 @@ export const {
   useEditWardMutation,
   useGetAWardQuery,
   useGetWardsQuery,
+  useSetTypeFromSocialMutation,
+  useUpdateUserProfileMutation,
+  useLazyGetParentDashboardQuery,
+  useGetSubjectsQuery,
+  useLazyGetSubjectsQuery,
+  useLazySearchWardQuery,
+  useGetAllWardsQuery,
+  useSubscribeMutation,
+  useGetAllPlansQuery,
+  useVerifyPaymentMutation,
+  useLazyGetAPaymentQuery,
+  useLazyGetACourseQuery,
+  useLazyGetCourseTutorQuery,
 } = parentService;

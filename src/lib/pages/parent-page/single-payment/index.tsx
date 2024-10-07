@@ -12,13 +12,74 @@ import {
   Link,
   Stack,
   Button as ChakraButton,
+  useToast,
 } from '@chakra-ui/react';
 import { MdDownload } from 'react-icons/md';
 import Button from '~/lib/components/ui/button';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { BiSolidFilePdf } from 'react-icons/bi';
 import { TbFileSearch } from 'react-icons/tb';
+
+import { useParams, useRouter } from 'next/navigation';
+import {
+  useLazyGetAPaymentQuery,
+  useSubscribeMutation,
+} from '~/lib/services/parent-mutation';
+import { useEffect, useState } from 'react';
+import moment from 'moment';
 const SubscriptionPage = () => {
+  const router = useRouter();
+  const { id } = useParams();
+  const toast = useToast();
+  const [paymentData, setPaymentData] = useState<any>([]);
+  const [renew, setRenew] = useState(false);
+  const [subscribe, subscriptionData] = useSubscribeMutation();
+  const [trigger, { data, isLoading, isError, error, isSuccess }] =
+    useLazyGetAPaymentQuery();
+  useEffect(() => {
+    trigger(id);
+  }, [id]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setPaymentData(data?.data);
+      const secondsApart =
+        new Date(data?.data?.subscription?.next_payment).getTime() -
+          new Date().getTime() <
+        0;
+
+      setRenew(secondsApart);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      router.back();
+    }
+  }, [isSuccess, data, isError, error]);
+  useEffect(() => {
+    const { data, isLoading, isError, error, isSuccess } = subscriptionData;
+    if (isSuccess) {
+      window.open(data?.data?.payment_url);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [subscriptionData]);
   const invoices = [
     { id: 'Invoice_JD1124', date: '19th, November 2024' },
     { id: 'Invoice_JD1024', date: '19th, October 2024' },
@@ -44,7 +105,7 @@ const SubscriptionPage = () => {
                     borderRadius="md"
                     color="white"
                   >
-                    <Text>Standard </Text>
+                    <Text>{paymentData?.subscription?.plan_name} </Text>
                   </Box>
                   <Text fontSize={20} fontWeight={500} color={'#000'}>
                     Plan
@@ -58,19 +119,34 @@ const SubscriptionPage = () => {
                     fontWeight={900}
                     color={'#000'}
                   >
-                    £10
+                    ₦{paymentData?.subscription?.plan_amount}
                   </Heading>
-                  <Text>/month</Text>
+                  <Text color={'#000'}>/month</Text>
                 </HStack>
               </HStack>
             </VStack>
             <HStack w={'100%'} justifyContent={'space-between'}>
-              <Text fontSize={24} fontWeight={500} color={'#000'}>
-                Joseph Doe
+              <Text
+                fontSize={24}
+                fontWeight={500}
+                color={'#000'}
+                textTransform={'capitalize'}
+              >
+                {paymentData?.firstname} {paymentData?.lastname}
               </Text>
               <HStack spacing={3}>
-                <Button bg="#FBA333" text="Upgrade Plan" />
-                <Button bg="#0065FF" text="Renew Plan" />
+                <Button bg="#FBA333" text="Upgrade Plan" isDisabled={true} />
+                <Button
+                  bg="#0065FF"
+                  text="Renew Plan"
+                  isDisabled={!renew}
+                  onClick={() =>
+                    subscribe({
+                      ward_id: id,
+                      plan_id: paymentData?.subscription?.id || '',
+                    })
+                  }
+                />
               </HStack>
             </HStack>
           </VStack>
@@ -88,7 +164,7 @@ const SubscriptionPage = () => {
                 Next Payment
               </Text>
               <Text fontSize={20} fontWeight={700} color={'#000'}>
-                on November 30, 2024
+                {moment(paymentData?.subscription?.next_payment).format('ll')}
               </Text>
             </Stack>
             <Button
@@ -111,12 +187,12 @@ const SubscriptionPage = () => {
             fontWeight={500}
             mb={4}
           >
-            Invoices (12)
+            Invoices ({paymentData?.invoices?.length})
           </Heading>
           <VStack align="stretch" spacing={4}>
-            {invoices.map((invoice) => (
+            {paymentData?.invoices?.map((invoice: any) => (
               <Flex
-                key={invoice.id}
+                key={invoice?.id}
                 justify="space-between"
                 align="center"
                 p={4}
@@ -126,7 +202,7 @@ const SubscriptionPage = () => {
                 <HStack spacing={3}>
                   <Icon as={BiSolidFilePdf} w={6} h={6} />
                   <Text color="#5F5F5F" fontSize={15} fontWeight={500}>
-                    {invoice.id}.pdf
+                    {invoice?.id}.pdf
                   </Text>
                 </HStack>
                 <Text
@@ -135,12 +211,12 @@ const SubscriptionPage = () => {
                   fontWeight={500}
                   textAlign={'start'}
                 >
-                  {invoice.date}
+                  Date Of Invoice:{moment(invoice?.created_at).format('LL')}
                 </Text>
 
                 <HStack spacing={4}>
-                  <Icon as={TbFileSearch} w={6} h={6} />{' '}
-                  <Icon as={MdDownload} w={6} h={6} />
+                  <Icon as={TbFileSearch} w={6} h={6} color="#5F5F5F" />{' '}
+                  <Icon as={MdDownload} w={6} h={6} color="#5F5F5F" />
                 </HStack>
               </Flex>
             ))}

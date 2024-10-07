@@ -65,14 +65,8 @@ export const authService = createApi({
           body,
         };
       },
-    }),
-    onboardStudent: builder.mutation({
-      query: (body: any) => {
-        return {
-          url: 'accounts/student/onboarding/',
-          method: 'post',
-          body,
-        };
+      extraOptions: {
+        
       },
     }),
 
@@ -96,11 +90,11 @@ export const authService = createApi({
     }),
 
     setTypeFromSocial: builder.mutation({
-      query: (body: any) => {
+      query: () => {
         return {
           url: 'accounts/user/set/account/type/from/social/',
-          method: 'patch',
-          body,
+          method: 'post',
+          body: {},
         };
       },
     }),
@@ -110,9 +104,9 @@ export const authService = createApi({
 export const {
   useRegisterAccountMutation,
   useLoginAccountMutation,
-  useOnboardStudentMutation,
+
   useVerifyOTPMutation,
   useVerifyPasswordMutation,
   useForgotPasswordMutation,
-  useSetTypeFromSocialMutation
+  useSetTypeFromSocialMutation,
 } = authService;

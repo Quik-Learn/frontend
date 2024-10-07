@@ -7,7 +7,8 @@
 
 import { VStack, Image, Text, Stack, useToast } from '@chakra-ui/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { setCookie } from 'nookies';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { Bars } from 'react-loader-spinner';
 
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
@@ -23,18 +24,23 @@ const Verify = () => {
   const router = useRouter();
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const [loading, setLoading] = useState(true);
+  const [firstRender, setFirstRender] = useState(true); // Track first render
   const searchParams = useSearchParams();
   const [verifyOTP, { data, isSuccess, isLoading, isError, error }] =
     useVerifyOTPMutation();
+  const token = useMemo(() => searchParams.get('token'), [searchParams]);
+  const email = useMemo(() => searchParams.get('email'), [searchParams]);
 
-  const token = searchParams.get('otp');
-  const email = searchParams.get('email');
-  // const role = searchParams.get('role');
-  console.log('first', token, email);
   useEffect(() => {
-    if (token && email) verifyOTP({ token, email });
-  }, [token, email]);
+    if (firstRender && token && email && !isLoading) {
+      setFirstRender(false); // Prevent subsequent calls
+      console.log('Triggering OTP verification');
+    } else {
+      console.log('first');
+      verifyOTP({ token, email });
+    }
+  }, [token, email, firstRender, verifyOTP, isSuccess]);
+
   useEffect(() => {
     if (isSuccess) {
       toast({
@@ -47,6 +53,7 @@ const Verify = () => {
       });
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
+
       dispatch(setType(data?.data?.user?.account_type));
       if (data?.data?.user?.account_type === 'Parent') {
         router.push('/parent');
@@ -55,17 +62,17 @@ const Verify = () => {
       }
     }
     if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.error?.message,
-        description: 'An error occured, try again',
-        status: 'success',
-        duration: 9000,
-        position: 'top',
-        isClosable: true,
-      });
+      // toast({
+      //   //@ts-ignore
+      //   title: error?.error?.message,
+      //   description: 'An error occured, try again',
+      //   status: 'error',
+      //   duration: 9000,
+      //   position: 'top',
+      //   isClosable: true,
+      // });
     }
-  }, [isSuccess, router, data?.data, isError, error]);
+  }, [isSuccess, data?.data, isError, error]);
 
   return (
     <SignupWrapper img="/images/login.png" bg="#FF8C00">
@@ -107,4 +114,4 @@ const Verify = () => {
   );
 };
 
-export default Verify;
+export default memo(Verify);

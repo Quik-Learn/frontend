@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
-import SignUp from '~/lib/components/auth/signup';
+import Login from './auth/login/page';
 
 export const metadata: Metadata = {
-  title: 'Sign Up',
+  title: 'Login',
 };
 
-export default SignUp;
+export default Login;

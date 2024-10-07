@@ -17,8 +17,10 @@ import {
   ListItem,
   ListIcon,
   Stack,
+  useToast,
+  Avatar,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoMdCheckmark } from 'react-icons/io';
 import * as yup from 'yup';
 import { LiaWindowCloseSolid } from 'react-icons/lia';
@@ -34,6 +36,8 @@ import {
 } from '~/lib/store/reducers/ui-slice';
 import { pricingData } from '~/lib/utils/nav';
 import { useRouter } from 'next/navigation';
+import { useGetAllWardsQuery } from '~/lib/services/parent-mutation';
+import AddWardComponent from '~/lib/components/AddWardComponent';
 const data = [
   {
     id: 1,
@@ -63,6 +67,8 @@ const data = [
 
 const Payment = () => {
   const router = useRouter();
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [successData, setSuccessData] = useState({
     title: '',
     description: '',
@@ -78,24 +84,35 @@ const Payment = () => {
   const {
     isSuccess: { title, description, buttonText },
   } = useAppSelector(uiState);
-
-  const [value, setValue] = useState('');
-  const signInSchema = yup.object().shape({
-    first_name: yup.string().required('Please confirm password'),
-
-    last_name: yup.string().required('Please confirm password'),
-    age: yup.string().required('Please confirm password'),
-    gender: yup.string().required('Please confirm password'),
-    email_address: yup.string().required('Please confirm password'),
+  const [wardData, setWardData] = useState<any>([]);
+  const {
+    data: wards,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+  } = useGetAllWardsQuery(null, {
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
   });
 
-  const initialValues: any = {
-    first_name: '',
-    last_name: '',
-    age: '',
-    gender: '',
-    email_address: '',
-  };
+  useEffect(() => {
+    if (isSuccess) {
+      setWardData(wards?.data);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, wards, isError, error]);
+
   function PriceWrapper({ children, bgColor }: any) {
     return (
       <Box
@@ -120,126 +137,43 @@ const Payment = () => {
         <Heading color={'#000'} fontSize={32} fontWeight={700} mb={8}>
           Subscriptions
         </Heading>
-        {false ? (
-          <SimpleGrid
-            columns={{ base: 1, sm: 2, md: 2, lg: 3 }}
-            spacing={6}
-            alignItems="center"
+        {wardData?.length === 0 ? (
+          <VStack
+            w={'100%'}
+            h={'80%'}
+            justifyContent={'center'}
+            alignItems={'center'}
           >
-            {pricingData.map((tier, index) => {
-              return (
-                <PriceWrapper key={index} bgColor={tier.bgColor}>
-                  <Box position="relative" color={tier.textColor}>
-                    <Box
-                      py={4}
-                      alignItems="center"
-                      display="flex"
-                      flexDirection="column"
-                    >
-                      <Text
-                        fontWeight="700"
-                        fontSize={{ base: 24, sm: 18, md: 25, lg: 30 }}
-                        my={3}
-                        fontFamily="heading"
-                      >
-                        {tier.title}
-                      </Text>
-                      <HStack
-                        justifyContent="center"
-                        bg="#FFFBE9"
-                        w={130}
-                        height={47}
-                        borderRadius={7}
-                        borderWidth={0.5}
-                        borderColor="#FBA333"
-                      >
-                        <Text
-                          fontSize={{ base: 18, sm: 22, md: 28, lg: 31 }}
-                          fontWeight="600"
-                          color="#0A52A8"
-                          fontFamily="Inter"
-                        >
-                          {tier.price}
-                        </Text>
-                        <Text
-                          fontSize={{ base: 14, sm: 14, md: 16, lg: 16 }}
-                          color="black"
-                          fontFamily="heading"
-                        >
-                          {tier.period}
-                        </Text>
-                      </HStack>
-                    </Box>
-                    <VStack py={6} borderBottomRadius={'xl'}>
-                      <Text
-                        fontWeight="500"
-                        fontSize={{ base: 14, sm: 14, md: 18, lg: 18 }}
-                        textAlign="start"
-                        fontFamily="heading"
-                        display="flex"
-                      >
-                        Available Features
-                      </Text>
-                      <List spacing={3} textAlign="start" px={12}>
-                        {tier.features.map((feature: any, idx: any) => (
-                          <ListItem
-                            key={idx}
-                            fontFamily="heading"
-                            fontSize={{ base: 12, sm: 12, md: 14, lg: 14 }}
-                          >
-                            <ListIcon
-                              as={
-                                feature.available
-                                  ? IoMdCheckmark
-                                  : LiaWindowCloseSolid
-                              }
-                              bg={feature.available ? '#FFD599' : 'transparent'}
-                              color="#000"
-                              fontSize={{ base: 12, sm: 12, md: 14, lg: 18 }}
-                            />
-                            {feature.feature}
-                          </ListItem>
-                        ))}
-                      </List>
-                      <Box w="80%" pt={7}>
-                        <ChakraButton
-                          w="full"
-                          mb={4}
-                          borderRadius={10}
-                          p={6}
-                          onClick={() => {
-                            setSuccessData({
-                              title: 'Successful!',
-                              description:
-                                'You habe successfukky subscribed for a basic plan',
-                              buttonText: 'Close',
-                            });
-                            onOpenn();
-                          }}
-                          bg={tier.buttonColorScheme}
-                          color={tier.buttonText}
-                          variant={tier.buttonVariant || 'solid'}
-                        >
-                          Select
-                        </ChakraButton>
-                      </Box>
-                    </VStack>
-                  </Box>
-                </PriceWrapper>
-              );
-            })}
-          </SimpleGrid>
+            <VStack w={'60%'} alignSelf={'center'} spacing={10}>
+              <Text
+                color={'#5F5F5F'}
+                fontSize={'48px'}
+                fontWeight={700}
+                textAlign={'center'}
+              >
+                You Currently have no Ward Register
+              </Text>
+              <Button
+                width={{ lg: 386 }}
+                text="Add a Ward "
+                bg="#0A52A8"
+                onClick={() => {
+                  setNew('');
+                  onOpen();
+                }}
+              />
+            </VStack>
+          </VStack>
         ) : (
           <Grid templateColumns="repeat(3, 1fr)" gap={6} my={6} px={6}>
-            {data?.map((item) => (
+            {wardData?.map((item: any) => (
               <GridItem
                 key={item.id}
-                colSpan={[3, 2, 1]}
                 // w={{lg: 410}}
-                h={{ lg: 500 }}
+
                 bg={'#fff'}
                 borderRadius={29}
-                minH={300}
+                minH={400}
                 padding={5}
                 boxShadow={'sm'}
                 display={'flex'}
@@ -247,49 +181,78 @@ const Payment = () => {
                 justifyContent={'space-around'}
                 alignItems={'center'}
               >
-                <Image src={item.img} alt="add" />
+                <Avatar
+                  w={'228px'}
+                  h={'228px'}
+                  fontSize={'xx-large'}
+                  mb={5}
+                  src={item?.profile_image}
+                  name={`${item?.firstname} ${item?.lastname}`}
+                />
                 <VStack>
-                  <Text color="#272727" fontSize={20} fontWeight={700}>
-                    {item.name}
+                  <Text
+                    color="#272727"
+                    fontSize={20}
+                    fontWeight={700}
+                    textTransform={'capitalize'}
+                  >
+                    {item?.firstname} {item?.lastname}
                   </Text>
-                  <Text color="#272727" fontSize={17} fontWeight={300}>
-                    {item.plan}
-                  </Text>
+                  {item?.subscription?.plan_name ? (
+                    <Text color="#272727" fontSize={17} fontWeight={300}>
+                      {item?.subscription?.plan_name}
+                    </Text>
+                  ) : null}
                 </VStack>
-                {item.count === 0 ? (
-                  <Stack w={'100%'}>
+                {!item?.subscription?.plan_name ? (
+                  <Stack w={'100%'} my={5}>
                     <Progress
-                      value={item.count}
+                      value={0}
                       size="lg"
                       bg={true ? '#5F5F5F' : '#5F5F5F'}
                       borderRadius="8px"
                       transition="all 0.3s ease-in-out"
-                      marginTop={10}
                     />
                   </Stack>
                 ) : (
                   <Stack w={'100%'}>
                     <Progress
-                      value={item.count}
+                      value={
+                        ((+item?.subscription?.total_hours -
+                          +item?.subscription?.hours_watched) /
+                          +item?.subscription?.total_hours) *
+                        100
+                      }
                       size="lg"
                       bg={true ? '#FFC727' : '#0065FF'}
                       borderRadius="8px"
                       transition="all 0.3s ease-in-out"
-                      marginTop={10}
                     />
                   </Stack>
                 )}
-
-                <Text color="#5F5F5F" fontSize={16} fontWeight={500}>
-                  {item.count} out of {item.allocation} hours this week
-                </Text>
+                {item?.subscription?.plan_name ? (
+                  <Text color="#5F5F5F" fontSize={16} fontWeight={500}>
+                    {item.subscription?.hours_watched} out of{' '}
+                    {item?.subscription?.total_hours} hours this week
+                  </Text>
+                ) : (
+                  <Text color="#5F5F5F" fontSize={16} fontWeight={700}>
+                    No Active Plan
+                  </Text>
+                )}
 
                 <Button
                   border="#0A52A8"
                   color="#0A52A8"
                   text="Manage Plan"
                   variant="outline"
-                  onClick={() => router.push('parent/payment/1')}
+                  onClick={() => {
+                    if (!item?.subscription?.plan_name) {
+                      router.push(`/parent/pricing?ward_id=${item?.id}`);
+                    } else {
+                      router.push(`/parent/payment/${item?.id}`);
+                    }
+                  }}
                 />
               </GridItem>
             ))}
@@ -343,6 +306,14 @@ const Payment = () => {
           title={successData?.title}
           description={successData?.description}
           buttonText={successData?.buttonText}
+        />
+        <AddWardComponent
+          onClose={onClose}
+          onOpen={onOpen}
+          isOpen={isOpen}
+          neww={neww}
+          setNew={setNew}
+          wards={wardData}
         />
       </Stack>
     </ParentContainer>

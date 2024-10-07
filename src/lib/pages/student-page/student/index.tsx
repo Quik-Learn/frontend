@@ -38,7 +38,7 @@ type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 const Dashboard = () => {
-  const { data, isLoading } = useDashboardHook();
+  const { data, isLoading, dashboardData } = useDashboardHook();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
   const [value, onChange] = useState<Value>(new Date());

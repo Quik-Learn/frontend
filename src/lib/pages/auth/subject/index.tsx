@@ -253,14 +253,15 @@ const Subject = () => {
                   </Stack>
                 ))}
               </HStack>
-
-              <Button
-                text="Submit"
-                bg="#0065FF"
-                isLoading={isStudentLoading}
-                isDisabled={selected?.length < 1}
-                onClick={handleSubmit}
-              />
+              <Stack w={'100%'}>
+                <Button
+                  text="Submit"
+                  bg="#0065FF"
+                  isLoading={isStudentLoading}
+                  isDisabled={selected?.length < 1}
+                  onClick={handleSubmit}
+                />
+              </Stack>
             </>
           )}
         </Formik>

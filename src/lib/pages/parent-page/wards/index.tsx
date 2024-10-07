@@ -16,7 +16,9 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
+  Avatar,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
 import { AddRegistered, AddWard, NewWard } from '~/lib/components/AddWard';
@@ -33,6 +35,7 @@ const data = [
 const Wards = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const router = useRouter();
   const [wardData, setWardData] = useState<any>([]);
   const {
     data: wards,
@@ -66,7 +69,7 @@ const Wards = () => {
 
   return (
     <ParentContainer>
-      {false ? (
+      {wardData.length === 0 ? (
         <VStack
           w={'100%'}
           h={'80%'}
@@ -82,7 +85,15 @@ const Wards = () => {
             >
               You Currently have no Ward Register
             </Text>
-            <Button width={{ lg: 386 }} text="Add a Ward " bg="#0A52A8" />
+            <Button
+              width={{ lg: 386 }}
+              text="Add a Ward "
+              bg="#0A52A8"
+              onClick={() => {
+                setNew('');
+                onOpen();
+              }}
+            />
           </VStack>
         </VStack>
       ) : (
@@ -112,7 +123,7 @@ const Wards = () => {
             </Text>
           </GridItem>
 
-          {data?.map((item) => (
+          {wardData?.map((item: any) => (
             <GridItem
               key={item.id}
               colSpan={[3, 2, 1]}
@@ -127,11 +138,15 @@ const Wards = () => {
               flexDirection={'column'}
               justifyContent={'space-around'}
               alignItems={'center'}
+              onClick={() => {}}
             >
-              <Image src={item.img} alt="add" />
+              <Avatar
+                src={item?.user?.image}
+                name={`${item?.user?.firstname} ${item?.user?.lastname}`}
+              />
               <VStack>
                 <Text color="#272727" fontSize={20} fontWeight={700}>
-                  {item.name}
+                  {item?.user?.firstname} {item?.user?.lastname}
                 </Text>
                 <Text color="#272727" fontSize={20} fontWeight={700}>
                   {item.class}
@@ -143,6 +158,7 @@ const Wards = () => {
                 color="#0A52A8"
                 text="Manage"
                 variant="outline"
+                onClick={() => router.push('/parent/subscription')}
               />
             </GridItem>
           ))}

@@ -36,7 +36,8 @@ export const userService = createApi({
       }
       return headers;
     },
-  }) as BaseQueryFn<string | FetchArgs, unknown, CustomErr, {}>,
+  }) as any,
+  tagTypes: ['cleanUp'],
   endpoints: (builder) => ({
     getUser: builder.query({
       query: () => {
@@ -44,6 +45,8 @@ export const userService = createApi({
           url: `accounts/user/`,
         };
       },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
     }),
     getSubjects: builder.query({
       query: () => {
@@ -51,6 +54,8 @@ export const userService = createApi({
           url: `subjects/get_base_subjects/`,
         };
       },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
     }),
   }),
 });
