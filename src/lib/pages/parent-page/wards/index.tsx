@@ -16,6 +16,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   useToast,
+  Avatar,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import * as yup from 'yup';
@@ -112,7 +113,7 @@ const Wards = () => {
             </Text>
           </GridItem>
 
-          {data?.map((item) => (
+          {wardData?.map((item: any) => (
             <GridItem
               key={item.id}
               colSpan={[3, 2, 1]}
@@ -127,11 +128,15 @@ const Wards = () => {
               flexDirection={'column'}
               justifyContent={'space-around'}
               alignItems={'center'}
+              onClick={() => {}}
             >
-              <Image src={item.img} alt="add" />
+              <Avatar
+                src={item?.user?.image}
+                name={`${item?.user?.firstname} ${item?.user?.lastname}`}
+              />
               <VStack>
                 <Text color="#272727" fontSize={20} fontWeight={700}>
-                  {item.name}
+                  {item?.user?.firstname} {item?.user?.lastname}
                 </Text>
                 <Text color="#272727" fontSize={20} fontWeight={700}>
                   {item.class}

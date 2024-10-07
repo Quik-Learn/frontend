@@ -5,6 +5,7 @@ import { useLoginAccountMutation } from '~/lib/services/auth-service';
 import { useAppDispatch } from '~/lib/store';
 import { setToken } from '~/lib/store/reducers/token-slice';
 import { setType } from '~/lib/store/reducers/type-slice';
+import useSocialLogin from '../../../hooks/useSocialLogin';
 
 const useLoginHook = () => {
   const toast = useToast();
@@ -15,14 +16,6 @@ const useLoginHook = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title: 'Account created.',
-        description: "We've created your account for you.",
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
       dispatch(setToken(data?.data?.auth_token));
       dispatch(setType(data?.data?.user?.account_type));
       if (data?.data?.user?.account_type === 'Parent') {

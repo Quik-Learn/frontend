@@ -19,7 +19,7 @@ import { useAppDispatch } from '~/lib/store';
 import { setToken } from '~/lib/store/reducers/token-slice';
 import { setType } from '~/lib/store/reducers/type-slice';
 
-const Verify = () => {
+const VerifyWard = () => {
   const router = useRouter();
   const toast = useToast();
   const dispatch = useAppDispatch();
@@ -52,12 +52,8 @@ const Verify = () => {
       });
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
-      dispatch(setType(data?.data?.user?.account_type));
-      if (data?.data?.user?.account_type === 'Parent') {
-        router.push('/parent');
-      } else {
-        router.push('/auth/subject');
-      }
+      dispatch(setType('Student'));
+      router.push('/student');
     }
     if (isError) {
       toast({
@@ -89,16 +85,20 @@ const Verify = () => {
             justifyContent="center"
             w={{ base: '100%', lg: '536px' }}
           >
-            <Text
-              color="#59595A"
-              fontSize={{ base: 20, lg: 24 }}
-              textAlign="center"
-              mt={20}
-            >
-              {data?.data?.user?.account_type === 'Parent'
-                ? 'Your account has been verified successfully! You will be redirected to your dashboard in a few seconds'
-                : 'Your account has been verified successfully! You will be  redirected shortly'}
-            </Text>
+            {isSuccess ? (
+              <Text
+                color="#59595A"
+                fontSize={{ base: 20, lg: 24 }}
+                textAlign="center"
+                mt={20}
+              >
+                Your account has been verified successfully! You will be
+                redirected to your dashboard in a few seconds
+              </Text>
+            ) : null}
+            {isError ? (
+              <Text>There was a problem with your verification!</Text>
+            ) : null}
             <Image
               src="/images/success.svg"
               alt="success"
@@ -112,4 +112,4 @@ const Verify = () => {
   );
 };
 
-export default memo(Verify);
+export default memo(VerifyWard);

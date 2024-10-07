@@ -29,6 +29,7 @@ import typeReducer from './reducers/type-slice';
 import { authService } from '../services/auth-service';
 import { userService } from '../services/user-service';
 import { parentService } from '../services/parent-mutation';
+import { studentService } from '../services/student-mutation';
 const persistConfig = {
   key: 'root',
   storage,
@@ -43,6 +44,7 @@ const rootReducer = combineReducers({
   [authService.reducerPath]: authService.reducer,
   [userService.reducerPath]: userService.reducer,
   [parentService.reducerPath]: parentService.reducer,
+  [studentService.reducerPath]: studentService.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -52,6 +54,7 @@ export const store: any = configureStore({
     [authService.reducerPath]: authService.reducer,
     [userService.reducerPath]: userService.reducer,
     [parentService.reducerPath]: parentService.reducer,
+    [studentService.reducerPath]: studentService.reducer,
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
@@ -62,6 +65,7 @@ export const store: any = configureStore({
       authService.middleware,
       userService.middleware,
       parentService.middleware,
+      studentService.middleware,
     ]),
 });
 

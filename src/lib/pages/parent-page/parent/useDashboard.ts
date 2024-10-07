@@ -8,7 +8,7 @@ const useDashboardHook = () => {
   useEffect(() => {
     trigger({});
   }, []);
-  return { data: data?.data, isLoading };
+  return { data: data?.data, isLoading, trigger };
 };
 
 export default useDashboardHook;

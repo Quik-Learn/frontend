@@ -37,7 +37,7 @@ const AddWardComponent = ({
     firstname: yup.string().required('Please enter first name'),
 
     lastname: yup.string().required('Please enter last name'),
-    // age: yup.string().required('Please enter age '),
+    state: yup.string().required('Please enter state '),
     sex: yup.string().required('Please enter  gender'),
     email: yup.string().required('Please enter  email address'),
     DOB: yup.string().required('Please enter date of birth '),
@@ -48,7 +48,7 @@ const AddWardComponent = ({
   const initialValues: any = {
     firstname: '',
     lastname: '',
-    // age: '',
+    state: '',
     sex: '',
     email: '',
     DOB: '',
@@ -110,7 +110,6 @@ const AddWardComponent = ({
     if (isSuccess) {
       setNew('');
       onClose();
-      
 
       setSuccessData({
         title: 'Successful!',

@@ -17,6 +17,7 @@ import {
   HStack,
   Avatar,
   VStack,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -86,6 +87,7 @@ export const NewWard = ({
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
+            console.log('submit');
             addWard(values);
           }}
           validateOnChange={false}
@@ -211,6 +213,26 @@ export const NewWard = ({
                 <Text fontSize={10} color={'red'}></Text>
               </FormControl>
               <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
+                <FormLabel fontSize={14} color="#1D2026">
+                  State of Residence
+                </FormLabel>
+                <Select
+                  placeholder="Enter your state"
+                  bg="#ffffff"
+                  borderWidth={1}
+                  borderColor="#E9EAF0"
+                  value={values.state}
+                  color="#1D2026"
+                  _placeholder={{ color: '#8C94A3' }}
+                  onChange={(e: any) => setFieldValue('state', e.target.value)}
+                >
+                  <option value="Lagos">Lagos</option>
+                </Select>
+                <FormErrorMessage fontSize={10} color={'#f00'}>
+                  {errors.state || ''}
+                </FormErrorMessage>
+              </FormControl>
+              <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
                 <FormLabel fontSize={14} color="#262626" fontWeight={500}>
                   Address
                 </FormLabel>
@@ -274,6 +296,7 @@ export const NewWard = ({
           bg="#0A52A8"
           isLoading={isLoading}
           onClick={() => {
+            console.log('clicked');
             formRef?.current?.handleSubmit();
           }}
         />

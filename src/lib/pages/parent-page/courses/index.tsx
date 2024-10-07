@@ -38,6 +38,8 @@ import {
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
+import { useGetSubjectsQuery } from '~/lib/services/user-service';
+import useGetCourses from './getCourses';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -51,9 +53,8 @@ const Courses = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const formRef = useRef(null);
   const router = useRouter();
-  const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [value, setValue] = useState('');
+  const { courses } = useGetCourses();
+
   const signInSchema = yup.object().shape({
     first_name: yup.string().required('Please confirm password'),
 

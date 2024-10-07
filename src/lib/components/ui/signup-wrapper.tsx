@@ -39,6 +39,7 @@ const SignupWrapper = ({
         borderRadius={8}
         width="56px"
         height="56px"
+        zIndex={80}
         alignSelf="flex-start"
         onClick={() => router.back()}
       />

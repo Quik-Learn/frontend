@@ -14,12 +14,15 @@ import React, { useEffect, useState } from 'react';
 import { parentNav, studentNav } from '../utils/nav';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAppSelector } from '../store';
-import { typeState } from '../store/reducers/type-slice';
+import { useAppDispatch, useAppSelector } from '../store';
+import { clearType, typeState } from '../store/reducers/type-slice';
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react';
+import { clearToken } from '../store/reducers/token-slice';
+import { clearUser } from '../store/reducers/user-slice';
 
 const ParentNav = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
   const [nav, setNav] = useState<any[]>([]);
   const type = useAppSelector(typeState);
@@ -28,13 +31,20 @@ const ParentNav = () => {
   // const type = pathname.split('/')[1] || 'parent';
   console.log(pathname, path);
   useEffect(() => {
-    if ('student' === 'student') {
+    if (type?.toLowerCase() === 'student') {
       setNav(studentNav);
     } else {
       setNav(parentNav);
     }
   }, [type]);
+  console.log(type, 'typetype');
 
+  const handleLogout = () => {
+    dispatch(clearToken());
+    dispatch(clearType());
+    dispatch(clearUser());
+    router.push('/');
+  };
   return (
     <VStack
       bg="#fff"
@@ -56,7 +66,7 @@ const ParentNav = () => {
       ) : (
         <>
           <Stack>
-            <Image src="./images/tutor-logo.png" alt="logo" />
+            <Image src="/images/tutor-logo.png" alt="logo" />
           </Stack>
           <VStack mt={30} p={5}>
             {nav?.map((item) => (
@@ -112,6 +122,7 @@ const ParentNav = () => {
               borderColor: '#FF4141',
               color: '#FF4141',
             }}
+            onClick={handleLogout}
           >
             <Image src="/images/log-out.svg" w={6} h={6} alt="icon" />
 

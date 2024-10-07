@@ -56,6 +56,15 @@ export const parentService = createApi({
         };
       },
     }),
+    updateUserProfile: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: `/accounts/user/`,
+          method: 'put',
+          body,
+        };
+      },
+    }),
     getAWard: builder.query({
       query: (id) => {
         return {
@@ -67,7 +76,7 @@ export const parentService = createApi({
       query: (body: any) => {
         return {
           url: `accounts/parent/manage/ward/${body.id}`,
-          method: 'put',
+          method: 'PUT',
           body: body.body,
         };
       },
@@ -76,7 +85,7 @@ export const parentService = createApi({
       query: (body: any) => {
         return {
           url: `accounts/parent/manage/ward/`,
-          method: 'patch',
+          method: 'PATCH',
           body,
         };
       },
@@ -85,6 +94,16 @@ export const parentService = createApi({
       query: () => {
         return {
           url: `accounts/parent/get/wards/`,
+        };
+      },
+    }),
+
+    setTypeFromSocial: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: 'accounts/user/set/account/type/from/social/',
+          method: 'PATCH',
+          body,
         };
       },
     }),
@@ -98,4 +117,6 @@ export const {
   useEditWardMutation,
   useGetAWardQuery,
   useGetWardsQuery,
+  useSetTypeFromSocialMutation,
+  useUpdateUserProfileMutation,
 } = parentService;

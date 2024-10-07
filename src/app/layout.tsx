@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import { useEffect, useState } from 'react';
 
 import Providers from '~/app/providers';
 

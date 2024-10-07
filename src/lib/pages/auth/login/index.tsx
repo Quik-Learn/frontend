@@ -30,18 +30,20 @@ import Link from 'next/link';
 import { Formik } from 'formik';
 import { MdArrowOutward } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import * as yup from 'yup';
 import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import useLoginHook from './useLogin';
+import useSocialLogin from '../../../hooks/useSocialLogin';
 
 const Login = () => {
   const router = useRouter();
   const formRef = useRef<any>(null);
   const { loginAccount, isLoading } = useLoginHook();
+  const { handleSocialLogin, loading } = useSocialLogin();
   const signInSchema = yup.object().shape({
     email: yup.string().required('Please enter your email'),
     password: yup.string().required('Please enter your password'),
@@ -57,6 +59,11 @@ const Login = () => {
       formRef?.current?.handleSubmit();
     }
   };
+
+  useEffect(() => {
+    console.log('here');
+  }, []);
+
   return (
     <SignupWrapper img="/images/login.png" flexDirection="row-reverse">
       <VStack
@@ -170,10 +177,20 @@ const Login = () => {
           </Text>
 
           <HStack spacing={6} justify="center" w={'full'}>
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('google', 'Parent')}
+            >
               <Image src="/images/google.svg" alt="google" w="20px" h="20px" />
             </HStack>
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('facebook', 'Parent')}
+            >
               <Image
                 src="/images/facebook.svg"
                 alt="google"
@@ -181,7 +198,12 @@ const Login = () => {
                 h="20px"
               />
             </HStack>
-            <HStack backgroundColor="#F7F7F8" p={4} cursor="pointer">
+            <HStack
+              backgroundColor="#F7F7F8"
+              p={4}
+              cursor="pointer"
+              onClick={() => handleSocialLogin('apple', 'Parent')}
+            >
               <Image src="/images/apple.svg" alt="google" w="20px" h="20px" />
             </HStack>
           </HStack>
