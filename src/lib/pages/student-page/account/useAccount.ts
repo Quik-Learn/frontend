@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
@@ -6,16 +7,40 @@ import { useUpdateUserProfileMutation } from '~/lib/services/parent-mutation';
 import { useToast } from '@chakra-ui/react';
 import {
   useLazyGetAuthUserQuery,
-  useLazyGetConnectionQuery,
   useReceieveConnectionMutation,
 } from '~/lib/services/student-mutation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '~/lib/store';
+import {
+  clearRedirect,
+  redirectState,
+  setRedirect,
+} from '~/lib/store/reducers/redirect-slice';
+import {
+  useLazyGetConnectionQuery,
+  userService,
+} from '~/lib/services/user-service';
 
 const useAccount = (callbackRecieve: any, onOpen: any) => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const redirect = useAppSelector(redirectState);
+  const searchParams = useSearchParams();
+
+  const action = searchParams.get('action');
+  const token = searchParams.get('token');
+  const authenticated = searchParams.get('authenticated');
   const [trigger, { data, isLoading, isSuccess }] = useLazyGetAuthUserQuery();
   const [getConnection, getConnectionData] = useLazyGetConnectionQuery();
   const [updateUserProfile, responseData] = useUpdateUserProfileMutation();
   const [receieveConnection, receieveConnectionData] =
     useReceieveConnectionMutation();
+  const {
+    isSuccess: isReqSuccess,
+    isError: isReqError,
+    error: reqError,
+  } = getConnectionData;
   const toast = useToast();
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter your firstname'),
@@ -53,16 +78,48 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
     }
   }, [data, isSuccess]);
   useEffect(() => {
-    const { isSuccess, isError, error } = receieveConnectionData;
-    if (isSuccess) {
-      trigger({});
-      callbackRecieve();
+    if (isReqSuccess) {
+      onOpen();
+      setTimeout(() => {
+        dispatch(userService.util.resetApiState());
+      }, 5000);
     }
-    if (isError) {
+    if (isReqError && !authenticated) {
+      console.log(reqError, 'here');
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
-        description: 'An Error occured.',
+        description: reqError?.data?.detail || 'An error occured',
+        title: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      if (reqError?.data?.detail?.toLowerCase().includes('permission')) {
+        dispatch(
+          setRedirect(
+            `/student/account?action=${action}&token=${token}&authenticated=true`
+          )
+        );
+        router.push('/');
+      }
+
+      dispatch(userService.util.resetApiState());
+    }
+  }, [isReqSuccess, isReqError, reqError]);
+  useEffect(() => {
+    if (receieveConnectionData.isSuccess) {
+      trigger({});
+      callbackRecieve();
+      dispatch(clearRedirect());
+      router.push('/student/account');
+    }
+    if (receieveConnectionData?.isError) {
+      toast({
+        description:
+          //@ts-ignore
+          receieveConnectionData?.error?.data?.detail || 'An error occured',
+        title: 'An Error occured.',
         status: 'error',
         duration: 9000,
         isClosable: true,
@@ -70,11 +127,6 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
       });
     }
   }, [receieveConnectionData]);
-  useEffect(() => {
-    if (getConnectionData.isSuccess) {
-      onOpen();
-    }
-  }, [getConnectionData.isSuccess]);
   useEffect(() => {
     if (responseData.isSuccess) {
       toast({
@@ -102,7 +154,14 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
       });
     }
   }, [responseData]);
-
+  console.log(redirect);
+  console.log(action, token, authenticated);
+  useEffect(() => {
+    if (action === 'connectionRequest') {
+      console.log('land');
+      getConnection(token);
+    }
+  }, [action, token]);
   return {
     initialValues,
     signInSchema,

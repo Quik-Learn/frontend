@@ -9,7 +9,7 @@
     "turbo": "pnpm dlx turbo@2.0.9",
     "build:turbo": "pnpm turbo run build",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
-    "start": "next start -p 8082",
+    "start": "next start -p 8083",
     "type-check": "tsc --noEmit",
     "check:turbo": "pnpm turbo lint type-check",
     "test:e2e": "playwright test",

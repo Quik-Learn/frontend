@@ -53,7 +53,7 @@ const Dashboard = () => {
 
   return (
     <ParentContainer>
-      {empty ? (
+      {true ? (
         <Grid
           templateColumns="repeat(12, 1fr)"
           templateRows={'repeat(4, 1fr)'}
@@ -76,7 +76,7 @@ const Dashboard = () => {
             >
               <VStack alignItems={'flex-start'}>
                 <Text fontSize="2xl">
-                  Welcome, {data?.firstname} {data?.lastname}!
+                  Welcome, {data?.user?.firstname} {data?.user?.lastname}!
                 </Text>
                 <Text mb="4">Enroll in Courses and find the best Tutors!</Text>
 
@@ -595,7 +595,7 @@ const Dashboard = () => {
             >
               <VStack alignItems={'flex-start'}>
                 <Text fontSize="2xl">
-                  Welcome, {data?.firstname} {data?.lastname}!
+                  Welcome, {data?.user?.firstname} {data?.user?.lastname}!
                 </Text>
                 <Text mb="4">Enroll in Courses and find the best Tutors!</Text>
                 <HStack gap={10}>

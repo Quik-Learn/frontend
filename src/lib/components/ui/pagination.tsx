@@ -6,46 +6,37 @@ import {
 } from 'react-icons/md';
 
 const Pagination = ({
-  totalPages = 10,
+  totalPages = 0,
   onPageChange,
   next,
   isLoading,
   previous,
-  refetch,
+  currentPage,
 }: any) => {
-  const [currentPage, setCurrentPage] = useState(1);
-
   const handlePreviousPage = () => {
     if (previous) {
-      setCurrentPage(previous);
+      onPageChange(previous);
+
       //   onPageChange?.(newPage); // Optional callback when page changes
     }
   };
 
   const handleNextPage = () => {
     if (next) {
-      setCurrentPage(next);
+      onPageChange(next);
       // Optional callback when page changes
     }
   };
 
-  // useEffect(() => {
-  //   refetch();
-  // }, []);
-  useEffect(() => {
-    if (currentPage) {
-      onPageChange(currentPage);
-    }
-  }, [currentPage]);
-
-  // Change page to a specific number
   const handlePageClick = (pageNumber: number) => {
-    setCurrentPage(pageNumber);
-    // onPageChange?.(pageNumber); // Optional callback when page changes
+    onPageChange(pageNumber);
   };
+  useEffect(() => {
+    onPageChange(1);
+  }, []);
 
   return (
-    <HStack spacing={2}>
+    <HStack spacing={2} justifyContent={'flex-end'} p={10} w="100%">
       {/* Previous Button */}
       <IconButton
         aria-label="Previous page"
@@ -60,7 +51,8 @@ const Pagination = ({
       {Array.from({ length: totalPages }).map((_, index) => (
         <ChakraButton
           key={index}
-          colorScheme={index + 1 === currentPage ? 'blue' : 'gray'}
+          color={'white'}
+          bg={index + 1 === currentPage ? '#02659C' : 'gray'}
           variant={index + 1 === currentPage ? 'solid' : 'outline'}
           onClick={() => handlePageClick(index + 1)}
           isDisabled={isLoading}

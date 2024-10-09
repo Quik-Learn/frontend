@@ -181,7 +181,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('google', 'Parent')}
+              onClick={() => handleSocialLogin('google', '')}
             >
               <Image src="/images/google.svg" alt="google" w="20px" h="20px" />
             </HStack>
@@ -189,7 +189,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('facebook', 'Parent')}
+              onClick={() => handleSocialLogin('facebook', '')}
             >
               <Image
                 src="/images/facebook.svg"
@@ -202,7 +202,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('apple', 'Parent')}
+              onClick={() => handleSocialLogin('apple', '')}
             >
               <Image src="/images/apple.svg" alt="google" w="20px" h="20px" />
             </HStack>

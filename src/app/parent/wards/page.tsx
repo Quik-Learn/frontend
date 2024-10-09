@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
-import Wards from '~/lib/pages/parent-page/wards';
+import Payment from '../payment/page';
 
 export const metadata: Metadata = {
   title: 'Parent Wards',
 };
 
-export default Wards;
+export default Payment;

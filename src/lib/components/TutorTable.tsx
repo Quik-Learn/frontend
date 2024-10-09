@@ -11,34 +11,43 @@ import {
   Checkbox,
 } from '@chakra-ui/react';
 
-const TutorTable = () => {
-  const qualifications = [
-    { subject: 'Law', qualification: 'A-level', grade: 'A' },
-    { subject: 'Sociology', qualification: 'A-level', grade: 'B' },
-    { subject: 'Drama', qualification: 'A-level', grade: 'A' },
-  ];
-
+const TutorTable = ({
+  general_availability,
+  qualifications,
+  subjects,
+}: any) => {
   // Data for availability
+  // const availability = [
+  //   {
+  //     time: 'Pre 12pm',
+  //     availability: [false, false, false, true, true, false, false],
+  //   },
+  //   {
+  //     time: '12 - 5pm',
+  //     availability: [true, false, true, false, false, false, false],
+  //   },
+  //   {
+  //     time: 'After 5pm',
+  //     availability: [true, true, true, false, true, false, false],
+  //   },
+  // ];
   const availability = [
     {
       time: 'Pre 12pm',
-      availability: [false, false, false, true, true, false, false],
+      availability: general_availability?.map((day: any) => day.morning),
     },
     {
       time: '12 - 5pm',
-      availability: [true, false, true, false, false, false, false],
+      availability: general_availability?.map((day: any) => day.afternoon),
     },
     {
       time: 'After 5pm',
-      availability: [true, true, true, false, true, false, false],
+      availability: general_availability?.map((day: any) => day.evening),
     },
   ];
-
+  console.log(availability, general_availability);
   // Data for subjects offered
-  const subjectsOffered = [
-    { subject: 'Law', qualification: 'A Level', price: '' },
-    { subject: 'Sociology', qualification: 'A Level', price: '£25/hr' },
-  ];
+
   return (
     <Box p={3}>
       {/* Qualifications Section */}
@@ -79,7 +88,7 @@ const TutorTable = () => {
             </Tr>
           </Thead>
           <Tbody borderColor={'#EBE8E6'}>
-            {qualifications.map((qual, index) => (
+            {qualifications?.map((qual: any, index: number) => (
               <Tr key={index} borderColor={'#EBE8E6'}>
                 <Td
                   borderColor={'#EBE8E6'}
@@ -95,7 +104,7 @@ const TutorTable = () => {
                   color={'#000000'}
                   fontWeight={300}
                 >
-                  {qual.qualification}
+                  {qual.Qualification}
                 </Td>
                 <Td
                   borderColor={'#EBE8E6'}
@@ -103,7 +112,7 @@ const TutorTable = () => {
                   color={'#000000'}
                   fontWeight={300}
                 >
-                  {qual.grade}
+                  {qual.Grade}
                 </Td>
               </Tr>
             ))}
@@ -194,7 +203,7 @@ const TutorTable = () => {
             </Tr>
           </Thead>
           <Tbody borderColor={'#EBE8E6'}>
-            {availability.map((slot, index) => (
+            {availability?.map((slot, index) => (
               <Tr key={index} borderColor={'#EBE8E6'}>
                 <Td
                   borderColor={'#EBE8E6'}
@@ -202,9 +211,9 @@ const TutorTable = () => {
                   color={'#000000'}
                   fontWeight={300}
                 >
-                  {slot.time}
+                  {slot?.time}
                 </Td>
-                {slot.availability.map((available, idx) => (
+                {slot?.availability?.map((available: any, idx: number) => (
                   <Td
                     key={idx}
                     bg={available ? '#FFF' : '#F5F5F5'}
@@ -213,9 +222,10 @@ const TutorTable = () => {
                     border={availability ? '#EBE8E6' : 'none'}
                   >
                     <Checkbox
-                      colorScheme="white"
+                      iconColor="black.400"
                       isChecked={available}
                       isReadOnly
+                      value={available}
                     />
                   </Td>
                 ))}
@@ -263,7 +273,7 @@ const TutorTable = () => {
             </Tr>
           </Thead>
           <Tbody borderColor={'#EBE8E6'}>
-            {subjectsOffered.map((subject, index) => (
+            {subjects?.map((subject: any, index: number) => (
               <Tr key={index} borderColor={'#EBE8E6'}>
                 <Td
                   color={'#000000'}

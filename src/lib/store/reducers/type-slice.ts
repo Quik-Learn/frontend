@@ -9,7 +9,7 @@ const typeSlice = createSlice({
       return payload;
     },
     clearType: () => {
-      return '';
+      return 'student';
     },
   },
 });

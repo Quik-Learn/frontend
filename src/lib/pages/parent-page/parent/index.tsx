@@ -33,7 +33,7 @@ const Dashboard = () => {
   const { data, isLoading, dashboardData } = useDashboardHook();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const router = useRouter();
-
+  console.log(dashboardData);
   const [neww, setNew] = useState('');
   return (
     <ParentContainer>
@@ -76,7 +76,11 @@ const Dashboard = () => {
                   setNew('');
                   onOpen();
                 }}
-                text="Add a Ward"
+                text={
+                  dashboardData?.ward_count === 0
+                    ? 'Add a Ward'
+                    : 'Add Another Ward'
+                }
               />
             </HStack>
           </VStack>
@@ -109,7 +113,9 @@ const Dashboard = () => {
                 textAlign={'center'}
                 color={'#0065FF'}
               >
-                Active Students
+                {dashboardData?.ward_count > 1
+                  ? 'Active Students'
+                  : 'Active Student'}
               </Text>
             </GridItem>
 
@@ -305,7 +311,7 @@ const Dashboard = () => {
             boxShadow={'base'}
             minHeight={'300px'}
           >
-            {dashboardData?.subscriptions?.length === 0 || !dashboardData ? (
+            {dashboardData?.subscriptions?.length === 0 ? (
               <>
                 <Text
                   my="4"
@@ -328,128 +334,54 @@ const Dashboard = () => {
               </>
             ) : (
               <>
-                <Text
-                  fontWeight="bold"
-                  textAlign={'left'}
-                  fontSize={18}
-                  mb="1"
-                  color={'#5F5F5F'}
-                >
-                  Basic Plan
-                </Text>
-                <Box mb="2" w={'100%'}>
-                  <ProgressBar
-                    firstPercentage={'70%'}
-                    secondPercentage={'30%'}
-                  />
-
-                  {/* <HStack justifyContent={'space-between'}>
+                {dashboardData?.subscriptions?.map((item: any) => (
+                  <>
                     <Text
                       fontWeight="bold"
                       textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
+                      fontSize={18}
+                      mb="1"
                       color={'#5F5F5F'}
                     >
-                      Jacob Doe
+                      {item.plan_name}
                     </Text>
-                    <Text
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      {' '}
-                      (20/30hrs)
-                    </Text>
-                  </HStack>
-
-                  <ProgressBar
-                    firstPercentage={'20%'}
-                    secondPercentage={'80%'}
-                  />
-                  <HStack justifyContent={'space-between'}>
-                    <Text
-                      fontWeight="bold"
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      Jacob Doe
-                    </Text>
-                    <Text
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      {' '}
-                      (20/30hrs)
-                    </Text>
-                  </HStack> */}
-                </Box>
-
-                <Text
-                  fontWeight="bold"
-                  textAlign={'left'}
-                  fontSize={18}
-                  mb="1"
-                  color={'#5F5F5F'}
-                >
-                  Standard Plan
-                </Text>
-                <Box mb="2" w={'100%'}>
-                  <Text>Jacob Doe (20/30hrs)</Text>
-                  <ProgressBar
-                    firstPercentage={'40%'}
-                    secondPercentage={'60%'}
-                  />
-                  <HStack justifyContent={'space-between'}>
-                    <Text
-                      fontWeight="bold"
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      Jacob Doe
-                    </Text>
-                    <Text
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      {' '}
-                      (20/30hrs)
-                    </Text>
-                  </HStack>
-                  <ProgressBar
-                    firstPercentage={'50%'}
-                    secondPercentage={'50%'}
-                  />
-                  <HStack justifyContent={'space-between'}>
-                    <Text
-                      fontWeight="bold"
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      Jacob Doe
-                    </Text>
-                    <Text
-                      textAlign={'left'}
-                      fontSize={12}
-                      mb="2"
-                      color={'#5F5F5F'}
-                    >
-                      {' '}
-                      (20/30hrs)
-                    </Text>
-                  </HStack>
-                </Box>
+                    <Box mb="2" w={'100%'}>
+                      {/* <Progress
+                        value={
+                          (+item.remaining_hours / +item?.total_hours) * 100
+                        }
+                        size="lg"
+                        bg={true ? '#FFC727' : '#0065FF'}
+                        borderRadius="8px"
+                        transition="all 0.3s ease-in-out"
+                      /> */}
+                      <ProgressBar
+                        firstPercentage={`${(item?.remaining_hours / item?.total_hours) * 100} %`}
+                        secondPercentage={`${(item?.total_hours / item?.total_hours) * 100}%`}
+                      />
+                      <HStack justifyContent={'space-between'}>
+                        <Text
+                          fontWeight="bold"
+                          textAlign={'left'}
+                          fontSize={12}
+                          mb="2"
+                          color={'#5F5F5F'}
+                        >
+                          {item?.ward_name}
+                        </Text>
+                        <Text
+                          textAlign={'left'}
+                          fontSize={12}
+                          mb="2"
+                          color={'#5F5F5F'}
+                        >
+                          {' '}
+                          {item.remaining_hours}hrs/{item.total_hours}hrs
+                        </Text>
+                      </HStack>
+                    </Box>
+                  </>
+                ))}
               </>
             )}
           </VStack>

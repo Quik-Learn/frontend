@@ -43,6 +43,8 @@ import {
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
 import { useRouter } from 'next/navigation';
+import useGetCourses from './getCourses';
+import Pagination from '~/lib/components/ui/pagination';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -53,28 +55,18 @@ const oldData = [
   { id: 3, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
 ];
 const Courses = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formRef = useRef(null);
   const router = useRouter();
-  const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [value, setValue] = useState('');
-  const signInSchema = yup.object().shape({
-    first_name: yup.string().required('Please confirm password'),
+  const {
+    courses,
+    count,
+    next,
+    previous,
+    isLoading,
+    getSubjects,
+    total_pages,
+    currentPage,
+  } = useGetCourses();
 
-    last_name: yup.string().required('Please confirm password'),
-    age: yup.string().required('Please confirm password'),
-    gender: yup.string().required('Please confirm password'),
-    email_address: yup.string().required('Please confirm password'),
-  });
-
-  const initialValues: any = {
-    first_name: '',
-    last_name: '',
-    age: '',
-    gender: '',
-    email_address: '',
-  };
   const CourseCard = ({
     title,
     description,
@@ -82,6 +74,7 @@ const Courses = () => {
     duration,
     learners,
     router,
+    id,
   }: any) => (
     <Box
       borderRadius="md"
@@ -93,7 +86,7 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push('/student/courses/1')}
+      onClick={() => router.push(`/parent/courses/${id}`)}
     >
       <Image
         src={imageSrc}
@@ -196,71 +189,63 @@ const Courses = () => {
                 }}
                 gap={4}
               >
-                {coursesArray.map((course, index) => (
+                {courses?.map((course: any, index: number) => (
                   <GridItem key={index}>
                     <CourseCard
-                      title={course.title}
-                      description={course.description}
-                      imageSrc={course.imageSrc}
-                      duration={course.duration}
-                      learners={course.learners}
+                      title={course?.title}
+                      description={course?.short_description}
+                      imageSrc={course?.thumbnail}
+                      duration={course?.lesson_hours}
+                      learners={course?.learners}
                       router={router}
+                      id={course?.id}
                     />
                   </GridItem>
                 ))}
               </Grid>
             </Box>
-            <HStack
-              justify="space-between"
-              mt={8}
-              width="full"
-              flexDirection={{ base: 'column', lg: 'row' }}
-            >
-              <HStack spacing={2}>
-                <ChakraButton
-                  leftIcon={<Text as="span">&larr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
+            <Pagination
+              totalPages={total_pages}
+              isLoading={isLoading}
+              currentPage={currentPage}
+              next={next}
+              previous={previous}
+              onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
+            />
+            <TabPanel>
+              {' '}
+              <Box m={6}>
+                <Grid
+                  templateColumns={{
+                    base: '90vw',
+                    lg: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  }}
+                  gap={4}
                 >
-                  Prev
-                </ChakraButton>
-
-                <ChakraButton
-                  rightIcon={<Text as="span">&rarr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
-                >
-                  Next
-                </ChakraButton>
-              </HStack>
-              <HStack spacing={2}>
-                <IconButton
-                  aria-label="Previous page"
-                  icon={<MdKeyboardDoubleArrowLeft />}
-                  colorScheme="gray"
-                  variant="ghost"
-                  isDisabled
-                />
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <ChakraButton
-                    key={index}
-                    colorScheme={index === 0 ? 'blue' : 'gray'}
-                    variant={index === 0 ? 'solid' : 'outline'}
-                  >
-                    {index + 1}
-                  </ChakraButton>
-                ))}
-                <IconButton
-                  aria-label="Next page"
-                  icon={<MdKeyboardDoubleArrowRight />}
-                  colorScheme="blue"
-                  variant="ghost"
-                />
-              </HStack>
-            </HStack>
-          </TabPanel>
-          <TabPanel>
-            {' '}
+                  {courses?.map((course: any, index: number) => (
+                    <GridItem key={index}>
+                      <CourseCard
+                        title={course?.title}
+                        description={course?.short_description}
+                        imageSrc={course?.thumbnail}
+                        duration={course?.lesson_hours}
+                        learners={course?.learners}
+                        router={router}
+                        id={course?.id}
+                      />
+                    </GridItem>
+                  ))}
+                </Grid>
+              </Box>
+              <Pagination
+                totalPages={total_pages}
+                isLoading={isLoading}
+                currentPage={currentPage}
+                next={next}
+                previous={previous}
+                onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
+              />
+            </TabPanel>{' '}
             <Box m={6}>
               <Grid
                 templateColumns={{
@@ -342,68 +327,29 @@ const Courses = () => {
                 }}
                 gap={4}
               >
-                {coursesArray.map((course, index) => (
+                {courses?.map((course: any, index: number) => (
                   <GridItem key={index}>
                     <CourseCard
-                      title={course.title}
-                      description={course.description}
-                      imageSrc={course.imageSrc}
-                      duration={course.duration}
-                      learners={course.learners}
+                      title={course?.title}
+                      description={course?.short_description}
+                      imageSrc={course?.thumbnail}
+                      duration={course?.lesson_hours}
+                      learners={course?.learners}
                       router={router}
+                      id={course?.id}
                     />
                   </GridItem>
                 ))}
               </Grid>
             </Box>
-            <HStack
-              justify="space-between"
-              mt={8}
-              width="full"
-              flexDirection={{ base: 'column', lg: 'row' }}
-            >
-              <HStack spacing={2}>
-                <ChakraButton
-                  leftIcon={<Text as="span">&larr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
-                >
-                  Prev
-                </ChakraButton>
-
-                <ChakraButton
-                  rightIcon={<Text as="span">&rarr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
-                >
-                  Next
-                </ChakraButton>
-              </HStack>
-              <HStack spacing={2}>
-                <IconButton
-                  aria-label="Previous page"
-                  icon={<MdKeyboardDoubleArrowLeft />}
-                  colorScheme="gray"
-                  variant="ghost"
-                  isDisabled
-                />
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <ChakraButton
-                    key={index}
-                    colorScheme={index === 0 ? 'blue' : 'gray'}
-                    variant={index === 0 ? 'solid' : 'outline'}
-                  >
-                    {index + 1}
-                  </ChakraButton>
-                ))}
-                <IconButton
-                  aria-label="Next page"
-                  icon={<MdKeyboardDoubleArrowRight />}
-                  colorScheme="blue"
-                  variant="ghost"
-                />
-              </HStack>
-            </HStack>
+            <Pagination
+              totalPages={total_pages}
+              isLoading={isLoading}
+              currentPage={currentPage}
+              next={next}
+              previous={previous}
+              onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
+            />
           </TabPanel>
         </TabPanels>
       </Tabs>

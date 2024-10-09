@@ -5,7 +5,7 @@ import { useLazyGetUserQuery } from '~/lib/services/user-service';
 import { setType } from '~/lib/store/reducers/type-slice';
 
 const useDashboardHook = () => {
-  const [trigger, { data, isLoading }] = useLazyGetUserQuery();
+  const [trigger, { data, isLoading, isSuccess }] = useLazyGetUserQuery();
   const [triggerDashboard, dashboardData] = useLazyGetParentDashboardQuery();
   const [profileData, setProfileData] = useState<any>();
   useEffect(() => {
@@ -14,11 +14,12 @@ const useDashboardHook = () => {
   }, []);
 
   useEffect(() => {
-    if (data?.data) {
+    if (isSuccess) {
+      console.log(data?.data);
       setProfileData(data?.data);
       setType(data?.data?.account_type?.toLowerCase());
     }
-  }, [data]);
+  }, [data, isSuccess]);
 
   return {
     data: profileData,

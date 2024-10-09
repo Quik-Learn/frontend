@@ -50,7 +50,7 @@ export const studentService = createApi({
     getStudentDashboard: builder.query({
       query: (id) => {
         return {
-          url: `student/get/general_stats/`,
+          url: `student/dashboard/`,
         };
       },
     }),
@@ -60,13 +60,6 @@ export const studentService = createApi({
           url: 'accounts/user/process/connection/request/',
           method: 'PATCH',
           body,
-        };
-      },
-    }),
-    getConnection: builder.query({
-      query: () => {
-        return {
-          url: 'accounts/user/get/connection/request/',
         };
       },
     }),
@@ -86,5 +79,4 @@ export const {
   useLazyGetStudentDashboardQuery,
   useReceieveConnectionMutation,
   useLazyGetAuthUserQuery,
-  useLazyGetConnectionQuery,
 } = studentService;

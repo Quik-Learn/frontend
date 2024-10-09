@@ -3,12 +3,14 @@ import { Box, SimpleGrid, VStack, Text, Button, Flex } from '@chakra-ui/react';
 import TopNav from '~/lib/layout/TopNav';
 import ParentNav from './ParentNav';
 import { tokenState } from '../store/reducers/token-slice';
-import { useAppSelector } from '../store';
+import { useAppDispatch, useAppSelector } from '../store';
 import { typeState } from '../store/reducers/type-slice';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { clearRedirect, setRedirect } from '../store/reducers/redirect-slice';
 
 const ParentContainer = ({ children }: any) => {
+  const dispatch = useAppDispatch();
   const token = useAppSelector(tokenState);
   const router = useRouter();
   useEffect(() => {
@@ -16,6 +18,9 @@ const ParentContainer = ({ children }: any) => {
       router.replace('/');
     }
   }, [token, router]);
+  useEffect(() => {
+    dispatch(clearRedirect());
+  }, []);
 
   return (
     <Flex minH={'100vh'} maxH={'100vh'} bg={'#fafafa'} overflowY={'scroll'}>

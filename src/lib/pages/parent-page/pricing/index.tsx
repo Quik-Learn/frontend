@@ -25,6 +25,7 @@ import {
   useGetAllPlansQuery,
 } from '~/lib/services/parent-mutation';
 import ParentContainer from '~/lib/layout/ParentContainer';
+import { pricingData } from '~/lib/utils/nav';
 interface Props {
   children: React.ReactNode;
 }
@@ -41,7 +42,6 @@ function PriceWrapper({ children, bgColor }: any) {
       borderColor={bgColor}
       display="flex"
       flexDirection="column"
-      w={{ base: '100%', md: '350px', lg: '408px' }}
     >
       {children}
     </Box>
@@ -189,25 +189,27 @@ export default function Pricing() {
                       Available Features
                     </Text>
                     <List spacing={3} textAlign="start" px={12}>
-                      {tier?.features?.map((feature: any, idx: any) => (
-                        <ListItem
-                          key={idx}
-                          fontFamily="heading"
-                          fontSize={{ base: 12, sm: 12, md: 14, lg: 18 }}
-                        >
-                          <ListIcon
-                            as={
-                              feature.available
-                                ? IoMdCheckmark
-                                : LiaWindowCloseSolid
-                            }
-                            bg={feature.available ? '#FFD599' : 'transparent'}
-                            color="#000"
+                      {pricingData[index]?.features?.map(
+                        (feature: any, idx: any) => (
+                          <ListItem
+                            key={idx}
+                            fontFamily="heading"
                             fontSize={{ base: 12, sm: 12, md: 14, lg: 18 }}
-                          />
-                          {feature.feature}
-                        </ListItem>
-                      ))}
+                          >
+                            <ListIcon
+                              as={
+                                feature.available
+                                  ? IoMdCheckmark
+                                  : LiaWindowCloseSolid
+                              }
+                              bg={feature.available ? '#FFD599' : 'transparent'}
+                              color="#000"
+                              fontSize={{ base: 12, sm: 12, md: 14, lg: 18 }}
+                            />
+                            {feature.feature}
+                          </ListItem>
+                        )
+                      )}
                     </List>
                     <Box w="80%" pt={7}>
                       <Button

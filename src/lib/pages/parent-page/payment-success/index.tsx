@@ -2,29 +2,36 @@
 
 import { VStack, Text, Stack, Spinner } from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import { useVerifyPaymentMutation } from '~/lib/services/parent-mutation';
 import { Image } from '@chakra-ui/react';
 import ParentContainer from '~/lib/layout/ParentContainer';
+
 const PaymentSuccess = () => {
   const router = useRouter();
-  const [verifyPayment, { data, isSuccess, isLoading, isError, error, reset }] =
+  const hasVerifiedPayment = useRef(false); // Use ref to track first call
+  const [verifyPayment, { data, isSuccess, isLoading, isError, error }] =
     useVerifyPaymentMutation();
 
   const searchParams = useSearchParams();
   const reference = searchParams.get('reference');
-  console.log(reference);
+
   useEffect(() => {
-    if (reference) {
+    if (reference && !hasVerifiedPayment.current) {
+      // Ensure it runs only once
+      hasVerifiedPayment.current = true;
       verifyPayment(reference);
     }
-  }, [reference]);
+  }, [reference, verifyPayment]);
 
   useEffect(() => {
     if (isSuccess) {
-      router.push('/parent/payment');
+      router.push('/parent/wards');
     }
-  }, [isSuccess]);
+    if (isError) {
+      console.log(error);
+    }
+  }, [isSuccess, isError, router, error]);
 
   return (
     <ParentContainer>
@@ -49,19 +56,19 @@ const PaymentSuccess = () => {
                 textAlign="center"
                 mt={20}
               >
-                Payment Successfull
+                Payment Successful
               </Text>
-            ) : (
+            ) : null}
+            {isError ? (
               <Text
-                color="#590000"
+                color="#F00"
                 fontSize={{ base: 20, lg: 24 }}
                 textAlign="center"
                 mt={20}
               >
                 Payment Failed, try again
               </Text>
-            )}
-
+            ) : null}
             <Image
               src="/images/success.svg"
               alt="success"
@@ -75,4 +82,4 @@ const PaymentSuccess = () => {
   );
 };
 
-export default PaymentSuccess;
+export default memo(PaymentSuccess);

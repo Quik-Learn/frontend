@@ -17,11 +17,12 @@ const useDashboardHook = () => {
   }, []);
 
   useEffect(() => {
-    if (data?.data) {
+    if (isSuccess) {
       setProfileData(data?.data);
       setType(data?.data?.account_type?.toLowerCase());
     }
-  }, [data]);
+  }, [data, isSuccess]);
+  console.log(data, profileData);
   return {
     data: profileData,
     isLoading: isLoading || dashboardData?.isLoading,

@@ -191,6 +191,28 @@ export const parentService = createApi({
         };
       },
     }),
+
+    getTutor: builder.query({
+      query: (instructor_id) => {
+        return {
+          url: `/instructor/get/${instructor_id}/`,
+        };
+      },
+    }),
+    getTutorOverview: builder.query({
+      query: (instructor_id) => {
+        return {
+          url: `/instructor/overview/${instructor_id}/`,
+        };
+      },
+    }),
+    getTutorRating: builder.query({
+      query: (instructor_id) => {
+        return {
+          url: `/instructor/reviews/${instructor_id}/`,
+        };
+      },
+    }),
   }),
 });
 
@@ -214,4 +236,8 @@ export const {
   useLazyGetAPaymentQuery,
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
+  useLazyGetResourcesQuery,
+  useLazyGetTutorOverviewQuery,
+  useLazyGetTutorQuery,
+  useLazyGetTutorRatingQuery,
 } = parentService;

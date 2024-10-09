@@ -57,7 +57,20 @@ export const userService = createApi({
       //@ts-ignore
       invalidatesTags: ['cleanUp'],
     }),
+    getConnection: builder.query({
+      query: (token) => {
+        return {
+          url: `accounts/user/get/connection/request?token=${token}`,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
   }),
 });
 
-export const { useLazyGetUserQuery, useGetSubjectsQuery } = userService;
+export const {
+  useLazyGetUserQuery,
+  useGetSubjectsQuery,
+  useLazyGetConnectionQuery,
+} = userService;

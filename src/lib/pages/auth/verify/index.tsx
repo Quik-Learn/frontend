@@ -7,7 +7,7 @@
 
 import { VStack, Image, Text, Stack, useToast } from '@chakra-ui/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Bars } from 'react-loader-spinner';
 
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
@@ -23,7 +23,8 @@ const Verify = () => {
   const router = useRouter();
   const toast = useToast();
   const dispatch = useAppDispatch();
-  const [firstRender, setFirstRender] = useState(true); // Track first render
+  const hasVerified = useRef(false); // Use ref to track first call
+
   const searchParams = useSearchParams();
   const [verifyOTP, { data, isSuccess, isLoading, isError, error }] =
     useVerifyOTPMutation();
@@ -31,14 +32,11 @@ const Verify = () => {
   const email = useMemo(() => searchParams.get('email'), [searchParams]);
 
   useEffect(() => {
-    if (firstRender && token && email && !isLoading) {
-      setFirstRender(false); // Prevent subsequent calls
-      console.log('Triggering OTP verification');
-    } else {
-      console.log('first');
+    if (token && email && !hasVerified.current) {
+      hasVerified.current = true;
       verifyOTP({ token, email });
     }
-  }, [token, email, firstRender, verifyOTP, isSuccess]);
+  }, [token, email, hasVerified, verifyOTP]);
 
   useEffect(() => {
     if (isSuccess) {

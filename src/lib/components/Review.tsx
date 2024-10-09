@@ -7,11 +7,13 @@ import {
   Text,
   Box,
   Stack,
+  Avatar,
 } from '@chakra-ui/react';
 import React from 'react';
 import Rating from './Rating';
+import { timeAgo } from '../helpers/paths';
 
-const Review = () => {
+const Review = ({ ratings }: any) => {
   const reviewArray = [
     {
       id: 1,
@@ -58,15 +60,19 @@ const Review = () => {
         </VStack>
       </HStack>
       <Stack>
-        {reviewArray?.map((item) => (
+        {ratings?.map((item: any, index: number) => (
           <HStack
-            key={item.id}
+            key={index}
             gap={4}
             justifyContent={'flex-start'}
             mb={4}
             flex={0}
           >
-            <Image src="/images.avatar.svg" w={10} h={10} />
+            <Avatar
+              src={item?.reviewer?.profile_image}
+              name={`${item?.reviewer?.firstname} ${item?.reviewer?.lastname}`}
+              color={'white'}
+            />
             <VStack
               gap={2}
               justifyContent={'flex-start'}
@@ -74,16 +80,16 @@ const Review = () => {
             >
               <HStack>
                 <Text color={'#1D2026'} fontSize={15} fontWeight={500}>
-                  {item.name}
+                  {item?.reviewer?.firstname} {item?.reviewer?.lastname}
                 </Text>
                 <Text color={'#6E7485'} fontSize={15} fontWeight={500}>
-                  {item.duration}
+                  {timeAgo(item?.created_at)}
                 </Text>
               </HStack>
-              <Rating rate={item.rating} />
+              <Rating rate={item?.rating} />
               <Stack>
                 <Text color={'#4E5566'} fontSize={14} whiteSpace="normal">
-                  {item.desc}
+                  {item?.review}
                 </Text>
               </Stack>
             </VStack>

@@ -27,9 +27,7 @@ import { useSearchParams } from 'next/navigation';
 const Account = () => {
   const formRef = useRef<any>(null);
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const searchParams = useSearchParams();
 
-  const action = useMemo(() => searchParams.get('action'), [searchParams]);
   const {
     initialValues,
     signInSchema,
@@ -45,12 +43,6 @@ const Account = () => {
     () => onClose(),
     () => onOpen()
   );
-
-  useEffect(() => {
-    if (action === 'connectionRequest') {
-      getConnection({});
-    }
-  }, [action]);
 
   return (
     <ParentContainer>
@@ -223,6 +215,7 @@ const Account = () => {
                       placeholder="Enter Parent Name"
                       bg="#EDF2F6"
                       borderWidth={1}
+                      disabled
                       borderColor="#F1F1F3"
                       w={'100%'}
                       color="#4C535F"
@@ -243,6 +236,7 @@ const Account = () => {
                       placeholder="Enter Parent Email Address"
                       bg="#EDF2F6"
                       borderWidth={1}
+                      disabled
                       borderColor="#F1F1F3"
                       w={'100%'}
                       color="#4C535F"

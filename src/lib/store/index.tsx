@@ -8,7 +8,8 @@ import {
   REGISTER,
   REHYDRATE,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+// import storage from 'redux-persist/lib/storage';
+import createWebStorage from 'redux-persist/lib/storage/createWebStorage';
 import {
   Action,
   combineReducers,
@@ -26,21 +27,40 @@ import tokenReducer from './reducers/token-slice';
 import userReducer from './reducers/user-slice';
 import uiReducer from './reducers/ui-slice';
 import typeReducer from './reducers/type-slice';
+import redirectReducer from './reducers/redirect-slice';
 import { authService } from '../services/auth-service';
 import { userService } from '../services/user-service';
 import { parentService } from '../services/parent-mutation';
 import { studentService } from '../services/student-mutation';
-const persistConfig = {
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key: any) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: any, value: any) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: any) {
+      return Promise.resolve();
+    },
+  };
+};
+const storage =
+  typeof window !== 'undefined'
+    ? createWebStorage('local')
+    : createNoopStorage();
+const persistConfig: any = {
   key: 'root',
   storage,
   whitelist: ['token', 'user', 'ui', 'type'],
 };
-
 const rootReducer = combineReducers({
   token: tokenReducer,
   user: userReducer,
   ui: uiReducer,
   type: typeReducer,
+  redirect: redirectReducer,
   [authService.reducerPath]: authService.reducer,
   [userService.reducerPath]: userService.reducer,
   [parentService.reducerPath]: parentService.reducer,

@@ -17,6 +17,7 @@ import {
   HStack,
   IconButton,
   useDisclosure,
+  Avatar,
 } from '@chakra-ui/react';
 import React from 'react';
 import { GiGraduateCap } from 'react-icons/gi';
@@ -30,6 +31,7 @@ import {
 } from 'react-icons/md';
 import BookLesson from './BookLesson';
 import { useRouter } from 'next/navigation';
+import Pagination from './ui/pagination';
 
 function Rating({ rating }: any) {
   return (
@@ -67,121 +69,154 @@ function Rating({ rating }: any) {
     </Box>
   );
 }
-const TutorCard = ({ onOpen, router }: any) => {
+const TutorCard = ({ onOpen, router, tutor, title }: any) => {
   return (
-    <Box
-      borderWidth="1px"
-      borderRadius="lg"
-      overflow="hidden"
-      p={4}
-      bg="white"
-      boxShadow="sm"
-      width={{ base: '100%', lg: '682px' }}
+    <HStack
+      flexDirection={{ base: 'column', md: 'row' }}
+      w={'100%'}
+      justifyContent={'space-between'}
     >
-      <Flex alignItems="flex-start">
-        <Image
-          borderRadius={10}
-          src="/images/tutor.svg"
-          alt="Tutor"
-          mr={4}
-          h="80%"
-          bg={'rgba(248, 248, 248, 1)'}
-        />
-        <VStack width="full">
-          <Flex
-            justifyContent="space-between"
-            alignItems="flex-start"
-            width="full"
-          >
-            <Box>
-              <Heading as="h3" fontSize={21} fontWeight={500} color={'#121117'}>
-                Phuong Y
-              </Heading>
-              <Badge
-                bg="#FFEBF3"
-                borderRadius="full"
-                px={2}
-                color={'#121117'}
-                fontWeight={700}
-                fontSize={14}
-                textTransform="capitalize"
-              >
-                Super Tutor
-              </Badge>
-              <HStack>
-                <Icon as={GiGraduateCap} />
-                <Text mt={2} fontSize="sm" color="#4D4C5C">
-                  English
+      <Box
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow="hidden"
+        p={4}
+        bg="white"
+        boxShadow="sm"
+        width={{ base: '100%', lg: '682px' }}
+      >
+        <Flex alignItems="center">
+          <Avatar
+            src={tutor?.user?.profile_image}
+            name={`${tutor?.user?.firstname} ${tutor?.user?.lastname}`}
+            mr={4}
+            h={164}
+            w={164}
+            bg={'rgba(248, 248, 248, 1)'}
+            color="#02659C"
+            borderRadius={8}
+          />
+          <VStack width="full">
+            <Flex
+              justifyContent="space-between"
+              alignItems="flex-start"
+              width="full"
+            >
+              <Box>
+                <Heading
+                  as="h3"
+                  fontSize={21}
+                  fontWeight={500}
+                  color={'#121117'}
+                >
+                  {tutor?.user?.firstname} {tutor?.user?.lastname}
+                </Heading>
+                <Badge
+                  bg="#FFEBF3"
+                  borderRadius="full"
+                  px={2}
+                  color={'#121117'}
+                  fontWeight={700}
+                  fontSize={14}
+                  textTransform="capitalize"
+                >
+                  {tutor?.user?.account_type}
+                </Badge>
+                <HStack>
+                  <Icon as={GiGraduateCap} />
+                  <Text mt={2} fontSize="sm" color="#4D4C5C">
+                    {title}
+                  </Text>
+                </HStack>
+                <HStack>
+                  <Icon as={RiUser4Line} />
+                  <Text mt={2} fontSize="sm" color="#4D4C5C">
+                    {tutor?.active_students || 0} active students • 894 lessons
+                  </Text>
+                </HStack>
+                <HStack>
+                  <Icon as={IoLanguage} />
+                  <Text mt={2} fontSize="sm" color="#4D4C5C">
+                    Speaks {tutor?.native_language} (Native),
+                  </Text>
+                </HStack>
+              </Box>
+              <VStack alignItems="flex-start">
+                <Rating rating={tutor?.rating || 0} />
+                <HStack>
+                  <Text ml={2} fontSize="sm">
+                    {tutor?.reviews_count} reviews
+                  </Text>
+                  <Text ml={4} fontSize="sm">
+                    {tutor?.lesson_min}
+                  </Text>
+                </HStack>
+              </VStack>
+            </Flex>
+            <Flex
+              mt={4}
+              justifyContent="space-between"
+              alignItems="flex-start"
+              width="full"
+            >
+              <Stack maxW="380px">
+                <Text fontSize="md" fontWeight="semibold" color="#121117">
+                  Bio:{tutor?.bio}
                 </Text>
-              </HStack>
-              <HStack>
-                <Icon as={RiUser4Line} />
-                <Text mt={2} fontSize="sm" color="#4D4C5C">
-                  46 active students • 894 lessons
-                </Text>
-              </HStack>
-              <HStack>
-                <Icon as={IoLanguage} />
-                <Text mt={2} fontSize="sm" color="#4D4C5C">
-                  Speaks English (Native),
-                </Text>
-              </HStack>
-            </Box>
-            <VStack alignItems="flex-start">
-              <Rating rating={5} />
-              <HStack>
-                <Text ml={2} fontSize="sm">
-                  14 reviews
-                </Text>
-                <Text ml={4} fontSize="sm">
-                  50-min lesson
-                </Text>
-              </HStack>
-            </VStack>
-          </Flex>
-          <Flex
-            mt={4}
-            justifyContent="space-between"
-            alignItems="flex-start"
-            width="full"
-          >
-            <Stack maxW="380px">
-              <Text fontSize="md" fontWeight="semibold" color="#121117">
-                Bio: Experienced Math Tutor
-              </Text>
-              {/* <Link href="/more">
+                {/* <Link href="/more">
                 <ChakraLink fontSize="md" fontWeight="semibold" color="#121117">
                   Read More
                 </ChakraLink>
               </Link> */}
-            </Stack>
-            <Button
-              bg="#FFD700"
-              text="View Profile"
-              width={244}
-              color="#121117"
-              onClick={() => router.push('/parent/tutor/098765456')}
-            />
-          </Flex>
+              </Stack>
+              <Button
+                bg="#FFD700"
+                text="View Profile"
+                width={244}
+                color="#121117"
+                onClick={() => router.push(`/parent/tutor/${tutor?.id}`)}
+              />
+            </Flex>
+          </VStack>
+        </Flex>
+      </Box>
+      {!tutor?.videoProfile ? (
+        <VStack
+          bg={'#fff'}
+          borderRadius={10}
+          p={2}
+          w={{ base: 320, md: 320 }}
+          h="100%"
+        >
+          <Avatar
+            src={tutor?.user?.profile_image}
+            name={`${tutor?.user?.firstname} ${tutor?.user?.lastname}`}
+            h={'80%'}
+            w={'100%'}
+            bg={'rgba(248, 248, 248, 1)'}
+            color="#02659C"
+            borderRadius={8}
+          />
+          <Button text="Watch Preview" bg="#02659C" />
         </VStack>
-      </Flex>
-    </Box>
+      ) : null}
+    </HStack>
   );
 };
-const tutors = Array(6).fill({
-  name: 'Phuong Y',
-  activeStudents: 46,
-  lessons: 894,
-  language: 'English (Native)',
-  description: 'Bio: Experienced Math Tutor',
-  reviews: 14,
-  lessonTime: '50-min lesson',
-  image: '/images/student.svg',
-});
 
-const TutorParent = () => {
+const TutorParent = ({
+  tutors,
+  title,
+  total_pages,
+  isLoading,
+  currentPage,
+  next,
+  previous,
+  getTutor,
+}: any) => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  console.log(tutors);
   return (
     <VStack>
       <SimpleGrid width="full" columns={{ base: 1, md: 4 }} spacing={4} mb={10}>
@@ -207,75 +242,27 @@ const TutorParent = () => {
         alignItems={'flex-start'}
         w={'100%'}
       >
-        <SimpleGrid columns={1} spacing={4} alignSelf="flex-start">
-          {tutors.map((tutor, index) => (
-            <TutorCard key={index} onOpen={onOpen} router={router} />
+        <SimpleGrid columns={1} spacing={4} alignSelf="flex-start" w={'100%'}>
+          {tutors?.map((tutor: any, index: any) => (
+            <TutorCard
+              key={index}
+              tutor={tutor}
+              onOpen={onOpen}
+              router={router}
+              title={title}
+            />
           ))}
         </SimpleGrid>
-        <VStack
-          bg={'#fff'}
-          borderRadius={10}
-          p={2}
-          w={{ base: '100%', md: 320 }}
-        >
-          <Image
-            src="/images/tutor.svg"
-            alt="tut"
-            w={'100%'}
-            h={'100%'}
-            bg={'rgba(196, 196, 196, 0.3)'}
-          />
-          <Button text="Watch Preview" bg="#02659C" />
-        </VStack>
       </HStack>
-      <HStack
-        justify="space-between"
-        mt={8}
-        width="full"
-        flexDirection={{ base: 'column', lg: 'row' }}
-      >
-        <HStack spacing={2}>
-          <ChakraButton
-            leftIcon={<Text as="span">&larr;</Text>}
-            colorScheme="gray"
-            variant="outline"
-          >
-            Prev
-          </ChakraButton>
 
-          <ChakraButton
-            rightIcon={<Text as="span">&rarr;</Text>}
-            colorScheme="gray"
-            variant="outline"
-          >
-            Next
-          </ChakraButton>
-        </HStack>
-        <HStack spacing={2}>
-          <IconButton
-            aria-label="Previous page"
-            icon={<MdKeyboardDoubleArrowLeft />}
-            colorScheme="gray"
-            variant="ghost"
-            isDisabled
-          />
-          {Array.from({ length: 3 }).map((_, index) => (
-            <ChakraButton
-              key={index}
-              colorScheme={index === 0 ? 'blue' : 'gray'}
-              variant={index === 0 ? 'solid' : 'outline'}
-            >
-              {index + 1}
-            </ChakraButton>
-          ))}
-          <IconButton
-            aria-label="Next page"
-            icon={<MdKeyboardDoubleArrowRight />}
-            colorScheme="blue"
-            variant="ghost"
-          />
-        </HStack>
-      </HStack>
+      <Pagination
+        totalPages={total_pages}
+        isLoading={isLoading}
+        currentPage={currentPage}
+        next={next}
+        previous={previous}
+        onPageChange={(page: number) => getTutor(page)} // Optional: Callback if you need to handle page change externally
+      />
       <BookLesson isOpen={isOpen} onClose={onClose} />
     </VStack>
   );

@@ -23,14 +23,14 @@ export const parentNav = [
     icon: '/images/course.svg',
     active: '/images/course-active.svg',
   },
-  {
-    id: 4,
-    name: 'Payment',
-    value: 'payment',
-    route: '/parent/payment',
-    icon: '/images/pay.svg',
-    active: '/images/pay-active.svg',
-  },
+  // {
+  //   id: 4,
+  //   name: 'Payment',
+  //   value: 'payment',
+  //   route: '/parent/payment',
+  //   icon: '/images/pay.svg',
+  //   active: '/images/pay-active.svg',
+  // },
   {
     id: 5,
     name: 'Resources',

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Grid,
@@ -9,12 +9,40 @@ import {
   Heading,
   Badge,
   HStack,
+  useToast,
 } from '@chakra-ui/react';
 import { button, cardsData } from '~/lib/utils/nav';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import Button from '~/lib/components/ui/button';
+import { useLazyGetResourcesQuery } from '~/lib/services/parent-mutation';
 
 const Resources = () => {
+  const toast = useToast();
+  const [resourceData, setResourceData] = useState<any>([]);
+  const [trigger, { data, isLoading, isError, error, isSuccess }] =
+    useLazyGetResourcesQuery();
+
+  useEffect(() => {
+    trigger({});
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data?.data);
+      setResourceData(data?.data);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, data, isError, error]);
   return (
     <ParentContainer>
       <Box p={8} bg="gray.50" minH="100vh" mt={5}>
