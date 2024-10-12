@@ -71,6 +71,53 @@ export const studentService = createApi({
         };
       },
     }),
+    getStudentCalender: builder.query({
+      query() {
+        return {
+          url: 'student/calender/',
+        };
+      },
+    }),
+    getTutorCalender: builder.query({
+      query({ id, params }) {
+        return {
+          url: `student/get-instructor-calender/${id}`,
+          params,
+        };
+      },
+    }),
+    getCurrentSubscription: builder.query({
+      query() {
+        return {
+          url: `student/get/current/subscription/`,
+        };
+      },
+    }),
+    getStudentSession: builder.query({
+      query() {
+        return {
+          url: `student/sessions/`,
+        };
+      },
+    }),
+    bookSessionStudent: builder.mutation({
+      query: ({ body, subject_id, instructor_id }: any) => {
+        return {
+          url: `student/book-session/${instructor_id}/${subject_id}/`,
+          method: 'post',
+          body,
+        };
+      },
+    }),
+    feedback: builder.mutation({
+      query: ({ body, session_id }: any) => {
+        return {
+          url: `/student/session-feedback/${session_id}/`,
+          method: 'post',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -79,4 +126,10 @@ export const {
   useLazyGetStudentDashboardQuery,
   useReceieveConnectionMutation,
   useLazyGetAuthUserQuery,
+  useLazyGetCurrentSubscriptionQuery,
+  useLazyGetStudentCalenderQuery,
+  useLazyGetStudentSessionQuery,
+  useLazyGetTutorCalenderQuery,
+  useBookSessionStudentMutation,
+  useFeedbackMutation,
 } = studentService;

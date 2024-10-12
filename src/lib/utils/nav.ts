@@ -68,7 +68,7 @@ export const studentNav = [
   {
     id: 2,
     name: 'My Session',
-    route: 'student/my-sessions',
+    route: '/student/my-sessions',
     value: 'session',
     icon: '/images/wards.svg',
     active: '/images/ward-active.svg',

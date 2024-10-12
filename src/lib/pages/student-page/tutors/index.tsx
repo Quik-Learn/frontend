@@ -29,8 +29,9 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  useToast,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SiPinboard } from 'react-icons/si';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { coursesArray } from '~/lib/utils/nav';
@@ -38,10 +39,14 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Tutor from '~/lib/components/tutor';
 import { CiSearch } from 'react-icons/ci';
+import {
+  useLazyGetACourseQuery,
+  useLazyGetCourseTutorQuery,
+} from '~/lib/services/parent-mutation';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -79,12 +84,44 @@ const oldData = [
   },
 ];
 const Tutors = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formRef = useRef(null);
   const router = useRouter();
-  const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [value, setValue] = useState('');
+  const { id } = useParams();
+  const toast = useToast();
+  const [courseData, setCourseData] = useState<any>([]);
+  const [tutors, setTutorData] = useState<any>([]);
+  const [trigger, { data, isLoading, isError, error, isSuccess }] =
+    useLazyGetACourseQuery();
+  const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
+
+  useEffect(() => {
+    trigger(id);
+    triggerTutor(id);
+  }, [id]);
+  useEffect(() => {
+    if (isSuccess) {
+      setCourseData(data?.data);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      router.back();
+    }
+  }, [isSuccess, data, isError, error]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = tutorData;
+    if (isSuccess) {
+      setTutorData(data?.data);
+    }
+    if (isError) {
+    }
+  }, [tutorData]);
 
   return (
     <ParentContainer>
@@ -96,7 +133,23 @@ const Tutors = () => {
         To book a tutor, first Select a course!
       </Text>
 
-      <Tutor />
+      {tutors?.length === 0 ? (
+        <Stack>
+          <Heading>No Tutor Found</Heading>
+        </Stack>
+      ) : (
+        <Tutor
+          id={id}
+          tutors={tutors}
+          title={courseData?.title}
+          total_pages={tutorData?.data?.total_pages}
+          isLoading={tutorData?.isLoading}
+          currentPage={tutorData?.data?.current_page}
+          next={tutorData?.data?.next}
+          previous={tutorData?.data?.previous}
+          getTutor={(page: number) => triggerTutor(page)}
+        />
+      )}
     </ParentContainer>
   );
 };

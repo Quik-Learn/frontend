@@ -23,6 +23,9 @@ import Button from './ui/button';
 import Rating from './Rating';
 import { RiHomeSmile2Line } from 'react-icons/ri';
 import { TiArrowForwardOutline } from 'react-icons/ti';
+import { convertTo12HourFormat, getTimeFromToday } from '../helpers/paths';
+import { events } from '../utils/data';
+import moment from 'moment';
 
 const Events = ({ event }: any) => {
   const [selected, setSelceted] = useState<any>();
@@ -32,9 +35,16 @@ const Events = ({ event }: any) => {
     onOpen: onOpenJoin,
     onClose: onCloseJoin,
   } = useDisclosure();
+
+  const start = convertTo12HourFormat(event?.start);
+  const end = convertTo12HourFormat(event?.end);
   const array = [
-    { id: 1, name: '11am to 12pm', icon: GoClock },
-    { id: 2, name: 'Starts in 30 minutes', icon: CiBellOn },
+    { id: 1, name: `${start} to ${end}`, icon: GoClock },
+    {
+      id: 2,
+      name: `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`,
+      icon: CiBellOn,
+    },
     { id: 3, name: 'Dr. James', icon: TiGroupOutline },
   ];
   return (

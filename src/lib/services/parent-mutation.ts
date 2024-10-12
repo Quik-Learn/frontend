@@ -113,9 +113,10 @@ export const parentService = createApi({
       },
     }),
     getSubjects: builder.query({
-      query: (page_size) => {
+      query: (params) => {
         return {
-          url: `subjects?page_size=${page_size}`,
+          url: `subjects/`,
+          params,
         };
       },
     }),

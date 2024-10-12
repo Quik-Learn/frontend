@@ -141,9 +141,9 @@ const Payment = () => {
         </Stack>
       ) : (
         <Stack padding={6} bg={'#fafafa'}>
-          <Heading color={'#000'} fontSize={32} fontWeight={700} mb={8}>
+          {/* <Heading color={'#000'} fontSize={32} fontWeight={700} mb={8}>
             Subscriptions
-          </Heading>
+          </Heading> */}
           {wardData?.length === 0 ? (
             <VStack
               w={'100%'}
@@ -173,6 +173,24 @@ const Payment = () => {
             </VStack>
           ) : (
             <Grid templateColumns="repeat(3, 1fr)" gap={6} my={6} px={6}>
+              <GridItem
+                bg={'#fff'}
+                borderRadius={29}
+                minH={400}
+                padding={5}
+                w={350}
+                boxShadow={'sm'}
+                display={'flex'}
+                flexDirection={'column'}
+                justifyContent={'space-around'}
+                alignItems={'center'}
+              >
+                <Text></Text>
+                <Image src="/images/add.svg" alt="add" />
+                <Text color="#5F5F5F" fontSize={24} fontWeight={500}>
+                  Add Ward
+                </Text>
+              </GridItem>
               {wardData?.map((item: any) => (
                 <GridItem
                   key={item.id}

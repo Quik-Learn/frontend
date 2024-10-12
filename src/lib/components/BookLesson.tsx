@@ -18,19 +18,85 @@ import 'react-calendar/dist/Calendar.css';
 import Button from './ui/button';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
-const BookLesson = ({ isOpen, onClose }: any) => {
-  const {
-    isOpen: isOpenn,
-    onOpen: onOpenn,
-    onClose: onClosee,
-  } = useDisclosure();
-  const [selected, setSelected] = useState<string[]>([]);
+import { convertTimeAndAddOneHour, formatToDateString } from '../helpers/paths';
+
+const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
+  const [selected, setSelected] = useState<string>('');
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Selected date from calendar
   const [successData, setSuccessData] = useState({
     title: '',
     description: '',
     buttonText: '',
   });
-  const time = ['9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm'];
+
+  // Tutor availability data
+  const availability = overview?.general_availability || [];
+
+  // Define time slots for morning, afternoon, and evening
+  const timeSlots = {
+    morning: ['9am', '10am', '11am'],
+    afternoon: ['12pm', '1pm', '2pm'],
+    evening: ['3pm', '4pm'],
+  };
+
+  // Convert availability into a more usable format
+  const getDayAvailability = (day: string) => {
+    const dayAvailability = availability.find(
+      (av: any) => av.day.toLowerCase() === day.toLowerCase()
+    );
+    return dayAvailability || {};
+  };
+
+  // Disable unavailable days on the calendar
+  const isDayAvailable = (date: Date) => {
+    const dayName = date
+      .toLocaleDateString('en-US', { weekday: 'long' })
+      .toLowerCase();
+    const dayAvailability = getDayAvailability(dayName);
+    return (
+      dayAvailability?.morning ||
+      dayAvailability?.afternoon ||
+      dayAvailability?.evening
+    );
+  };
+  // Add class for available days and selected date
+  const tileClassName = ({ date }: { date: Date }) => {
+    let className = '';
+
+    if (isDayAvailable(date)) {
+      className += ' available-day'; // Available day class
+    }
+
+    if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+      className += ' selected-day'; // Selected day class
+    }
+
+    return className;
+  };
+
+  // Filter time slots based on the selected day
+  const getAvailableTimeSlots = () => {
+    if (!selectedDate) return [];
+
+    const dayName = selectedDate
+      .toLocaleDateString('en-US', { weekday: 'long' })
+      .toLowerCase();
+    const dayAvailability = getDayAvailability(dayName);
+
+    let availableTimes: string[] = [];
+
+    if (dayAvailability.morning)
+      availableTimes = availableTimes.concat(timeSlots.morning);
+    if (dayAvailability.afternoon)
+      availableTimes = availableTimes.concat(timeSlots.afternoon);
+    if (dayAvailability.evening)
+      availableTimes = availableTimes.concat(timeSlots.evening);
+
+    return availableTimes;
+  };
+
+  const availableTimes = getAvailableTimeSlots();
+
   return (
     <Stack w={'1000'}>
       <Modal
@@ -43,12 +109,13 @@ const BookLesson = ({ isOpen, onClose }: any) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
-            Book an Introductory Session with Dr. James
+            Book an Introductory Session with {tutor?.user?.user?.firstname}{' '}
+            {tutor?.user?.user?.lastname}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody justifyContent={'center'} alignItems={'center'}>
             <Text mx={6} color={'#5F5F5F'} fontSize={20} mt={-10}>
-              Dr. James is a specialist in Mathematics
+              {tutor?.bio}
             </Text>
             <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
               Select a Date
@@ -80,6 +147,24 @@ const BookLesson = ({ isOpen, onClose }: any) => {
                       bg: '#367BF5',
                     },
                   },
+                  ' .react-calendar__tile.available-day ': {
+                    backgroundColor: '#00bfff',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '60px',
+                    height: '60px',
+                  },
+                  ' .react-calendar__tile.selected-day ': {
+                    backgroundColor: '#0065FF',
+                    color: '#fff',
+                    borderRadius: '50%',
+                    width: '60px',
+                    height: '60px',
+                  },
+                  ' .react-calendar__tile.available-day:hover': {
+                    backgroundColor: '#004bbd',
+                    color: '#fff',
+                  },
                   '.react-calendar__tile--active': {
                     bg: '#E0CAE0',
                     color: '#141736',
@@ -101,61 +186,47 @@ const BookLesson = ({ isOpen, onClose }: any) => {
                 }}
               >
                 <Calendar
-                  onChange={() => {}}
-                  value={''}
-                  selectRange
+                  onChange={setSelectedDate}
+                  value={selectedDate}
+                  tileClassName={tileClassName}
+                  tileDisabled={({ date }) => !isDayAvailable(date)}
                   prevLabel={<IoChevronBackOutline />}
                   nextLabel={<GrFormNext />}
-                  next2Label={<GrFormNext color="white" />}
-                  prev2Label={<IoChevronBackOutline color="white" />}
+                  next2Label={null}
+                  prev2Label={null}
                 />
               </Box>
             </Stack>
-            <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
-              Select a Date
-            </Text>
-            <HStack gap={4}>
-              {time?.map((item) => (
-                <Stack
-                  bg={
-                    selected.find((itemm) => itemm === item)
-                      ? '#0065FF'
-                      : '#CDCDCD'
-                  }
-                  px={4}
-                  py={2}
-                  borderRadius={8}
-                  justifyContent={'center'}
-                  alignItems={'center'}
-                  onClick={() => {
-                    console.log(selected, item);
-                    if (
-                      selected?.length &&
-                      selected?.find((itemm) => itemm === item)
-                    ) {
-                      const lastSelectedIndex = selected.lastIndexOf(item);
-                      const updatedSelected = [...selected];
-                      updatedSelected.splice(lastSelectedIndex, 1); // Remove the last selected item
-                      setSelected(updatedSelected);
-                    } else {
-                      setSelected((prev) => [...prev, item]);
-                    }
-                  }}
-                >
-                  <Text
-                    fontSize={14}
-                    fontWeight={500}
-                    color={
-                      selected.find((itemm) => itemm === item)
-                        ? '#fff'
-                        : '#121117'
-                    }
-                  >
-                    {item}
-                  </Text>
-                </Stack>
-              ))}
-            </HStack>
+            {selectedDate && (
+              <>
+                <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
+                  Select a Time
+                </Text>
+                <HStack gap={4}>
+                  {availableTimes?.map((item) => (
+                    <Stack
+                      bg={selected === item ? '#0065FF' : '#CDCDCD'}
+                      px={4}
+                      py={2}
+                      borderRadius={8}
+                      justifyContent={'center'}
+                      alignItems={'center'}
+                      onClick={() => {
+                        setSelected(item);
+                      }}
+                    >
+                      <Text
+                        fontSize={14}
+                        fontWeight={500}
+                        color={selected === item ? '#fff' : '#121117'}
+                      >
+                        {item}
+                      </Text>
+                    </Stack>
+                  ))}
+                </HStack>
+              </>
+            )}
             <Stack
               justifyContent={'flex-end'}
               alignItems={'flex-end'}
@@ -167,12 +238,12 @@ const BookLesson = ({ isOpen, onClose }: any) => {
                 bg="#0177FB"
                 width={'279px'}
                 onClick={() => {
-                  onClose();
-                  onOpenn();
-                  setSuccessData({
-                    title: 'Successful',
-                    description: 'Session successfully booked!',
-                    buttonText: 'Close',
+                  const { originalTime, oneHourLater } =
+                    convertTimeAndAddOneHour(selected);
+                  bookSession({
+                    date: formatToDateString(selectedDate),
+                    start_time: originalTime,
+                    end_time: oneHourLater,
                   });
                 }}
               />
@@ -180,13 +251,6 @@ const BookLesson = ({ isOpen, onClose }: any) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <SuccessModal
-        onClose={onClosee}
-        isOpen={isOpenn}
-        title={successData.title}
-        description={successData.description}
-        buttonText={successData.buttonText}
-      />
     </Stack>
   );
 };

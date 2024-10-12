@@ -67,7 +67,7 @@ export const NewWard = ({
   isLoading,
 }: any) => {
   return (
-    <ModalContent bg={'#fff'}>
+    <ModalContent bg={'#fff'} maxH={'80vh'} overflowY={'auto'}>
       <ModalHeader
         color={'#5F5F5F'}
         fontSize={32}
@@ -78,10 +78,10 @@ export const NewWard = ({
       </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
+        {/* <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
           Form Builder is free to use. Sign up using your email address or phone
           number below to get started.
-        </Text>
+        </Text> */}
 
         <Formik
           initialValues={initialValues}
@@ -307,7 +307,7 @@ export const NewWard = ({
 };
 export const AddRegistered = ({ value, setValue, wards, connectWard }: any) => {
   return (
-    <ModalContent bg={'#fff'}>
+    <ModalContent bg={'#fff'} maxH={'80vh'} overflowY={'auto'}>
       <ModalHeader
         color={'#5F5F5F'}
         fontSize={22}

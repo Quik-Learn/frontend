@@ -46,6 +46,11 @@ import Review from '~/lib/components/Review';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Button from '~/lib/components/ui/button';
 import BookLesson from '~/lib/components/BookLesson';
+import {
+  useBookSessionStudentMutation,
+  useLazyGetTutorCalenderQuery,
+} from '~/lib/services/student-mutation';
+import SuccessModal from '~/lib/components/ui/success-modal';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -53,17 +58,24 @@ const data = [
 
 const TutorPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenn,
+    onOpen: onOpenn,
+    onClose: onClosee,
+  } = useDisclosure();
   const router = useRouter();
   const { id } = useParams();
-  const toast = useToast();
   const searchParams = useSearchParams();
+  const toast = useToast();
   const [overview, setOverview] = useState<any>([]);
   const [tutor, setTutorData] = useState<any>([]);
   const [tutorRating, setTutorRatingData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetTutorQuery();
   const [triggerOverview, tutorOverview] = useLazyGetTutorOverviewQuery();
-
+  const [triggerTutorCalender, tutorCalender] = useLazyGetTutorCalenderQuery();
+  const [bookSessionStudent, bookSessionStudentData] =
+    useBookSessionStudentMutation();
   const [triggerReview, tutorReview] = useLazyGetTutorRatingQuery();
   const subjectId = searchParams.get('subject_id');
   useEffect(() => {
@@ -125,6 +137,27 @@ const TutorPage = () => {
       });
     }
   }, [tutorReview]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = bookSessionStudentData;
+    if (isSuccess) {
+      onOpenn();
+      onClose();
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [bookSessionStudentData]);
+  const bookSessionHandler = (body: any) => {
+    bookSessionStudent({ subject_id: subjectId, instructor_id: id, body });
+  };
   return (
     <ParentContainer>
       {isLoading ? (
@@ -146,7 +179,8 @@ const TutorPage = () => {
           >
             <HStack justifyContent={'flex-start'} gap={3}>
               <Avatar
-                name={`   ${tutor?.user?.user?.firstname} ${tutor?.user?.user?.lastname}`}
+                size="xs"
+                name={`${tutor?.user?.user?.firstname} ${tutor?.user?.user?.lastname}`}
                 src={tutor?.user?.profile_image}
               />
               <VStack justifyContent={'flex-start'} alignItems={'flex-start'}>
@@ -309,6 +343,7 @@ const TutorPage = () => {
                 bg="#02659C"
                 width={279}
                 onClick={onOpen}
+                // onClick={() => triggerTutorCalender({ id })}
               />
             </VStack>
           </HStack>
@@ -409,10 +444,18 @@ const TutorPage = () => {
         </Stack>
       )}
       <BookLesson
-        isOpen={isOpen}
-        onClose={onClose}
         tutor={tutor}
         overview={overview}
+        onClose={onClose}
+        isOpen={isOpen}
+        bookSession={bookSessionHandler}
+      />
+      <SuccessModal
+        onClose={onClosee}
+        isOpen={isOpenn}
+        title={'Successful'}
+        description={'Session successfully booked!'}
+        buttonText={'Close'}
       />
     </ParentContainer>
   );

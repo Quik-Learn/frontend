@@ -69,7 +69,7 @@ function Rating({ rating }: any) {
     </Box>
   );
 }
-const TutorCard = ({ onOpen, router, tutor, title }: any) => {
+const TutorCard = ({ onOpen, router, tutor, title, id }: any) => {
   return (
     <HStack
       flexDirection={{ base: 'column', md: 'row' }}
@@ -131,7 +131,8 @@ const TutorCard = ({ onOpen, router, tutor, title }: any) => {
                 <HStack>
                   <Icon as={RiUser4Line} />
                   <Text mt={2} fontSize="sm" color="#4D4C5C">
-                    {tutor?.active_students || 0} active students • 894 lessons
+                    {tutor?.active_students || 0} active students •{' '}
+                    {tutor?.num_of_lessons} lessons
                   </Text>
                 </HStack>
                 <HStack>
@@ -180,7 +181,7 @@ const TutorCard = ({ onOpen, router, tutor, title }: any) => {
           </VStack>
         </Flex>
       </Box>
-      {!tutor?.videoProfile ? (
+      {tutor?.videoProfile ? (
         <VStack
           bg={'#fff'}
           borderRadius={10}
@@ -192,6 +193,7 @@ const TutorCard = ({ onOpen, router, tutor, title }: any) => {
             src={tutor?.user?.profile_image}
             name={`${tutor?.user?.firstname} ${tutor?.user?.lastname}`}
             h={'80%'}
+            maxH={'200px'}
             w={'100%'}
             bg={'rgba(248, 248, 248, 1)'}
             color="#02659C"
@@ -213,6 +215,7 @@ const TutorParent = ({
   next,
   previous,
   getTutor,
+  id,
 }: any) => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -250,6 +253,7 @@ const TutorParent = ({
               onOpen={onOpen}
               router={router}
               title={title}
+              id={id}
             />
           ))}
         </SimpleGrid>

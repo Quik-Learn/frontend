@@ -29,8 +29,9 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  useToast,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SiPinboard } from 'react-icons/si';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { coursesArray } from '~/lib/utils/nav';
@@ -38,11 +39,15 @@ import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
 } from 'react-icons/md';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
 import Tutor from '~/lib/components/tutor';
 import Button from '~/lib/components/ui/button';
 import Review from '~/lib/components/Review';
+import {
+  useLazyGetACourseQuery,
+  useLazyGetCourseTutorQuery,
+} from '~/lib/services/parent-mutation';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -80,16 +85,57 @@ const oldData = [
   },
 ];
 const SingleSession = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const formRef = useRef(null);
   const router = useRouter();
-  const [neww, setNew] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [value, setValue] = useState('');
+  const { id } = useParams();
+  const toast = useToast();
+  const [courseData, setCourseData] = useState<any>([]);
+  const [tutors, setTutorData] = useState<any>([]);
+  const [trigger, { data, isLoading, isError, error, isSuccess }] =
+    useLazyGetACourseQuery();
+  const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
+
+  useEffect(() => {
+    trigger(id);
+    triggerTutor(id);
+  }, [id]);
+  useEffect(() => {
+    if (isSuccess) {
+      setCourseData(data?.data);
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      router.back();
+    }
+  }, [isSuccess, data, isError, error]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = tutorData;
+    if (isSuccess) {
+      setTutorData(data?.data);
+    }
+    if (isError) {
+      // toast({
+      //   //@ts-ignore
+      //   title: error?.error?.message || 'An error occured',
+      //   description: 'An Error occured.',
+      //   status: 'error',
+      //   duration: 9000,
+      //   isClosable: true,
+      //   position: 'top',
+      // });
+    }
+  }, [tutorData]);
 
   return (
     <ParentContainer>
-      <Stack alignItems={'center'}>
+      <Stack>
         <VStack py={9} px={9} w={{ lg: '100%' }}>
           <Text
             color={'#1D2026'}
@@ -99,11 +145,10 @@ const SingleSession = () => {
             fontWeight={700}
             mb={2}
           >
-            Mathematics - K2 to K5 level, (Advanced Mathematics)
+            {courseData?.title}
           </Text>
           <Text color={'#4E5566'} fontSize={'24px'} mb={2}>
-            3 in 1 Course: Learn to design websites with Figma, build with
-            Webflow, and make a living freelancing.
+            {courseData?.short_description}
           </Text>
 
           <Tabs w={'100%'}>
@@ -142,6 +187,23 @@ const SingleSession = () => {
               >
                 Reviews
               </Tab>
+              <Tab
+                fontSize={{
+                  base: 16,
+                  sm: 18,
+                  md: 18,
+                }}
+                _selected={{
+                  color: '#1D2026',
+                  borderBottomWidth: 2,
+                  borderColor: '#FF6636',
+                }}
+                fontFamily="heading"
+                fontWeight="500"
+                color={'#4E5566'}
+              >
+                Tutors
+              </Tab>
             </TabList>
 
             <TabPanels>
@@ -156,13 +218,7 @@ const SingleSession = () => {
                     Description
                   </Heading>
                   <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
-                    For example, this is a Design course but I don't teach you
-                    Photoshop. Because Photoshop is needlessly complicated for
-                    Web Design. But people still teach it to web designers. I
-                    don't. I teach Figma – a simple tool that is taking over the
-                    design world. You will be designing a complete website
-                    within a week while others are still learning how to create
-                    basic layouts in Photoshop.
+                    {courseData?.description}
                   </Text>
 
                   <Stack
@@ -189,48 +245,18 @@ const SingleSession = () => {
                       <List
                         spacing={2}
                         display={'flex'}
-                        alignItems={'flex-start'}
+                        flexWrap={'wrap'}
+                        w={'100%'}
                       >
-                        {oldData?.slice(0, 2).map((item) => (
+                        {courseData?.achievements?.map((item: any) => (
                           <ListItem
-                            w={'50%'}
+                            key={item?.id}
                             color={'#4E5566'}
+                            w={'45%'}
                             fontSize={{ base: 14, md: 16 }}
                           >
                             <ListIcon as={FaCircleCheck} color="#009933" />
-                            {item.name}
-                          </ListItem>
-                        ))}
-                      </List>
-                      <List
-                        spacing={2}
-                        display={'flex'}
-                        alignItems={'flex-start'}
-                      >
-                        {oldData?.slice(2, 4).map((item) => (
-                          <ListItem
-                            color={'#4E5566'}
-                            w={'50%'}
-                            fontSize={{ base: 14, md: 16 }}
-                          >
-                            <ListIcon as={FaCircleCheck} color="#009933" />
-                            {item.name}
-                          </ListItem>
-                        ))}
-                      </List>
-                      <List
-                        spacing={2}
-                        display={'flex'}
-                        alignItems={'flex-start'}
-                      >
-                        {oldData?.slice(4).map((item) => (
-                          <ListItem
-                            color={'#4E5566'}
-                            w={'50%'}
-                            fontSize={{ base: 14, md: 16 }}
-                          >
-                            <ListIcon as={FaCircleCheck} color="#009933" />
-                            {item.name}
+                            {item.description}
                           </ListItem>
                         ))}
                       </List>
@@ -242,16 +268,35 @@ const SingleSession = () => {
               <TabPanel py={8}>
                 <Review />
               </TabPanel>
+              <TabPanel py={8}>
+                {tutors?.length === 0 ? (
+                  <Stack>
+                    <Heading>No Tutor Found</Heading>
+                  </Stack>
+                ) : (
+                  <Tutor
+                    tutors={tutors}
+                    id={id}
+                    title={courseData?.title}
+                    total_pages={tutorData?.data?.total_pages}
+                    isLoading={tutorData?.isLoading}
+                    currentPage={tutorData?.data?.current_page}
+                    next={tutorData?.data?.next}
+                    previous={tutorData?.data?.previous}
+                    getTutor={(page: number) => triggerTutor(page)}
+                  />
+                )}
+              </TabPanel>
             </TabPanels>
           </Tabs>
-          <Stack justifyContent={'flex-end'} alignItems={'flex-end'} w={'100%'}>
+          {/* <Stack justifyContent={'flex-end'} alignItems={'flex-end'} w={'100%'}>
             <Button
               text="Next"
               bg="#02659C"
               width={'279px'}
-              onClick={() => router.push('/student/book-session/tutors')}
+              onClick={() => router.push(`/student/book-session/${id}/tutors`)}
             />
-          </Stack>
+          </Stack> */}
         </VStack>
       </Stack>
     </ParentContainer>

@@ -28,7 +28,7 @@ import useGetCourses from './getCourses';
 import Pagination from '~/lib/components/ui/pagination';
 import { useEffect, useState } from 'react';
 
-const Courses = () => {
+const NewCourses = () => {
   const router = useRouter();
   const [text, setText] = useState('');
   const [baseSubject, setBaseSubject] = useState('');
@@ -68,7 +68,7 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push(`/parent/courses/${id}`)}
+      onClick={() => router.push(`/student/book-session/${id}`)}
     >
       <Image
         src={imageSrc}
@@ -103,11 +103,14 @@ const Courses = () => {
   console.log(baseSubjectData);
   return (
     <ParentContainer>
-      <HStack p={4} bg={'#fff'} borderRadius={'14px'} m={6}>
-        <Text color={'black'} fontSize={'26px'} fontWeight={500}>
-          All Courses
-        </Text>
-      </HStack>
+      <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
+        Book A Session
+      </Text>
+
+      <Text mx={6} color={'#5F5F5F'} fontSize={20}>
+        To book a Session, first Select a course!
+      </Text>
+
       {isLoading ? (
         <Stack
           w={'100%'}
@@ -237,4 +240,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default NewCourses;

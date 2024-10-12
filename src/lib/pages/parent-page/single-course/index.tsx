@@ -200,6 +200,7 @@ const SingleCourses = () => {
                   </Stack>
                 ) : (
                   <TutorParent
+                    id={id}
                     tutors={tutors}
                     title={courseData?.title}
                     total_pages={tutorData?.data?.total_pages}

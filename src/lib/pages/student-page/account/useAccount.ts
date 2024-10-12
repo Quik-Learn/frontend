@@ -27,7 +27,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
   const dispatch = useAppDispatch();
   const redirect = useAppSelector(redirectState);
   const searchParams = useSearchParams();
-
+  const [incomingData, setIncomingData] = useState();
   const action = searchParams.get('action');
   const token = searchParams.get('token');
   const authenticated = searchParams.get('authenticated');
@@ -40,6 +40,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
     isSuccess: isReqSuccess,
     isError: isReqError,
     error: reqError,
+    data: reqData,
   } = getConnectionData;
   const toast = useToast();
   const signInSchema = yup.object().shape({
@@ -80,6 +81,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
   useEffect(() => {
     if (isReqSuccess) {
       onOpen();
+      setIncomingData(reqData?.data);
       setTimeout(() => {
         dispatch(userService.util.resetApiState());
       }, 5000);
@@ -106,7 +108,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
 
       dispatch(userService.util.resetApiState());
     }
-  }, [isReqSuccess, isReqError, reqError]);
+  }, [isReqSuccess, isReqError, reqError, reqData]);
   useEffect(() => {
     if (receieveConnectionData.isSuccess) {
       trigger({});
@@ -172,7 +174,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
     recieveLoading: receieveConnectionData?.isLoading,
     getConnection,
     isConnectionLoading: getConnectionData?.isLoading,
-    connectionData: getConnectionData?.data?.data,
+    connectionData: incomingData,
   };
 };
 

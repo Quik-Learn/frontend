@@ -7,19 +7,18 @@ import {
   Text,
   Image,
   HStack,
-  Icon,
   Avatar,
   Grid,
   GridItem,
   Progress,
   useDisclosure,
   Skeleton,
-  SkeletonText,
+  Icon,
   Stack,
 } from '@chakra-ui/react';
-
+import { TfiEmail } from 'react-icons/tfi';
 import Button from '~/lib/components/ui/button';
-
+import { HiOutlinePhone } from 'react-icons/hi2';
 import { BsThreeDots } from 'react-icons/bs';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import Linecharts from '~/lib/components/Linecharts';
@@ -219,13 +218,21 @@ const Dashboard = () => {
             <Text fontSize={14} color="#5F5F5F" fontWeight={700}>
               {data?.account_type}
             </Text>
+            <HStack gap={5} alignItems={'center'} justifyContent={'center'}>
+              <Icon as={TfiEmail} />
 
-            <Text color={'#5F5F5F'} fontSize={14}>
-              {data?.email}
-            </Text>
-            <Text color={'#5F5F5F'} fontSize={14}>
-              {data?.phone}
-            </Text>
+              <Text color={'#5F5F5F'} fontSize={14}>
+                {data?.email}
+              </Text>
+            </HStack>
+            {data?.phone ? (
+              <HStack gap={5} alignItems={'center'} justifyContent={'center'}>
+                <Icon as={HiOutlinePhone} />
+                <Text color={'#5F5F5F'} fontSize={14}>
+                  {data?.phone}
+                </Text>
+              </HStack>
+            ) : null}
           </VStack>
         </GridItem>
 

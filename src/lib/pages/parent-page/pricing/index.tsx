@@ -128,7 +128,7 @@ export default function Pricing() {
               <PriceWrapper
                 key={index}
                 bgColor={
-                  index === 1 ? '#F2F2F2' : index === 2 ? '#FBA333' : '#FFFFFF'
+                  index === 0 ? '#F2F2F2' : index === 1 ? '#FBA333' : '#FFFFFF'
                 }
               >
                 <Box
@@ -147,6 +147,7 @@ export default function Pricing() {
                       fontWeight="700"
                       fontSize={{ base: 24, sm: 28, md: 35, lg: 40 }}
                       my={3}
+                      color={index === 1 ? 'white' : 'black'}
                       fontFamily="heading"
                     >
                       {tier?.name}
@@ -155,8 +156,7 @@ export default function Pricing() {
                       justifyContent="center"
                       bg="#FFFBE9"
                       flex={0}
-                      p={4}
-                      height={47}
+                      p={2}
                       borderRadius={7}
                       borderWidth={0.5}
                       borderColor="#FBA333"
@@ -178,12 +178,13 @@ export default function Pricing() {
                       </Text>
                     </HStack>
                   </Box>
-                  <VStack py={6} borderBottomRadius={'xl'}>
+                  <VStack py={2} borderBottomRadius={'xl'}>
                     <Text
                       fontWeight="500"
-                      fontSize={{ base: 14, sm: 14, md: 16, lg: 16 }}
+                      fontSize={{ base: 14, sm: 14, md: 16, lg: 20 }}
                       textAlign="start"
                       fontFamily="heading"
+                      color={index === 1 ? 'white' : 'black'}
                       display="flex"
                     >
                       Available Features
@@ -193,8 +194,9 @@ export default function Pricing() {
                         (feature: any, idx: any) => (
                           <ListItem
                             key={idx}
+                            color={index === 1 ? 'white' : 'black'}
                             fontFamily="heading"
-                            fontSize={{ base: 12, sm: 12, md: 14, lg: 18 }}
+                            fontSize={{ base: 12, sm: 12, md: 14, lg: 16 }}
                           >
                             <ListIcon
                               as={
@@ -216,16 +218,16 @@ export default function Pricing() {
                         w="full"
                         mb={4}
                         bg={
-                          index === 1
+                          index === 0
                             ? '#0A52A8'
-                            : index === 2
+                            : index === 1
                               ? 'white'
                               : '#0A52A8'
                         }
                         color={
-                          index === 1
+                          index === 0
                             ? 'white'
-                            : index === 2
+                            : index === 1
                               ? '#0A52A8'
                               : 'white'
                         }

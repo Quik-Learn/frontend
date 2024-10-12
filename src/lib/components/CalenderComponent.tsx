@@ -37,16 +37,25 @@ import { TiGroupOutline } from 'react-icons/ti';
 import { IoVideocamOutline } from 'react-icons/io5';
 import Button from './ui/button';
 import { calendarStyle } from '../styles/theme/config';
-import { myEventsList } from '../utils/data';
+// import { events, myEventsList } from '../utils/data';
 import Events from './Events';
+import { getRandomColor } from '../helpers/paths';
+import { useRouter } from 'next/navigation';
 const localizer = momentLocalizer(moment);
 
-const CalenderComponent = () => {
+const CalenderComponent = ({ events }: any) => {
+  const router = useRouter();
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date()); // March 4, 2024
-
+  console.log(events);
   const toast = useToast();
-
+  const addRandomColorsToEvents: any = (events: any) => {
+    return events?.map((event: any) => ({
+      ...event,
+      color: getRandomColor(),
+    }));
+  };
+  console.log(addRandomColorsToEvents);
   const handleSelectSlot = ({ start }: any) => {
     toast({
       title: `Clicked date: ${moment(start).format('MMMM Do YYYY')}`,
@@ -57,7 +66,8 @@ const CalenderComponent = () => {
   };
 
   const eventStyleGetter = (event: any) => {
-    const backgroundColor = event.color;
+    console.log(event);
+    const backgroundColor = event.color || 'blue';
     const style = {
       backgroundColor,
       borderRadius: '5px',
@@ -93,7 +103,7 @@ const CalenderComponent = () => {
     <Box p={5} sx={calendarStyle}>
       <BigCalendar
         localizer={localizer}
-        events={myEventsList}
+        events={addRandomColorsToEvents(events)}
         startAccessor="start"
         endAccessor="end"
         style={{ height: '800px' }}
@@ -155,7 +165,12 @@ const CalenderComponent = () => {
                 </Select>
               </Flex>
               <Flex align="center">
-                <Button width={'262px'} text="Book a session" bg="#0177FB" />
+                <Button
+                  width={'262px'}
+                  text="Book a session"
+                  bg="#0177FB"
+                  onClick={() => router.push('/student/book-session')}
+                />
               </Flex>
             </Flex>
           ),

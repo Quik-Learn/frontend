@@ -23,10 +23,18 @@ const ParentContainer = ({ children }: any) => {
   }, []);
 
   return (
-    <Flex minH={'100vh'} maxH={'100vh'} bg={'#fafafa'} overflowY={'scroll'}>
+    <Flex
+      minH={'100vh'}
+      maxW={'100vw'}
+      width={'100vw'}
+      maxH={'100vh'}
+      bg={'#fafafa'}
+      overflowX={'hidden'}
+      overflowY={'scroll'}
+    >
       <TopNav />
       <ParentNav />
-      <Box flex="1" ml={261} mt={98}>
+      <Box flex="1" ml={261} mt={98} overflowX={'hidden'}>
         {children}
       </Box>
     </Flex>
