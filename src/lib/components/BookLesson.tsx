@@ -22,7 +22,7 @@ import { convertTimeAndAddOneHour, formatToDateString } from '../helpers/paths';
 
 const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
   const [selected, setSelected] = useState<string>('');
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null); // Selected date from calendar
+  const [selectedDate, setSelectedDate] = useState<any>(null); // Selected date from calendar
   const [successData, setSuccessData] = useState({
     title: '',
     description: '',
