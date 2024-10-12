@@ -105,7 +105,7 @@ const SingleSession = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -123,7 +123,7 @@ const SingleSession = () => {
     if (isError) {
       // toast({
       //   //@ts-ignore
-      //   title: error?.error?.message || 'An error occured',
+      //   title: error?.data?.error?.message || 'An error occured',
       //   description: 'An Error occured.',
       //   status: 'error',
       //   duration: 9000,
@@ -147,7 +147,12 @@ const SingleSession = () => {
           >
             {courseData?.title}
           </Text>
-          <Text color={'#4E5566'} fontSize={'24px'} mb={2}>
+          <Text
+            color={'#4E5566'}
+            fontSize={'24px'}
+            mb={2}
+            alignSelf={'flex-start'}
+          >
             {courseData?.short_description}
           </Text>
 

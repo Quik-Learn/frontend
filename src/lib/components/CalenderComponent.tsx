@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Calendar as BigCalendar,
   momentLocalizer,
@@ -39,65 +39,24 @@ import Button from './ui/button';
 import { calendarStyle } from '../styles/theme/config';
 // import { events, myEventsList } from '../utils/data';
 import Events from './Events';
-import { getRandomColor } from '../helpers/paths';
+import {
+  addRandomColorsToEvents,
+  customDayPropGetter,
+  customSlotPropGetter,
+  eventStyleGetter,
+  getRandomColor,
+} from '../helpers/paths';
 import { useRouter } from 'next/navigation';
+import { useJoinMeetingMutation } from '../services/student-mutation';
 const localizer = momentLocalizer(moment);
 
-const CalenderComponent = ({ events }: any) => {
+const CalenderComponent = ({ events, trigger }: any) => {
   const router = useRouter();
   const [view, setView] = React.useState(Views.WEEK);
-  const [currentDate, setCurrentDate] = useState(new Date()); // March 4, 2024
+  const [currentDate, setCurrentDate] = useState(new Date());
+
   console.log(events);
   const toast = useToast();
-  const addRandomColorsToEvents: any = (events: any) => {
-    return events?.map((event: any) => ({
-      ...event,
-      color: getRandomColor(),
-    }));
-  };
-  console.log(addRandomColorsToEvents);
-  const handleSelectSlot = ({ start }: any) => {
-    toast({
-      title: `Clicked date: ${moment(start).format('MMMM Do YYYY')}`,
-      status: 'info',
-      duration: 2000,
-      isClosable: true,
-    });
-  };
-
-  const eventStyleGetter = (event: any) => {
-    console.log(event);
-    const backgroundColor = event.color || 'blue';
-    const style = {
-      backgroundColor,
-      borderRadius: '5px',
-      color: 'white',
-      display: 'block',
-      padding: '5px',
-    };
-    return {
-      style,
-    };
-  };
-  const customDayPropGetter = (date: any) => {
-    if (date.getDay() === 6 || date.getDay() === 0) {
-      return {
-        style: {
-          border: '',
-        },
-      };
-    }
-    return {};
-  };
-  const customSlotPropGetter = (date: any) => {
-    return {
-      style: {
-        border: 'none',
-        borderWidth: '0px !important',
-        borderColor: 'transparent',
-      },
-    };
-  };
 
   return (
     <Box p={5} sx={calendarStyle}>
@@ -126,7 +85,7 @@ const CalenderComponent = ({ events }: any) => {
         min={moment().set({ hour: 9, minute: 0 }).toDate()}
         max={moment().set({ hour: 18, minute: 0 }).toDate()}
         components={{
-          event: ({ event }) => <Events event={event} />,
+          event: ({ event }) => <Events event={event} trigger={trigger} />,
           toolbar: ({ label, onNavigate, onView, view }: any) => (
             <Flex justify="space-between" align="center" mb={4}>
               <Flex>

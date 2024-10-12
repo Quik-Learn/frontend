@@ -69,11 +69,13 @@ const TutorPage = () => {
   const toast = useToast();
   const [overview, setOverview] = useState<any>([]);
   const [tutor, setTutorData] = useState<any>([]);
+  const [tutorCalander, setTutorCalender] = useState<any>([]);
   const [tutorRating, setTutorRatingData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetTutorQuery();
   const [triggerOverview, tutorOverview] = useLazyGetTutorOverviewQuery();
-  const [triggerTutorCalender, tutorCalender] = useLazyGetTutorCalenderQuery();
+  const [triggerTutorCalender, tutorCalenderData] =
+    useLazyGetTutorCalenderQuery();
   const [bookSessionStudent, bookSessionStudentData] =
     useBookSessionStudentMutation();
   const [triggerReview, tutorReview] = useLazyGetTutorRatingQuery();
@@ -82,6 +84,7 @@ const TutorPage = () => {
     trigger(id);
     triggerOverview(id);
     triggerReview(id);
+    triggerTutorCalender({ id });
   }, [id]);
   useEffect(() => {
     if (isSuccess) {
@@ -91,7 +94,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -111,7 +114,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -128,7 +131,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -144,9 +147,10 @@ const TutorPage = () => {
       onClose();
     }
     if (isError) {
+      console.log(error);
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -155,6 +159,24 @@ const TutorPage = () => {
       });
     }
   }, [bookSessionStudentData]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = tutorCalenderData;
+    if (isSuccess) {
+      setTutorCalender(data?.data);
+    }
+    if (isError) {
+      console.log(error);
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [tutorCalenderData]);
   const bookSessionHandler = (body: any) => {
     bookSessionStudent({ subject_id: subjectId, instructor_id: id, body });
   };
@@ -449,6 +471,8 @@ const TutorPage = () => {
         onClose={onClose}
         isOpen={isOpen}
         bookSession={bookSessionHandler}
+        isLoading={bookSessionStudentData?.isLoading}
+        tutorCalender={tutorCalander}
       />
       <SuccessModal
         onClose={onClosee}

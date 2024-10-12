@@ -101,10 +101,14 @@ export const formatData = (data: any) => {
     const formattedDate = `${item.date}T23:00:00.000Z`;
     console.log(formattedStartTime);
     return {
-      desc: item.title,
+      desc: item?.title,
       start: formattedStartTime,
       end: formattedEndTime,
       date: formattedDate,
+      instructor: item?.instructor,
+      id: item?.id,
+      subject: item?.subject,
+      meeting_link: item?.meeting_link,
     };
   });
 };
@@ -143,3 +147,43 @@ export function getTimeFromToday(dateString: any) {
 
   return null; // Return null if the date is not today
 }
+export const addRandomColorsToEvents: any = (events: any) => {
+  return events?.map((event: any) => ({
+    ...event,
+    color: getRandomColor(),
+  }));
+};
+
+export const eventStyleGetter = (event: any) => {
+  console.log(event);
+  const backgroundColor = event.color || 'blue';
+  const style = {
+    backgroundColor,
+    borderRadius: '5px',
+    color: 'white',
+    display: 'block',
+    padding: '5px',
+  };
+  return {
+    style,
+  };
+};
+export const customDayPropGetter = (date: any) => {
+  if (date.getDay() === 6 || date.getDay() === 0) {
+    return {
+      style: {
+        border: '',
+      },
+    };
+  }
+  return {};
+};
+export const customSlotPropGetter = (date: any) => {
+  return {
+    style: {
+      border: 'none',
+      borderWidth: '0px !important',
+      borderColor: 'transparent',
+    },
+  };
+};

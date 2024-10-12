@@ -16,16 +16,18 @@ const MySessions = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
-    useLazyGetStudentCalenderQuery();
+    useLazyGetStudentSessionQuery();
+  // const [triggerSession, sessionData] = useLazyGetStudentSessionQuery();
   useEffect(() => {
     if (isSuccess) {
       setEvents(formatData(data?.data));
       console.log(data?.data, formatData(data?.data));
     }
     if (isError) {
+      console.log(error);
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -44,7 +46,7 @@ const MySessions = () => {
         My Sessions
       </Text>
 
-      <CalenderComponent events={events} />
+      <CalenderComponent events={events} trigger={trigger} />
     </ParentContainer>
   );
 };

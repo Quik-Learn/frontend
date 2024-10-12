@@ -13,8 +13,9 @@ import {
   Image,
   ModalOverlay,
   Textarea,
+  useToast,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CiBellOn } from 'react-icons/ci';
 import { GoClock } from 'react-icons/go';
 import { IoVideocamOutline } from 'react-icons/io5';
@@ -26,10 +27,15 @@ import { TiArrowForwardOutline } from 'react-icons/ti';
 import { convertTo12HourFormat, getTimeFromToday } from '../helpers/paths';
 import { events } from '../utils/data';
 import moment from 'moment';
+import { useJoinMeetingMutation } from '../services/student-mutation';
 
-const Events = ({ event }: any) => {
+const Events = ({ event, trigger }: any) => {
+  const [isDisabled, setIsDisabled] = useState(true);
   const [selected, setSelceted] = useState<any>();
+  const [joinMeeting, { data, isLoading, isSuccess, isError, error, reset }] =
+    useJoinMeetingMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const {
     isOpen: isOpenJoin,
     onOpen: onOpenJoin,
@@ -45,8 +51,56 @@ const Events = ({ event }: any) => {
       name: `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`,
       icon: CiBellOn,
     },
-    { id: 3, name: 'Dr. James', icon: TiGroupOutline },
+    { id: 3, name: event?.instructor?.name, icon: TiGroupOutline },
   ];
+
+  useEffect(() => {
+    const checkTimeDifference = () => {
+      const now: any = new Date();
+      const timeDifferenceInMs = event?.start - now; // Difference in milliseconds
+      const oneHourInMs = 1 * 60 * 60 * 1000; // One hour in milliseconds
+      console.log(timeDifferenceInMs, oneHourInMs);
+
+      // Enable the button if the current time is within one hour of the session start time
+      if (timeDifferenceInMs <= oneHourInMs) {
+        setIsDisabled(false);
+        if (!event?.meeting_link) {
+          trigger({});
+        }
+      }
+    };
+
+    // Check the time difference when the component mounts
+    checkTimeDifference();
+
+    // Optionally, set up an interval to check continuously (e.g., every minute)
+    const interval = setInterval(checkTimeDifference, 6 * 1000); // Every 1 minute
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(interval);
+  }, [event?.start]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      console.log(data);
+      onClose();
+      window.open(event?.meeting_link);
+      // onOpenJoin();
+    }
+    if (isError) {
+      console.log(error);
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, isError, error, data]);
+
   return (
     <Box
       bg={selected?.color}
@@ -62,6 +116,7 @@ const Events = ({ event }: any) => {
       height={'58px'}
       w={'100%'}
       onClick={() => {
+        // trigger({});
         onOpen();
         setSelceted(event);
       }}
@@ -109,10 +164,10 @@ const Events = ({ event }: any) => {
                 <Button
                   width={127}
                   bg={selected?.color}
+                  isDisabled={isDisabled}
                   text="Join Session"
                   onClick={() => {
-                    onClose();
-                    onOpenJoin();
+                    joinMeeting(event?.id);
                   }}
                 />
               </HStack>
@@ -120,8 +175,8 @@ const Events = ({ event }: any) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Image src="/images/english-icon.svg" w={6} h={6} borderRadius={10} />
-      <Text fontSize={10}>{event.title}</Text>
+      <Image src={event.subject?.thumbnail} w={8} h={8} borderRadius={10} />
+      <Text fontSize={10}>{event.subject?.title}</Text>
       <Modal isOpen={isOpenJoin} onClose={onCloseJoin} isCentered>
         <ModalOverlay />
         <ModalContent

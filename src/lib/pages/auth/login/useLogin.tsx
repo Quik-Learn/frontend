@@ -48,7 +48,7 @@ const useLoginHook = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occurred',
+        title: error?.data?.error?.message || 'An error occurred',
         description: 'An Error occurred.',
         status: 'error',
         duration: 9000,

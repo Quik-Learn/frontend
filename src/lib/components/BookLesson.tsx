@@ -20,7 +20,15 @@ import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
 import { convertTimeAndAddOneHour, formatToDateString } from '../helpers/paths';
 
-const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
+const BookLesson = ({
+  isOpen,
+  onClose,
+  tutor,
+  overview,
+  bookSession,
+  isLoading,
+  tutorCalender,
+}: any) => {
   const [selected, setSelected] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<any>(null); // Selected date from calendar
   const [successData, setSuccessData] = useState({
@@ -44,6 +52,16 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
     const dayAvailability = availability.find(
       (av: any) => av.day.toLowerCase() === day.toLowerCase()
     );
+    // console.log(dayAvailability);
+    return dayAvailability || {};
+  };
+
+  // Convert availability into a more usable format
+  const getTimeAvailability = (day: string) => {
+    const dayAvailability = availability.find(
+      (av: any) => av.day.toLowerCase() === day.toLowerCase()
+    );
+    // console.log(dayAvailability);
     return dayAvailability || {};
   };
 
@@ -53,10 +71,12 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
       .toLocaleDateString('en-US', { weekday: 'long' })
       .toLowerCase();
     const dayAvailability = getDayAvailability(dayName);
+    // console.log(getDayAvailability(dayName));
     return (
-      dayAvailability?.morning ||
-      dayAvailability?.afternoon ||
-      dayAvailability?.evening
+      date > new Date() &&
+      (dayAvailability?.morning ||
+        dayAvailability?.afternoon ||
+        dayAvailability?.evening)
     );
   };
   // Add class for available days and selected date
@@ -73,7 +93,9 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
 
     return className;
   };
-
+  const tileDisabled = ({ date }: any) => {
+    return date < new Date();
+  };
   // Filter time slots based on the selected day
   const getAvailableTimeSlots = () => {
     if (!selectedDate) return [];
@@ -91,10 +113,12 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
       availableTimes = availableTimes.concat(timeSlots.afternoon);
     if (dayAvailability.evening)
       availableTimes = availableTimes.concat(timeSlots.evening);
-
+    console.log(availableTimes);
     return availableTimes;
   };
-
+  const checkBusyTime = () => {
+    console.log(selectedDate);
+  };
   const availableTimes = getAvailableTimeSlots();
 
   return (
@@ -194,6 +218,7 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
                   nextLabel={<GrFormNext />}
                   next2Label={null}
                   prev2Label={null}
+                  minDate={new Date()}
                 />
               </Box>
             </Stack>
@@ -236,6 +261,7 @@ const BookLesson = ({ isOpen, onClose, tutor, overview, bookSession }: any) => {
               <Button
                 text="Confirm Booking"
                 bg="#0177FB"
+                isLoading={isLoading}
                 width={'279px'}
                 onClick={() => {
                   const { originalTime, oneHourLater } =

@@ -214,6 +214,15 @@ export const parentService = createApi({
         };
       },
     }),
+    bookSessionParent: builder.mutation({
+      query: ({ body, subject_id, instructor_id, ward_id }: any) => {
+        return {
+          url: `parent/book-session/${instructor_id}/${subject_id}/${ward_id}`,
+          method: 'post',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -241,4 +250,5 @@ export const {
   useLazyGetTutorOverviewQuery,
   useLazyGetTutorQuery,
   useLazyGetTutorRatingQuery,
+  useBookSessionParentMutation,
 } = parentService;

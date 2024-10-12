@@ -42,7 +42,7 @@ const Wards = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,

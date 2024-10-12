@@ -61,7 +61,7 @@ const Verify = () => {
     if (isError) {
       // toast({
       //   //@ts-ignore
-      //   title: error?.error?.message,
+      //   title: error?.data?.error?.message,
       //   description: 'An error occured, try again',
       //   status: 'error',
       //   duration: 9000,

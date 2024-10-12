@@ -28,7 +28,7 @@ const useForgotPassword = (callback1: any, callback2: any) => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -44,7 +44,7 @@ const useForgotPassword = (callback1: any, callback2: any) => {
     if (isVerifyError) {
       toast({
         //@ts-ignore
-        title: verifyError?.error?.message || 'An error occured',
+        title: verifyerror?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,

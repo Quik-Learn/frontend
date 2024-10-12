@@ -62,7 +62,7 @@ const useAccount = () => {
     if (responseData.isError) {
       toast({
         //@ts-ignore
-        title: responseData.error?.error?.message || 'An error occured',
+        title: responseData.error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,

@@ -67,8 +67,9 @@ export default function Pricing() {
     }
     if (isError) {
       toast({
-        //@ts-ignore
-        title: error?.error?.message || error?.message || 'An error occured',
+        title:
+          //@ts-ignore
+          error?.data?.error?.message || error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,

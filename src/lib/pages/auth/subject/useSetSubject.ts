@@ -41,7 +41,7 @@ export const useSetSubjectHook = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured!',
+        title: error?.data?.error?.message || 'An error occured!',
         description: 'Try Again.',
         status: 'error',
         duration: 9000,
@@ -69,7 +69,7 @@ export const useSetSubjectHook = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured!',
+        title: error?.data?.error?.message || 'An error occured!',
         description: 'Try Again.',
         status: 'error',
         duration: 9000,

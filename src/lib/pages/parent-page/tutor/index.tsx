@@ -24,6 +24,7 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import {
+  useBookSessionParentMutation,
   useLazyGetTutorOverviewQuery,
   useLazyGetTutorQuery,
   useLazyGetTutorRatingQuery,
@@ -46,6 +47,7 @@ import Review from '~/lib/components/Review';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Button from '~/lib/components/ui/button';
 import BookLesson from '~/lib/components/BookLesson';
+import SuccessModal from '~/lib/components/ui/success-modal';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -53,6 +55,11 @@ const data = [
 
 const TutorPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenn,
+    onOpen: onOpenn,
+    onClose: onClosee,
+  } = useDisclosure();
   const router = useRouter();
   const { id } = useParams();
   const toast = useToast();
@@ -63,7 +70,8 @@ const TutorPage = () => {
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetTutorQuery();
   const [triggerOverview, tutorOverview] = useLazyGetTutorOverviewQuery();
-
+  const [bookSessionStudent, bookSessionStudentData] =
+    useBookSessionParentMutation();
   const [triggerReview, tutorReview] = useLazyGetTutorRatingQuery();
   const subjectId = searchParams.get('subject_id');
   useEffect(() => {
@@ -79,7 +87,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -99,7 +107,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -116,7 +124,7 @@ const TutorPage = () => {
     if (isError) {
       toast({
         //@ts-ignore
-        title: error?.error?.message || 'An error occured',
+        title: error?.data?.error?.message || 'An error occured',
         description: 'An Error occured.',
         status: 'error',
         duration: 9000,
@@ -125,6 +133,33 @@ const TutorPage = () => {
       });
     }
   }, [tutorReview]);
+
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = bookSessionStudentData;
+    if (isSuccess) {
+      onOpenn();
+      onClose();
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [bookSessionStudentData]);
+  const bookSessionHandler = (body: any) => {
+    bookSessionStudent({
+      subject_id: subjectId,
+      instructor_id: id,
+      ward_id: '',
+      body,
+    });
+  };
   return (
     <ParentContainer>
       {isLoading ? (
@@ -413,6 +448,14 @@ const TutorPage = () => {
         onClose={onClose}
         tutor={tutor}
         overview={overview}
+        isLoading={bookSessionStudentData?.isLoading}
+      />
+      <SuccessModal
+        onClose={onClosee}
+        isOpen={isOpenn}
+        title={'Successful'}
+        description={'Session successfully booked!'}
+        buttonText={'Close'}
       />
     </ParentContainer>
   );

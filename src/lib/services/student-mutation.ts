@@ -112,9 +112,27 @@ export const studentService = createApi({
     feedback: builder.mutation({
       query: ({ body, session_id }: any) => {
         return {
-          url: `/student/session-feedback/${session_id}/`,
+          url: `student/session-feedback/${session_id}/`,
           method: 'post',
           body,
+        };
+      },
+    }),
+    joinMeeting: builder.mutation({
+      query: (meeting_id: any) => {
+        return {
+          url: `student/join-meeting/${meeting_id}/`,
+          method: 'post',
+          body: {},
+        };
+      },
+    }),
+    leaveMeeting: builder.mutation({
+      query: (meeting_id) => {
+        return {
+          url: `student/leave-meeting/${meeting_id}/`,
+          method: 'post',
+          body: {},
         };
       },
     }),
@@ -132,4 +150,6 @@ export const {
   useLazyGetTutorCalenderQuery,
   useBookSessionStudentMutation,
   useFeedbackMutation,
+  useJoinMeetingMutation,
+  useLeaveMeetingMutation,
 } = studentService;
