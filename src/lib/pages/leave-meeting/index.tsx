@@ -1,3 +1,5 @@
+'use client';
+
 import { Spinner, HStack, useDisclosure, Text } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import FeedbackModal from '~/lib/components/FeedbackModal';
