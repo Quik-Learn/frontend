@@ -3,12 +3,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable quotes */
 
+import { Dispatch } from '@reduxjs/toolkit';
 import {
   BaseQueryFn,
   createApi,
   FetchArgs,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
+import { useRouter } from 'next/navigation';
 
 interface CustomErr {
   data: {
@@ -37,6 +39,7 @@ export const studentService = createApi({
       return headers;
     },
   }) as BaseQueryFn<string | FetchArgs, unknown, CustomErr, {}>,
+  tagTypes: ['cleanUp'],
   endpoints: (builder) => ({
     onboardStudent: builder.mutation({
       query: (body: any) => {
@@ -94,9 +97,10 @@ export const studentService = createApi({
       },
     }),
     getStudentSession: builder.query({
-      query() {
+      query(params) {
         return {
           url: `student/sessions/`,
+          params,
         };
       },
     }),
@@ -136,6 +140,34 @@ export const studentService = createApi({
         };
       },
     }),
+
+    getActiveCourses: builder.query({
+      query: (params) => {
+        return {
+          url: `student/get-active-courses/`,
+          params,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
+    getCompletedCourses: builder.query({
+      query: (params) => {
+        return {
+          url: `student/get-completed-courses/`,
+          params,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
+    getPastSession: builder.query({
+      query: () => {
+        return {
+          url: `student/past-sessions/`,
+        };
+      },
+    }),
   }),
 });
 
@@ -152,4 +184,6 @@ export const {
   useFeedbackMutation,
   useJoinMeetingMutation,
   useLeaveMeetingMutation,
+  useLazyGetActiveCoursesQuery,
+  useLazyGetCompletedCoursesQuery,
 } = studentService;

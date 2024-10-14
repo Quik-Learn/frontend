@@ -64,9 +64,6 @@ const Events = ({ event, trigger }: any) => {
       // Enable the button if the current time is within one hour of the session start time
       if (timeDifferenceInMs <= oneHourInMs) {
         setIsDisabled(false);
-        if (!event?.meeting_link) {
-          trigger({});
-        }
       }
     };
 
@@ -113,7 +110,8 @@ const Events = ({ event, trigger }: any) => {
       display={'flex'}
       flexDirection={'row'}
       gap={2}
-      height={'58px'}
+      mb={5}
+      height={'100%'}
       w={'100%'}
       onClick={() => {
         // trigger({});

@@ -141,10 +141,13 @@ const TutorPage = () => {
     }
   }, [tutorReview]);
   useEffect(() => {
-    const { data, isError, error, isSuccess } = bookSessionStudentData;
+    const { data, isError, error, isSuccess, reset } = bookSessionStudentData;
     if (isSuccess) {
       onOpenn();
       onClose();
+      setTimeout(() => {
+        reset();
+      }, 5000);
     }
     if (isError) {
       console.log(error);
@@ -157,6 +160,9 @@ const TutorPage = () => {
         isClosable: true,
         position: 'top',
       });
+      setTimeout(() => {
+        reset();
+      }, 5000);
     }
   }, [bookSessionStudentData]);
   useEffect(() => {
@@ -475,7 +481,10 @@ const TutorPage = () => {
         tutorCalender={tutorCalander}
       />
       <SuccessModal
-        onClose={onClosee}
+        onClose={() => {
+          onClosee();
+          triggerTutorCalender({ id });
+        }}
         isOpen={isOpenn}
         title={'Successful'}
         description={'Session successfully booked!'}

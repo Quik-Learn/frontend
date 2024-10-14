@@ -31,9 +31,9 @@ const Pagination = ({
   const handlePageClick = (pageNumber: number) => {
     onPageChange(pageNumber);
   };
-  useEffect(() => {
-    onPageChange(1);
-  }, []);
+  // useEffect(() => {
+  //   onPageChange(1);
+  // }, []);
 
   return (
     <HStack spacing={2} justifyContent={'flex-end'} p={10} w="100%">
