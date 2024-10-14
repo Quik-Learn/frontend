@@ -30,7 +30,7 @@ import {
   MdKeyboardDoubleArrowLeft,
 } from 'react-icons/md';
 import BookLesson from './BookLesson';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import Pagination from './ui/pagination';
 
 function Rating({ rating }: any) {
@@ -69,7 +69,7 @@ function Rating({ rating }: any) {
     </Box>
   );
 }
-const TutorCard = ({ onOpen, router, tutor, title, id }: any) => {
+const TutorCard = ({ onOpen, router, tutor, title, id, ward_id }: any) => {
   return (
     <HStack
       flexDirection={{ base: 'column', md: 'row' }}
@@ -175,7 +175,11 @@ const TutorCard = ({ onOpen, router, tutor, title, id }: any) => {
                 text="View Profile"
                 width={244}
                 color="#121117"
-                onClick={() => router.push(`/parent/tutor/${tutor?.id}`)}
+                onClick={() =>
+                  router.push(
+                    `/parent/tutor/${tutor?.id}?course_id=${id}&ward_id=${ward_id}`
+                  )
+                }
               />
             </Flex>
           </VStack>
@@ -216,9 +220,11 @@ const TutorParent = ({
   previous,
   getTutor,
   id,
+  ward_id,
 }: any) => {
   const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   console.log(tutors);
   return (
     <VStack>
@@ -254,6 +260,7 @@ const TutorParent = ({
               router={router}
               title={title}
               id={id}
+              ward_id={ward_id}
             />
           ))}
         </SimpleGrid>

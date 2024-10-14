@@ -11,6 +11,7 @@ import {
   Avatar,
   Stack,
   Spinner,
+  HStack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -159,14 +160,15 @@ const Wards = () => {
                       {item.class}
                     </Text>
                   </VStack>
-
-                  <Button
-                    border="#0A52A8"
-                    color="#0A52A8"
-                    text="Manage"
-                    variant="outline"
-                    onClick={() => router.push('/parent/subscription')}
-                  />
+                  <HStack>
+                    <Button
+                      border="#0A52A8"
+                      color="#0A52A8"
+                      text="Manage"
+                      variant="outline"
+                      onClick={() => router.push('/parent/subscription')}
+                    />
+                  </HStack>
                 </GridItem>
               ))}
             </Grid>

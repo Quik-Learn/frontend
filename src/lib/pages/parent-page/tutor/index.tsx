@@ -25,6 +25,7 @@ import { useEffect, useRef, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import {
   useBookSessionParentMutation,
+  useLazyGetTutorCalenderQuery,
   useLazyGetTutorOverviewQuery,
   useLazyGetTutorQuery,
   useLazyGetTutorRatingQuery,
@@ -67,17 +68,22 @@ const TutorPage = () => {
   const [overview, setOverview] = useState<any>([]);
   const [tutor, setTutorData] = useState<any>([]);
   const [tutorRating, setTutorRatingData] = useState<any>([]);
+  const [tutorCalander, setTutorCalender] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetTutorQuery();
   const [triggerOverview, tutorOverview] = useLazyGetTutorOverviewQuery();
   const [bookSessionStudent, bookSessionStudentData] =
     useBookSessionParentMutation();
+  const [triggerTutorCalender, tutorCalenderData] =
+    useLazyGetTutorCalenderQuery();
   const [triggerReview, tutorReview] = useLazyGetTutorRatingQuery();
-  const subjectId = searchParams.get('subject_id');
+  const subjectId = searchParams.get('course_id');
+  const ward_id = searchParams.get('ward_id');
   useEffect(() => {
     trigger(id);
     triggerOverview(id);
     triggerReview(id);
+    triggerTutorCalender({ id });
   }, [id]);
   useEffect(() => {
     if (isSuccess) {
@@ -97,7 +103,6 @@ const TutorPage = () => {
       router.back();
     }
   }, [isSuccess, data, isError, error]);
-  console.log(tutor, overview);
   useEffect(() => {
     const { data, isError, error, isSuccess } = tutorOverview;
     if (isSuccess) {
@@ -152,11 +157,30 @@ const TutorPage = () => {
       });
     }
   }, [bookSessionStudentData]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = tutorCalenderData;
+    if (isSuccess) {
+      setTutorCalender(data?.data);
+    }
+    if (isError) {
+      console.log(error);
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [tutorCalenderData]);
+
   const bookSessionHandler = (body: any) => {
     bookSessionStudent({
       subject_id: subjectId,
       instructor_id: id,
-      ward_id: '',
+      ward_id,
       body,
     });
   };
@@ -449,6 +473,8 @@ const TutorPage = () => {
         tutor={tutor}
         overview={overview}
         isLoading={bookSessionStudentData?.isLoading}
+        bookSession={bookSessionHandler}
+        tutorCalender={tutorCalander}
       />
       <SuccessModal
         onClose={onClosee}

@@ -208,8 +208,8 @@ const Payment = () => {
                   alignItems={'center'}
                 >
                   <Avatar
-                    w={'228px'}
-                    h={'228px'}
+                    w={'200px'}
+                    h={'200px'}
                     fontSize={'xx-large'}
                     mb={5}
                     src={item?.profile_image}
@@ -262,31 +262,46 @@ const Payment = () => {
                     </Stack>
                   )}
                   {item?.subscription?.plan_name ? (
-                    <Text color="#5F5F5F" fontSize={16} fontWeight={500}>
+                    <Text color="#5F5F5F" fontSize={12} fontWeight={500}>
                       {item.subscription?.hours_watched} out of{' '}
                       {item?.subscription?.total_hours} hours this week
                     </Text>
                   ) : (
-                    <Text color="#5F5F5F" fontSize={16} fontWeight={700}>
+                    <Text color="#5F5F5F" fontSize={12} fontWeight={700}>
                       No Active Plan
                     </Text>
                   )}
+                  <HStack gap={3} mt={4}>
+                    {item?.subscription?.plan_name ? (
+                      <Button
+                        border="#0A52A8"
+                        bg="#0A52A8"
+                        text={'Book Session'}
+                        onClick={() => {
+                          router.push(`/parent/courses?ward_id=${item?.id}`);
+                          console.log('first');
+                        }}
+                      />
+                    ) : null}
 
-                  <Button
-                    border="#0A52A8"
-                    color="#0A52A8"
-                    text={
-                      item?.subscription?.plan_name ? 'Manage Plan' : 'Add Plan'
-                    }
-                    variant="outline"
-                    onClick={() => {
-                      if (!item?.subscription?.plan_name) {
-                        router.push(`/parent/pricing?ward_id=${item?.id}`);
-                      } else {
-                        router.push(`/parent/payment/${item?.id}`);
+                    <Button
+                      border="#0A52A8"
+                      color="#0A52A8"
+                      text={
+                        item?.subscription?.plan_name
+                          ? 'Manage Plan'
+                          : 'Add Plan'
                       }
-                    }}
-                  />
+                      variant="outline"
+                      onClick={() => {
+                        if (!item?.subscription?.plan_name) {
+                          router.push(`/parent/pricing?ward_id=${item?.id}`);
+                        } else {
+                          router.push(`/parent/payment/${item?.id}`);
+                        }
+                      }}
+                    />
+                  </HStack>
                 </GridItem>
               ))}
             </Grid>

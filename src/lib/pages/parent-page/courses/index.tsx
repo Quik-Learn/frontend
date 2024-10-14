@@ -23,7 +23,7 @@ import { IoIosClose } from 'react-icons/io';
 import { FiClock } from 'react-icons/fi';
 import { PiStudent } from 'react-icons/pi';
 import ParentContainer from '~/lib/layout/ParentContainer';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import useGetCourses from './getCourses';
 import Pagination from '~/lib/components/ui/pagination';
 import { useEffect, useState } from 'react';
@@ -31,6 +31,8 @@ import { useEffect, useState } from 'react';
 const Courses = () => {
   const router = useRouter();
   const [text, setText] = useState('');
+  const searchParams = useSearchParams();
+  const ward_id = searchParams.get('ward_id');
   const [baseSubject, setBaseSubject] = useState('');
   const {
     courses,
@@ -68,7 +70,7 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push(`/parent/courses/${id}`)}
+      onClick={() => router.push(`/parent/courses/${id}?ward_id=${ward_id}`)}
     >
       <Image
         src={imageSrc}

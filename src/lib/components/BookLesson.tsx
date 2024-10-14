@@ -155,7 +155,7 @@ const BookLesson = ({
         size={'4xl'}
       >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent bg={'#fff'}>
           <ModalHeader color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
             Book an Introductory Session with {tutor?.user?.user?.firstname}{' '}
             {tutor?.user?.user?.lastname}

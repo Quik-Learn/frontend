@@ -70,11 +70,18 @@ body {
   overflow-y: scroll;
   height: 80px !important;
   max-height: 80px !important;
+  color: cornflowerblue !important;
 }
 .rbc-event,
 .rbc-day-slot .rbc-background-event {
+  margin-top: 0px !important;
   height: 80px !important;
   max-height: 80px !important;
+  position: relative !important;
+  top: 0px;
+}
+.rbc-button-link {
+  color: black !important;
 }
 @media only screen and (min-width: 1440px) {
 }

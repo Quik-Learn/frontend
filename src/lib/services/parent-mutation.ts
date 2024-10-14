@@ -50,8 +50,8 @@ export const parentService = createApi({
     addSubjectForWard: builder.mutation({
       query: (body: any) => {
         return {
-          url: `accounts/parent/add/interested-subjects/ward/${body.id}`,
-          method: 'put',
+          url: `accounts/parent/add/interested-subjects/ward/${body.id}/`,
+          method: 'PUT',
           body: body.body,
         };
       },
@@ -219,9 +219,17 @@ export const parentService = createApi({
     bookSessionParent: builder.mutation({
       query: ({ body, subject_id, instructor_id, ward_id }: any) => {
         return {
-          url: `parent/book-session/${instructor_id}/${subject_id}/${ward_id}`,
-          method: 'post',
+          url: `parent/book-session/${instructor_id}/${subject_id}/${ward_id}/`,
+          method: 'POST',
           body,
+        };
+      },
+    }),
+    getTutorCalender: builder.query({
+      query: ({ id, params }) => {
+        return {
+          url: `parent/get-instructor-calender/${id}`,
+          params,
         };
       },
     }),
@@ -253,4 +261,5 @@ export const {
   useLazyGetTutorQuery,
   useLazyGetTutorRatingQuery,
   useBookSessionParentMutation,
+  useLazyGetTutorCalenderQuery,
 } = parentService;

@@ -1,14 +1,16 @@
 import { Modal, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SuccessModal from './ui/success-modal';
-import { AddRegistered, AddSubject, AddWard, NewWard } from './AddWard';
+import { AddRegistered, AddWard, NewWard } from './AddWard';
 import * as yup from 'yup';
 import {
+  useAddSubjectForWardMutation,
   useAddWardMutation,
   useConnectWardMutation,
   useLazySearchWardQuery,
 } from '../services/parent-mutation';
 import { useSetSubjectHook } from '../pages/auth/subject/useSetSubject';
+import { AddSubject } from './AddSubject';
 
 const AddWardComponent = ({
   onOpen,
@@ -24,8 +26,11 @@ const AddWardComponent = ({
     useAddWardMutation();
   const [connectWard, connectWardDetails] = useConnectWardMutation();
   const [searchWard, serachWardData] = useLazySearchWardQuery();
+  const [addSubjectForWard, addSubjectForWardData] =
+    useAddSubjectForWardMutation();
   const [filteredWards, setFilteredWards] = useState([]);
   const [selected, setSelected] = useState([]);
+  const [id, setId] = useState([]);
   const [successData, setSuccessData] = useState({
     title: '',
     description: '',
@@ -47,8 +52,6 @@ const AddWardComponent = ({
     isLoading: isLoadingSubject,
     setFilterText,
     filterText,
-    onboardStudent,
-    isStudentLoading,
   } = useSetSubjectHook();
   const [value, setValue] = useState('');
   const signInSchema = yup.object().shape({
@@ -84,13 +87,8 @@ const AddWardComponent = ({
     if (isSuccess) {
       setNew('');
       onClose();
-
-      setSuccessData({
-        title: 'Successful!',
-        description: 'An email as been sent to ward with his login details',
-        buttonText: 'Close',
-      });
-      onOpenn();
+      setId(data?.data?.user?.id);
+      onOpenSubject();
     }
     if (isError) {
       toast({
@@ -103,7 +101,8 @@ const AddWardComponent = ({
         position: 'top',
       });
     }
-  }, [isError, error, isSuccess]);
+  }, [isError, error, isSuccess, data]);
+
   useEffect(() => {
     const { data, isSuccess, isError, error, isLoading } = connectWardDetails;
     if (isSuccess) {
@@ -129,7 +128,30 @@ const AddWardComponent = ({
       });
     }
   }, [connectWardDetails]);
+  useEffect(() => {
+    const { isSuccess, isError, error } = addSubjectForWardData;
+    if (isSuccess) {
+      onCloseSubject();
 
+      setSuccessData({
+        title: 'Successful!',
+        description: 'An email as been sent to ward with his login details',
+        buttonText: 'Close',
+      });
+      onOpenn();
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [addSubjectForWardData]);
   useEffect(() => {
     const { data, isSuccess, isError, error, isLoading } = serachWardData;
     if (isSuccess) {
@@ -176,12 +198,23 @@ const AddWardComponent = ({
 
       <AddSubject
         data={subjects}
+        isOpen={isOpenSubject}
+        onClose={onCloseSubject}
         selected={selected}
         filterText={filterText}
         setFilterText={setFilterText}
         isLoading={isLoadingSubject}
-        setSelected={selected}
-        handleSubmit={() => console.log(selected)}
+        setSelected={setSelected}
+        isLoadingSubmit={addSubjectForWardData?.isLoading}
+        handleSubmit={() => {
+          const subjects = selected?.map((item: any) => {
+            return item?.id;
+          });
+          addSubjectForWard({
+            id,
+            body: { subjects },
+          });
+        }}
       />
       <SuccessModal
         onClose={onClosee}

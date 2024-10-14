@@ -58,8 +58,9 @@ const Dashboard = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (
-        dashboardData?.subscriptions?.length > 0 &&
+        dashboardData?.subscriptions?.length === 0 &&
         !isOpenn &&
+        !isOpen &&
         dashboardData?.ward_count > 0
       ) {
         onOpenn();

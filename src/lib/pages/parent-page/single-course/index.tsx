@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
 import TutorParent from '~/lib/components/tutor-parent';
 import {
@@ -29,6 +29,8 @@ const SingleCourses = () => {
   const router = useRouter();
   const { id } = useParams();
   const toast = useToast();
+  const searchParams = useSearchParams();
+  const ward_id = searchParams.get('ward_id');
   const [courseData, setCourseData] = useState<any>([]);
   const [tutors, setTutorData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
@@ -209,6 +211,7 @@ const SingleCourses = () => {
                     next={tutorData?.data?.next}
                     previous={tutorData?.data?.previous}
                     getTutor={(page: number) => triggerTutor(page)}
+                    ward_id={ward_id}
                   />
                 )}
               </TabPanel>
