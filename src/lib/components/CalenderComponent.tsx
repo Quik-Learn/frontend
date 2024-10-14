@@ -31,10 +31,6 @@ import {
 } from '@chakra-ui/react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
-import { GoClock } from 'react-icons/go';
-import { CiBellOn } from 'react-icons/ci';
-import { TiGroupOutline } from 'react-icons/ti';
-import { IoVideocamOutline } from 'react-icons/io5';
 import Button from './ui/button';
 import { calendarStyle } from '../styles/theme/config';
 // import { events, myEventsList } from '../utils/data';
@@ -47,16 +43,28 @@ import {
   getRandomColor,
 } from '../helpers/paths';
 import { useRouter } from 'next/navigation';
-import { useJoinMeetingMutation } from '../services/student-mutation';
 const localizer = momentLocalizer(moment);
 
-const CalenderComponent = ({ events, trigger }: any) => {
+const CalenderComponent = ({ events, trigger, setRange }: any) => {
   const router = useRouter();
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  console.log(events);
-  const toast = useToast();
+  const handleNavigate = (newDate: Date, newView: string) => {
+    setCurrentDate(newDate);
+
+    // Calculate the start and end date based on the new view
+    let start, end;
+    if (newView === Views.WEEK) {
+      start = moment(newDate).startOf('week').toDate();
+      end = moment(newDate).endOf('week').toDate();
+    } else if (newView === Views.MONTH) {
+      start = moment(newDate).startOf('month').toDate();
+      end = moment(newDate).endOf('month').toDate();
+    }
+    setRange({ start, end });
+    console.log(`Start: ${start}, End: ${end}`);
+  };
 
   return (
     <Box p={5} sx={calendarStyle}>
@@ -70,7 +78,7 @@ const CalenderComponent = ({ events, trigger }: any) => {
         defaultView={Views.WEEK}
         views={[Views.WEEK, Views.MONTH]}
         date={currentDate}
-        onNavigate={(newDate) => setCurrentDate(newDate)}
+        onNavigate={(newDate) => handleNavigate(newDate, view)}
         view={view}
         onView={(e: any) => setView(e)}
         step={60}

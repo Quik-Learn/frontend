@@ -18,10 +18,6 @@ import {
   Box,
   Heading,
   Icon,
-  Tooltip,
-  List,
-  ListItem,
-  ListIcon,
   Button as ChakraButton,
   IconButton,
   Tabs,
@@ -29,107 +25,75 @@ import {
   Tab,
   TabPanels,
   TabPanel,
+  Skeleton,
+  SkeletonText,
 } from '@chakra-ui/react';
-import { useRef, useState } from 'react';
-import { CiSearch } from 'react-icons/ci';
+import { useCallback, useEffect, useState } from 'react';
 import { FiClock } from 'react-icons/fi';
-import * as yup from 'yup';
 import { PiStudent } from 'react-icons/pi';
-import { LuDot } from 'react-icons/lu';
 import ParentContainer from '~/lib/layout/ParentContainer';
-import { coursesArray } from '~/lib/utils/nav';
-import {
-  MdKeyboardDoubleArrowLeft,
-  MdKeyboardDoubleArrowRight,
-} from 'react-icons/md';
+
 import { useRouter } from 'next/navigation';
 import useGetCourses from './getCourses';
 import Pagination from '~/lib/components/ui/pagination';
-const data = [
-  { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
-  { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
-];
-const oldData = [
-  { id: 1, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 2, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-  { id: 3, name: 'Nick Jonas ', value: 'Nickjonas34@gmail.com' },
-];
+import CourseCard from '~/lib/components/CourseCard';
+import CourseCardAll from '~/lib/components/CourseCardAll';
+
 const Courses = () => {
   const router = useRouter();
   const {
     courses,
-    count,
     next,
     previous,
     isLoading,
     getSubjects,
     total_pages,
     currentPage,
+    getActiveCourses,
+    getCompletedCourses,
+    setCourses,
   } = useGetCourses();
 
-  const CourseCard = ({
-    title,
-    description,
-    imageSrc,
-    duration,
-    learners,
-    router,
-    id,
-  }: any) => (
-    <Box
-      borderRadius="md"
-      display={'flex'}
-      boxShadow="md"
-      overflow="hidden"
-      bg="white"
-      mb={10}
-      h={176}
-      gap={5}
-      p={2}
-      onClick={() => router.push(`/student/courses/${id}`)}
-    >
-      <Image
-        src={imageSrc}
-        alt={title}
-        w="154px"
-        h={'100%'}
-        objectFit="cover"
-      />
-      <VStack p={4} align="center" justify={'center'} gap={4} h={'100%'}>
-        <Heading fontSize={13} fontWeight="medium" color={'black'}>
-          {title}
-        </Heading>
+  const [activeTab, setActiveTab] = useState('active'); // Default is all courses
 
-        <HStack justifyContent="space-between" w={'100%'}>
-          <HStack spacing={1} justifyContent={'center'} alignItems={'center'}>
-            <Icon as={FiClock} size={'sm'} color={'#4D4C5C'} />
-            <Text fontSize={10} color="#4D4C5C" fontWeight="semibold">
-              {duration}
-            </Text>
-          </HStack>
-          <HStack spacing={1} justifyContent={'center'} alignItems={'center'}>
-            <Icon as={PiStudent} color={'#4D4C5C'} />
+  // Fetch courses based on the active tab
+  const fetchCourses = useCallback((page: number, active: string) => {
+    switch (active) {
+      case 'active':
+        getActiveCourses(page);
+        break;
+      case 'completed':
+        getCompletedCourses(page);
+        break;
+      default:
+        getSubjects(page);
+    }
+  }, []);
 
-            <Text fontSize={10} color="#4D4C5C" fontWeight="semibold">
-              {learners} Students
-            </Text>
-          </HStack>
-        </HStack>
-      </VStack>
-    </Box>
-  );
+  useEffect(() => {
+    fetchCourses(1, activeTab); // Fetch the data when the tab changes
+  }, [activeTab, fetchCourses]);
 
+  console.log(courses);
   return (
     <ParentContainer>
-      <Tabs w={'100%'} mt={8}>
-        <TabList border={'none'} defaultValue={'Active Courses'}>
+      <Tabs
+        w={'100%'}
+        mt={8}
+        onChange={(index) => {
+          const tabs = ['active', 'completed', 'all'];
+          setCourses([]);
+          setActiveTab(tabs[index]);
+        }}
+      >
+        <TabList border={'none'}>
           <Tab
             fontSize={{
               base: 16,
               sm: 18,
               md: 18,
             }}
-            value={'Active Courses'}
+            value="active"
             _selected={{
               color: '#FF8C00',
               borderBottomWidth: 2,
@@ -152,7 +116,7 @@ const Courses = () => {
               borderBottomWidth: 2,
               borderColor: '#FF8C00',
             }}
-            value={'Completed Courses'}
+            value="completed"
             fontFamily="heading"
             fontWeight="500"
             color={'#5F5F5F'}
@@ -170,6 +134,7 @@ const Courses = () => {
               borderBottomWidth: 2,
               borderColor: '#FF8C00',
             }}
+            value="all"
             fontFamily="heading"
             fontWeight="500"
             color={'#5F5F5F'}
@@ -179,9 +144,14 @@ const Courses = () => {
         </TabList>
 
         <TabPanels>
-          <TabPanel>
-            {' '}
-            <Box m={6}>
+          <Box m={6}>
+            {isLoading ? (
+              <Stack>
+                <Skeleton height="20px" />
+                <Skeleton height="20px" />
+                <Skeleton height="20px" />
+              </Stack>
+            ) : (
               <Grid
                 templateColumns={{
                   base: '90vw',
@@ -189,168 +159,55 @@ const Courses = () => {
                 }}
                 gap={4}
               >
-                {courses?.map((course: any, index: number) => (
-                  <GridItem key={index}>
-                    <CourseCard
-                      title={course?.title}
-                      description={course?.short_description}
-                      imageSrc={course?.thumbnail}
-                      duration={course?.lesson_hours}
-                      learners={course?.learners}
-                      router={router}
-                      id={course?.id}
-                    />
-                  </GridItem>
-                ))}
-              </Grid>
-            </Box>
-            <Pagination
-              totalPages={total_pages}
-              isLoading={isLoading}
-              currentPage={currentPage}
-              next={next}
-              previous={previous}
-              onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
-            />
-            <TabPanel>
-              {' '}
-              <Box m={6}>
-                <Grid
-                  templateColumns={{
-                    base: '90vw',
-                    lg: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  }}
-                  gap={4}
-                >
-                  {courses?.map((course: any, index: number) => (
-                    <GridItem key={index}>
-                      <CourseCard
-                        title={course?.title}
-                        description={course?.short_description}
-                        imageSrc={course?.thumbnail}
-                        duration={course?.lesson_hours}
-                        learners={course?.learners}
-                        router={router}
-                        id={course?.id}
-                      />
-                    </GridItem>
-                  ))}
-                </Grid>
-              </Box>
-              <Pagination
-                totalPages={total_pages}
-                isLoading={isLoading}
-                currentPage={currentPage}
-                next={next}
-                previous={previous}
-                onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
-              />
-            </TabPanel>{' '}
-            <Box m={6}>
-              <Grid
-                templateColumns={{
-                  base: '90vw',
-                  lg: 'repeat(auto-fill, minmax(300px, 1fr))',
-                }}
-                gap={4}
-              >
-                {coursesArray?.slice(2, 4).map((course, index) => (
-                  <GridItem key={index}>
-                    <CourseCard
-                      title={course.title}
-                      description={course.description}
-                      imageSrc={course.imageSrc}
-                      duration={course.duration}
-                      learners={course.learners}
-                      router={router}
-                    />
-                  </GridItem>
-                ))}
-              </Grid>
-            </Box>
-            <HStack
-              justify="space-between"
-              mt={8}
-              width="full"
-              flexDirection={{ base: 'column', lg: 'row' }}
-            >
-              <HStack spacing={2}>
-                <ChakraButton
-                  leftIcon={<Text as="span">&larr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
-                >
-                  Prev
-                </ChakraButton>
-
-                <ChakraButton
-                  rightIcon={<Text as="span">&rarr;</Text>}
-                  colorScheme="gray"
-                  variant="outline"
-                >
-                  Next
-                </ChakraButton>
-              </HStack>
-              <HStack spacing={2}>
-                <IconButton
-                  aria-label="Previous page"
-                  icon={<MdKeyboardDoubleArrowLeft />}
-                  colorScheme="gray"
-                  variant="ghost"
-                  isDisabled
-                />
-                {Array.from({ length: 3 }).map((_, index) => (
-                  <ChakraButton
-                    key={index}
-                    colorScheme={index === 0 ? 'blue' : 'gray'}
-                    variant={index === 0 ? 'solid' : 'outline'}
+                {courses?.length == 0 ? (
+                  <Stack
+                    w={'100%'}
+                    height={'100%'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
                   >
-                    {index + 1}
-                  </ChakraButton>
-                ))}
-                <IconButton
-                  aria-label="Next page"
-                  icon={<MdKeyboardDoubleArrowRight />}
-                  colorScheme="blue"
-                  variant="ghost"
-                />
-              </HStack>
-            </HStack>
-          </TabPanel>
-          <TabPanel>
-            {' '}
-            <Box m={6}>
-              <Grid
-                templateColumns={{
-                  base: '90vw',
-                  lg: 'repeat(auto-fill, minmax(300px, 1fr))',
-                }}
-                gap={4}
-              >
-                {courses?.map((course: any, index: number) => (
-                  <GridItem key={index}>
-                    <CourseCard
-                      title={course?.title}
-                      description={course?.short_description}
-                      imageSrc={course?.thumbnail}
-                      duration={course?.lesson_hours}
-                      learners={course?.learners}
-                      router={router}
-                      id={course?.id}
-                    />
-                  </GridItem>
-                ))}
+                    <Heading>No Course Found!</Heading>
+                  </Stack>
+                ) : (
+                  <>
+                    {courses?.map((course: any, index: number) => (
+                      <GridItem key={index}>
+                        {activeTab === 'all' ? (
+                          <CourseCardAll
+                            title={course?.title}
+                            description={course?.short_description}
+                            imageSrc={course?.thumbnail}
+                            duration={course?.lesson_hours}
+                            learners={course?.learners}
+                            router={router}
+                            id={course?.id}
+                          />
+                        ) : (
+                          <CourseCard
+                            title={course?.title}
+                            completed_sessions={course?.completed_sessions}
+                            imageSrc={course?.thumbnail}
+                            total_sessions={course?.total_sessions}
+                            instructor={course?.instructor}
+                            router={router}
+                            id={course?.id}
+                          />
+                        )}
+                      </GridItem>
+                    ))}
+                  </>
+                )}
               </Grid>
-            </Box>
-            <Pagination
-              totalPages={total_pages}
-              isLoading={isLoading}
-              currentPage={currentPage}
-              next={next}
-              previous={previous}
-              onPageChange={(page: number) => getSubjects(page)} // Optional: Callback if you need to handle page change externally
-            />
-          </TabPanel>
+            )}
+          </Box>
+          <Pagination
+            totalPages={total_pages}
+            isLoading={isLoading}
+            currentPage={currentPage}
+            next={next}
+            previous={previous}
+            onPageChange={(page: number) => fetchCourses(page, activeTab)}
+          />
         </TabPanels>
       </Tabs>
     </ParentContainer>

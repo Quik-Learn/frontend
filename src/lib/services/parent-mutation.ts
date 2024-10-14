@@ -119,6 +119,8 @@ export const parentService = createApi({
           params,
         };
       },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
     }),
     searchWard: builder.query({
       query: (params) => {

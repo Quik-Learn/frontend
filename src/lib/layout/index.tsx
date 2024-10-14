@@ -1,5 +1,5 @@
 'use client';
-
+import '../styles';
 import { Box } from '@chakra-ui/react';
 import { useEffect, useState, type ReactNode } from 'react';
 import { useAppSelector } from '../store';

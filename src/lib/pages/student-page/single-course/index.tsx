@@ -146,7 +146,12 @@ const SingleCourses = () => {
           >
             {courseData?.title}
           </Text>
-          <Text color={'#4E5566'} fontSize={'24px'} mb={2}>
+          <Text
+            color={'#4E5566'}
+            fontSize={'24px'}
+            mb={2}
+            alignSelf={'flex-start'}
+          >
             {courseData?.short_description}
           </Text>
 
@@ -240,6 +245,7 @@ const SingleCourses = () => {
                     <VStack
                       justifyContent={'space-between'}
                       alignItems={'center'}
+                      w={'100%'}
                     >
                       <List
                         spacing={2}

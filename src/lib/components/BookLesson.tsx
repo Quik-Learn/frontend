@@ -18,7 +18,12 @@ import 'react-calendar/dist/Calendar.css';
 import Button from './ui/button';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
-import { convertTimeAndAddOneHour, formatToDateString } from '../helpers/paths';
+import {
+  convertTimeAndAddOneHour,
+  convertTo12HourFormat,
+  convertTo12HourFormatt,
+  formatToDateString,
+} from '../helpers/paths';
 
 const BookLesson = ({
   isOpen,
@@ -93,6 +98,22 @@ const BookLesson = ({
 
     return className;
   };
+
+  const isSlotBooked = (date: Date, timeSlot: string) => {
+    const formattedDate = formatToDateString(date); // Format date to 'YYYY-MM-DD'
+    console.log(
+      formattedDate,
+      date,
+      timeSlot,
+      convertTo12HourFormatt('16:00:00')
+    );
+    return tutorCalender.some(
+      (session: any) =>
+        session.date === formattedDate &&
+        timeSlot === convertTo12HourFormatt(session.start_time)
+    );
+  };
+
   const tileDisabled = ({ date }: any) => {
     return date < new Date();
   };
@@ -113,14 +134,17 @@ const BookLesson = ({
       availableTimes = availableTimes.concat(timeSlots.afternoon);
     if (dayAvailability.evening)
       availableTimes = availableTimes.concat(timeSlots.evening);
-    console.log(availableTimes);
+
+    // Filter out the booked time slots for the selected date
+    availableTimes = availableTimes.filter(
+      (timeSlot) => !isSlotBooked(selectedDate, timeSlot)
+    );
+
     return availableTimes;
   };
-  const checkBusyTime = () => {
-    console.log(selectedDate);
-  };
-  const availableTimes = getAvailableTimeSlots();
 
+  const availableTimes = getAvailableTimeSlots();
+  console.log(selectedDate);
   return (
     <Stack w={'1000'}>
       <Modal

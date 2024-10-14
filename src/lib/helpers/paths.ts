@@ -29,10 +29,10 @@ export const timeAgo = (dateString: string) => {
 };
 export function formatToDateString(isoString: any): string {
   const date = new Date(isoString); // Parse ISO string to Date object
-  const year = date.getUTCFullYear(); // Get the full year
-  const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Get month (0-indexed) and pad to 2 digits
-  const day = String(date.getUTCDate()).padStart(2, '0'); // Get day and pad to 2 digits
-
+  const year = date.getFullYear(); // Get the full year
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed) and pad to 2 digits
+  const day = String(date.getDate()).padStart(2, '0'); // Get day and pad to 2 digits
+  console.log(`${year}-${month}-${day}`);
   return `${year}-${month}-${day}`; // Return in 'YYYY-MM-DD' format
 }
 export function convertTimeAndAddOneHour(timeString: any): {
@@ -67,21 +67,14 @@ export function convertTimeAndAddOneHour(timeString: any): {
     oneHourLater: `${oneHourLater}:00:00`,
   };
 }
-
-const convertTo12Hour = (time24: any) => {
-  const [hours, minutes] = time24.split(':');
-  let hour = parseInt(hours, 10);
-  const isPM = hour >= 12;
-
-  if (hour > 12) {
-    hour -= 12;
-  } else if (hour === 0) {
-    hour = 12; // Handle midnight case (00:00 -> 12am)
-  }
-
-  const suffix = isPM ? 'pm' : 'am';
-  return `${hour}${suffix}`;
+export const convertTo12HourFormatt = (time24: string) => {
+  const [hour, minute] = time24?.split(':');
+  const hourNumber = parseInt(hour, 10);
+  const ampm = hourNumber >= 12 ? 'pm' : 'am';
+  const hour12 = hourNumber % 12 || 12;
+  return `${hour12}${ampm}`;
 };
+
 const convertToFullDate = (time: any, date: any) => {
   // Combine date and time into an ISO string
   const dateTimeString = `${date}T${time}`;
@@ -120,6 +113,14 @@ export const getRandomColor = () => {
   }
   return color;
 };
+export const getRandomSoftColor = () => {
+  const getRandomValue = () => Math.floor(Math.random() * 56) + 200; // Values between 200 and 255
+  const r = getRandomValue();
+  const g = getRandomValue();
+  const b = getRandomValue();
+
+  return `rgb(${r}, ${g}, ${b})`;
+};
 export function convertTo12HourFormat(dateString: string) {
   // Create a Date object from the date string
   const date = new Date(dateString);
@@ -153,6 +154,12 @@ export const addRandomColorsToEvents: any = (events: any) => {
     color: getRandomColor(),
   }));
 };
+export const addRandomSoftColorsToEvents: any = (data: any) => {
+  return data?.map((item: any) => ({
+    ...item,
+    color: getRandomSoftColor(),
+  }));
+};
 
 export const eventStyleGetter = (event: any) => {
   console.log(event);
@@ -182,7 +189,7 @@ export const customSlotPropGetter = (date: any) => {
   return {
     style: {
       border: 'none',
-      borderWidth: '0px !important',
+      borderWidth: '0px',
       borderColor: 'transparent',
     },
   };

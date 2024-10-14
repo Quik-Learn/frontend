@@ -10,6 +10,7 @@ import {
 } from '~/lib/services/student-mutation';
 import { useEffect, useState } from 'react';
 import { formatData } from '~/lib/helpers/paths';
+import moment from 'moment';
 
 const MySessions = () => {
   const router = useRouter();
@@ -17,6 +18,10 @@ const MySessions = () => {
   const [events, setEvents] = useState([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetStudentSessionQuery();
+  const [range, setRange] = useState<{ start: any; end: any }>({
+    start: moment().startOf('week').toDate(),
+    end: moment().endOf('week').toDate(),
+  });
   // const [triggerSession, sessionData] = useLazyGetStudentSessionQuery();
   useEffect(() => {
     if (isSuccess) {
@@ -39,6 +44,17 @@ const MySessions = () => {
   useEffect(() => {
     trigger({});
   }, []);
+  console.log(range);
+  // Fetch sessions when the range changes
+  useEffect(() => {
+    if (range?.start && range?.end) {
+      const params = {
+        start_date: moment(range?.start).format('YYYY-MM-DD'),
+        end_date: moment(range?.end).format('YYYY-MM-DD'),
+      };
+      trigger(params);
+    }
+  }, [range]);
 
   return (
     <ParentContainer>
@@ -46,7 +62,11 @@ const MySessions = () => {
         My Sessions
       </Text>
 
-      <CalenderComponent events={events} trigger={trigger} />
+      <CalenderComponent
+        events={events}
+        trigger={trigger}
+        setRange={setRange}
+      />
     </ParentContainer>
   );
 };
