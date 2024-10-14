@@ -1,6 +1,6 @@
 'use client';
 
-import { Spinner, HStack, useDisclosure, Text } from '@chakra-ui/react';
+import { Spinner, HStack, useDisclosure, Text, Stack } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
 import FeedbackModal from '~/lib/components/FeedbackModal';
 import ParentContainer from '~/lib/layout/ParentContainer';
@@ -10,8 +10,6 @@ import useProfileHook from '~/lib/hooks/useProfile';
 const LeaveMeeting = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { type, isLoading } = useProfileHook();
-
-  useEffect(() => {}, []);
 
   return (
     <ParentContainer>
@@ -26,7 +24,9 @@ const LeaveMeeting = () => {
           <Spinner size="xl" />
           <Text>Loading...</Text>
         </HStack>
-      ) : null}
+      ) : (
+        <Stack></Stack>
+      )}
     </ParentContainer>
   );
 };
