@@ -1,13 +1,14 @@
 import { Modal, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SuccessModal from './ui/success-modal';
-import { AddRegistered, AddWard, NewWard } from './AddWard';
+import { AddRegistered, AddSubject, AddWard, NewWard } from './AddWard';
 import * as yup from 'yup';
 import {
   useAddWardMutation,
   useConnectWardMutation,
   useLazySearchWardQuery,
 } from '../services/parent-mutation';
+import { useSetSubjectHook } from '../pages/auth/subject/useSetSubject';
 
 const AddWardComponent = ({
   onOpen,
@@ -24,6 +25,7 @@ const AddWardComponent = ({
   const [connectWard, connectWardDetails] = useConnectWardMutation();
   const [searchWard, serachWardData] = useLazySearchWardQuery();
   const [filteredWards, setFilteredWards] = useState([]);
+  const [selected, setSelected] = useState([]);
   const [successData, setSuccessData] = useState({
     title: '',
     description: '',
@@ -34,6 +36,20 @@ const AddWardComponent = ({
     onOpen: onOpenn,
     onClose: onClosee,
   } = useDisclosure();
+  const {
+    isOpen: isOpenSubject,
+    onOpen: onOpenSubject,
+    onClose: onCloseSubject,
+  } = useDisclosure();
+
+  const {
+    data: subjects,
+    isLoading: isLoadingSubject,
+    setFilterText,
+    filterText,
+    onboardStudent,
+    isStudentLoading,
+  } = useSetSubjectHook();
   const [value, setValue] = useState('');
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter first name'),
@@ -57,26 +73,7 @@ const AddWardComponent = ({
     address: '',
     password: '',
   };
-  const oldData = [
-    { id: 1, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
-    { id: 2, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
-    { id: 3, name: 'Nick Jonas ', email: 'Nickjonas34@gmail.com' },
-  ];
 
-  const filterSubjects = useCallback(
-    (filterText: string) => {
-      const result = wards?.filter(
-        (item: any) =>
-          item?.user?.firstname
-            ?.toLowerCase()
-            .includes(filterText?.toLowerCase()) ||
-          item?.user?.email?.toLowerCase().includes(filterText?.toLowerCase())
-      );
-      console.log(result);
-      setFilteredWards(result);
-    },
-    [wards]
-  );
   useEffect(() => {
     if (value) {
       searchWard({ Ward: value });
@@ -176,6 +173,16 @@ const AddWardComponent = ({
           />
         ) : null}
       </Modal>
+
+      <AddSubject
+        data={subjects}
+        selected={selected}
+        filterText={filterText}
+        setFilterText={setFilterText}
+        isLoading={isLoadingSubject}
+        setSelected={selected}
+        handleSubmit={() => console.log(selected)}
+      />
       <SuccessModal
         onClose={onClosee}
         isOpen={isOpenn}
