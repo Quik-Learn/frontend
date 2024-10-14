@@ -1,0 +1,87 @@
+/* Global Styling here */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-SemiBold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+body {
+  background: #fff;
+}
+
+* {
+  font-family: 'Satoshi';
+}
+
+.react-calendar {
+  border: 'none';
+  background-color: aquamarine;
+}
+.tile {
+  background: #000;
+}
+.center {
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+}
+.css-1gpotox .rbc-timeslot-group {
+  height: 80px;
+  min-height: 80px !important;
+}
+.rbc-time-content > .rbc-day-slot {
+  width: '100px' !important;
+}
+.rbc-day-slot .rbc-events-container {
+  margin-right: 0px !important;
+}
+.rbc-day-slot .rbc-event {
+  position: relative !important;
+  margin-bottom: 20px;
+  top: 0px !important;
+  bottom: 0px !important;
+}
+.rbc-month-view,
+.rbc-time-view {
+  border: none !important;
+}
+.rbc-row-bg {
+  overflow-y: scroll;
+  height: 80px !important;
+  max-height: 80px !important;
+  color: cornflowerblue !important;
+}
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+  margin-top: 0px !important;
+  height: 80px !important;
+  max-height: 80px !important;
+  position: relative !important;
+  top: 0px;
+}
+.rbc-button-link {
+  color: black !important;
+}
+@media only screen and (min-width: 1440px) {
+}

@@ -1,4 +1,5 @@
 import type { DeepPartial, Theme } from '@chakra-ui/react';
+<<<<<<< HEAD
 import { Be_Vietnam_Pro, Inter } from 'next/font/google';
 
 export const fontBody = Be_Vietnam_Pro({
@@ -14,4 +15,11 @@ export const InterFont = Inter({
 export const fonts: DeepPartial<Theme['fonts']> = {
   heading: fontBody.style.fontFamily,
   body: InterFont.style.fontFamily,
+=======
+
+export const fonts: DeepPartial<Theme['fonts']> = {
+  heading: 'Satoshi, sans-serif',
+  body: 'Satoshi, sans-serif',
+  mono: 'Satoshi, sans-serif',
+>>>>>>> ui-work
 };
