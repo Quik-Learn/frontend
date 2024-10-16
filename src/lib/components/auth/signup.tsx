@@ -85,10 +85,6 @@ const SignUp = () => {
               <Button
                 text="Sign Up"
                 width={246}
-<<<<<<< HEAD
-                color="#242424"
-=======
->>>>>>> ui-work
                 onClick={() => router.push('/auth/parent-signup')}
               />
             </Stack>
@@ -131,20 +127,12 @@ const SignUp = () => {
               <Button
                 text="Sign Up"
                 width={246}
-<<<<<<< HEAD
-                color="#242424"
-=======
->>>>>>> ui-work
                 onClick={() => router.push('/auth/student-signup')}
               />
             </Stack>
           </Box>
         </HStack>
-<<<<<<< HEAD
-        <HStack justify="space-between" align="center" w="full">
-=======
         {/* <HStack justify="space-between" align="center" w="full">
->>>>>>> ui-work
           <Text color="#666666" fontSize={13.5}>
             Need help? Call us on{' '}
             <Text as="span" color="#2C2C2C" fontWeight="semibold">
@@ -158,16 +146,9 @@ const SignUp = () => {
           <Button
             text="Log In"
             width={97}
-<<<<<<< HEAD
-            color="#242424"
-            onClick={() => router.push('/auth/login')}
-          />
-        </HStack>
-=======
             onClick={() => router.push('/auth/login')}
           />
         </HStack> */}
->>>>>>> ui-work
       </VStack>
     </VStack>
   );

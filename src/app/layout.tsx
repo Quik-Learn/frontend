@@ -1,10 +1,6 @@
 import type { Metadata, Viewport } from 'next';
-<<<<<<< HEAD
-
-=======
 import { useEffect, useState } from 'react';
 import './styles.css';
->>>>>>> ui-work
 import Providers from '~/app/providers';
 
 type RootLayoutProps = {

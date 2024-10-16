@@ -1,15 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-<<<<<<< HEAD
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-=======
     "lib": ["dom", "dom.iterable", "esnext"],
->>>>>>> ui-work
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -23,13 +15,7 @@
     "jsx": "preserve",
     "baseUrl": "src",
     "paths": {
-<<<<<<< HEAD
-      "~/*": [
-        "./*"
-      ]
-=======
       "~/*": ["./*"]
->>>>>>> ui-work
     },
     "incremental": true,
     "plugins": [
@@ -45,17 +31,9 @@
     "**/*.tsx",
     "src",
     "commitlint.config.js",
-<<<<<<< HEAD
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-=======
     ".next/types/**/*.ts",
     "**/*.css",
     "src/app/styles.css"
   ],
   "exclude": ["node_modules"]
->>>>>>> ui-work
 }

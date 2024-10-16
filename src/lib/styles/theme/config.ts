@@ -4,8 +4,6 @@ export const config: ThemeConfig = {
   initialColorMode: 'system',
   disableTransitionOnChange: false,
 };
-<<<<<<< HEAD
-=======
 export const calendarStyle = {
   '.rbc-month-view .rbc-month-row': {
     border: 'none',
@@ -65,4 +63,3 @@ export const calendarStyle = {
     borderColor: 'transparent',
   },
 };
->>>>>>> ui-work
