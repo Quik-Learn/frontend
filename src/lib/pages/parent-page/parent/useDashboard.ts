@@ -1,4 +1,3 @@
-import { useFocusEffect } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useLazyGetParentDashboardQuery } from '~/lib/services/parent-mutation';
 import { useLazyGetUserQuery } from '~/lib/services/user-service';
