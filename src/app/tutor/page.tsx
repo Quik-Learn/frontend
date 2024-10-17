@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import Dashboard from '~/lib/pages/parent-page/parent';
+import Dashboard from '~/lib/pages/tutor-page/dashboard';
 
 export const metadata: Metadata = {
-  title: 'Parents Dashboard',
+  title: 'Tutor Dashboard',
 };
 
 export default Dashboard;

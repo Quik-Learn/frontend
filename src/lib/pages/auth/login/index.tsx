@@ -150,7 +150,12 @@ const Login = () => {
                 Remember me
               </Checkbox>
 
-              <Button text="Sign In" onClick={handleSubmit} width={'100%'} />
+              <Button
+                text="Sign In"
+                onClick={handleSubmit}
+                isLoading={isLoading}
+                width={'100%'}
+              />
             </>
           )}
         </Formik>
@@ -181,7 +186,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('google', '')}
+              onClick={() => handleSocialLogin('google', 'student')}
             >
               <Image src="/images/google.svg" alt="google" w="20px" h="20px" />
             </HStack>
@@ -189,7 +194,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('facebook', '')}
+              onClick={() => handleSocialLogin('facebook', 'student')}
             >
               <Image
                 src="/images/facebook.svg"
@@ -202,7 +207,7 @@ const Login = () => {
               backgroundColor="#F7F7F8"
               p={4}
               cursor="pointer"
-              onClick={() => handleSocialLogin('apple', '')}
+              onClick={() => handleSocialLogin('apple', 'student')}
             >
               <Image src="/images/apple.svg" alt="google" w="20px" h="20px" />
             </HStack>

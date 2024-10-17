@@ -11,7 +11,13 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import { IoMdEye, IoMdEyeOff } from 'react-icons/io';
-const PasswordInput = ({ onChange, value, error, label, placeholder }: any) => {
+const PasswordInput = ({
+  onChange,
+  value,
+  error,
+  label,
+  placeholder = 'Enter Password',
+}: any) => {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
   return (
@@ -22,10 +28,10 @@ const PasswordInput = ({ onChange, value, error, label, placeholder }: any) => {
       <InputGroup
         color="#1D2026"
         _placeholder={{ color: '#8C94A3' }}
-        bg="#FCFCFD"
+        bg="#ffffff"
         borderWidth={1}
+        borderColor="#E9EAF0"
         borderRadius={10}
-        borderColor="#F1F1F3"
       >
         <Input
           placeholder={placeholder}
@@ -34,6 +40,8 @@ const PasswordInput = ({ onChange, value, error, label, placeholder }: any) => {
           fontSize={14}
           onChange={onChange}
           border="none"
+          color="#1D2026"
+          _placeholder={{ color: '#8C94A3' }}
         />
         <InputRightElement width="4.5rem">
           <Icon onClick={handleClick} as={show ? IoMdEye : IoMdEyeOff} />

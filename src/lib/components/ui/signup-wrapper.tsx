@@ -18,16 +18,22 @@ const SignupWrapper = ({
 }) => {
   const router = useRouter();
   return (
-    <Stack minH="100vh" maxH="100vh" bg={'white'} flexDir={flexDirection}>
+    <Stack
+      minH="100vh"
+      maxH="100vh"
+      h={'100vh'}
+      bg={'white'}
+      flexDir={flexDirection}
+    >
       <VStack
         width={{ base: '100%', md: '50%', lg: '50x' }}
-        height="100%"
+        h={'100vh'}
         minH="100vh"
         bg={bg}
         justifyContent="space-between"
         display={{ base: 'none', md: 'flex' }}
       >
-        <Image src={img} width={1000} height={800} alt="signup" />
+        <Image src={img} width={1000} height={'100%'} alt="signup" />
       </VStack>
       <IconButton
         position={'absolute'}

@@ -26,7 +26,7 @@ const SignUp = () => {
       //   backgroundSize="cover"
       //   backgroundImage="/images/background.svg"
     >
-      <HStack justify="space-between" align="center" w="full" px={10} pt={5}>
+      <HStack justify="center" align="center" w="full" px={10} pt={5}>
         <IconButton
           icon={<MdOutlineKeyboardBackspace color="white" />}
           aria-label="icon"
@@ -34,6 +34,9 @@ const SignUp = () => {
           borderRadius={8}
           width="56px"
           height="56px"
+          position={'absolute'}
+          top={6}
+          left={6}
           alignSelf="flex-start"
           onClick={() => router.back()}
         />
@@ -53,14 +56,14 @@ const SignUp = () => {
       >
         Sign Up
       </Heading>
-      <VStack>
-        <HStack>
+      <Stack>
+        <HStack alignItems={'flex-start'}>
           <Box borderRadius="10px" boxShadow="md" px={10} pb={10} width="full">
             <VStack width="full" alignItems="center">
               <Image
                 src="/images/parent.svg"
                 alt="parent"
-                height={280}
+                height={240}
                 width={300}
               />
               <Heading
@@ -102,7 +105,7 @@ const SignUp = () => {
               <Image
                 src="/images/student.svg"
                 alt="parent"
-                height={280}
+                height={220}
                 width={300}
               />
               <Heading
@@ -132,7 +135,13 @@ const SignUp = () => {
             </Stack>
           </Box>
         </HStack>
-        {/* <HStack justify="space-between" align="center" w="full">
+        <HStack
+          justify="space-between"
+          align="center"
+          w="full"
+          mt={-20}
+          pb={10}
+        >
           <Text color="#666666" fontSize={13.5}>
             Need help? Call us on{' '}
             <Text as="span" color="#2C2C2C" fontWeight="semibold">
@@ -148,8 +157,8 @@ const SignUp = () => {
             width={97}
             onClick={() => router.push('/auth/login')}
           />
-        </HStack> */}
-      </VStack>
+        </HStack>
+      </Stack>
     </VStack>
   );
 };
