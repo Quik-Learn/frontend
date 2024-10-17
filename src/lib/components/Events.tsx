@@ -29,19 +29,17 @@ import { events } from '../utils/data';
 import moment from 'moment';
 import { useJoinMeetingMutation } from '../services/student-mutation';
 import FeedbackModal from './FeedbackModal';
+import { setMeetingId } from '../store/reducers/meeting-id-slice';
+import { useAppDispatch } from '../store';
 
-const Events = ({ event, trigger }: any) => {
+const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
   const [isDisabled, setIsDisabled] = useState(true);
+  const dispatch = useAppDispatch();
   const [selected, setSelceted] = useState<any>();
   const [joinMeeting, { data, isLoading, isSuccess, isError, error, reset }] =
     useJoinMeetingMutation();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const {
-    isOpen: isOpenJoin,
-    onOpen: onOpenJoin,
-    onClose: onCloseJoin,
-  } = useDisclosure();
 
   const start = convertTo12HourFormat(event?.start);
   const end = convertTo12HourFormat(event?.end);
@@ -54,36 +52,54 @@ const Events = ({ event, trigger }: any) => {
     },
     { id: 3, name: event?.instructor?.name, icon: TiGroupOutline },
   ];
-
   useEffect(() => {
     const checkTimeDifference = () => {
-      const now: any = new Date();
-      const timeDifferenceInMs = event?.start - now; // Difference in milliseconds
+      const now = new Date().getTime(); // Current time in milliseconds
       const oneHourInMs = 1 * 60 * 60 * 1000; // One hour in milliseconds
-      console.log(timeDifferenceInMs, oneHourInMs);
+      const threeHoursInMs = 3 * 60 * 60 * 1000; // Three hours in milliseconds
 
-      // Enable the button if the current time is within one hour of the session start time
-      if (timeDifferenceInMs <= oneHourInMs) {
-        setIsDisabled(false);
+      if (event?.start && event?.end) {
+        const eventStartTime = new Date(event.start).getTime(); // Event start time in milliseconds
+        const eventEndTime = new Date(event.end).getTime(); // Event end time in milliseconds
+
+        // Calculate the time difference before the event starts
+        const timeDifferenceBeforeEventInMs = eventStartTime - now;
+        // Calculate the time difference after the event ends
+        const timeDifferenceAfterEventInMs = now - eventEndTime;
+
+        // Enable the button only if:
+        // 1. The current time is within 1 hour before the event starts (positive and within 1 hour)
+        // 2. The current time is within 3 hours after the event ends (positive and within 3 hours)
+        if (
+          (timeDifferenceBeforeEventInMs <= oneHourInMs &&
+            timeDifferenceBeforeEventInMs >= 0) || // Within 1 hour before the start
+          (timeDifferenceAfterEventInMs <= threeHoursInMs &&
+            timeDifferenceAfterEventInMs >= 0) // Within 3 hours after the end
+        ) {
+          setIsDisabled(false); // Enable the button
+        } else {
+          setIsDisabled(true); // Disable the button
+        }
       }
     };
 
-    // Check the time difference when the component mounts
+    // Initial check when the component mounts
     checkTimeDifference();
 
-    // Optionally, set up an interval to check continuously (e.g., every minute)
-    const interval = setInterval(checkTimeDifference, 6 * 1000); // Every 1 minute
+    // Set up an interval to check continuously (e.g., every minute)
+    const interval = setInterval(checkTimeDifference, 60 * 1000); // Every 1 minute
 
     // Cleanup the interval on component unmount
     return () => clearInterval(interval);
-  }, [event?.start]);
+  }, [event?.start, event?.end]); // Track both start and end times of the event
 
   useEffect(() => {
     if (isSuccess) {
       console.log(data);
       onClose();
-      window.open(event?.meeting_link);
-      // onOpenJoin();
+      window.open(data?.data);
+      // dispatch(setMeetingId(event?.meeting_link?.meeting_id));
+      localStorage.setItem('meetingId', event?.meeting_link?.meeting_id);
     }
     if (isError) {
       console.log(error);
@@ -97,7 +113,7 @@ const Events = ({ event, trigger }: any) => {
         position: 'top',
       });
     }
-  }, [isSuccess, isError, error, data]);
+  }, [isSuccess, isError, error, data, event]);
 
   return (
     <Box
@@ -164,9 +180,10 @@ const Events = ({ event, trigger }: any) => {
                   width={127}
                   bg={selected?.color}
                   isDisabled={isDisabled}
+                  isLoading={isLoading}
                   text="Join Session"
                   onClick={() => {
-                    joinMeeting(event?.id);
+                    joinMeeting(event?.meeting_link?.meeting_id);
                   }}
                 />
               </HStack>
@@ -176,7 +193,14 @@ const Events = ({ event, trigger }: any) => {
       </Modal>
       <Image src={event.subject?.thumbnail} w={8} h={8} borderRadius={10} />
       <Text fontSize={10}>{event.subject?.title}</Text>
-      <FeedbackModal isOpen={isOpenJoin} onClose={onCloseJoin} />
+      <FeedbackModal
+        isOpen={isOpenJoin}
+        onClose={onCloseJoin}
+        session_id={event?.id}
+        isJoinLoading={isLoading}
+        isDisabled={isDisabled}
+        joinMeeting={(id: string) => joinMeeting(id)}
+      />
     </Box>
   );
 };

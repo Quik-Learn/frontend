@@ -28,9 +28,11 @@
 }
 
 body {
+  background-color: #fff !important;
+}
+html {
   background: #fff;
 }
-
 * {
   font-family: 'Satoshi';
 }

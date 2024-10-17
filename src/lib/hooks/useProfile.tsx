@@ -23,6 +23,7 @@ const useProfileHook = () => {
     type: data?.data?.account_type?.toLowerCase(),
     isLoading,
     trigger,
+    isSuccess,
   };
 };
 
