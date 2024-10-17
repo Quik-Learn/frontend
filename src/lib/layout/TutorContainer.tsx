@@ -31,7 +31,7 @@ const TutorContainer = ({ children }: any) => {
       width={'100vw'}
       maxH={'100vh'}
       height={'100vh'}
-      bg={'#FFFFFF'}
+      bg={'#FCFCFC'}
       overflowX={'hidden'}
       overflowY={'scroll'}
     >
