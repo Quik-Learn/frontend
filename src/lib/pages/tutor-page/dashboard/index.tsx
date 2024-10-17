@@ -1,11 +1,24 @@
 'use client';
-import { Avatar, HStack, Icon, Stack, Text, VStack } from '@chakra-ui/react';
+import {
+  Avatar,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+  VStack,
+  Box,
+  Image,
+  IconButton,
+  SimpleGrid,
+  Select,
+} from '@chakra-ui/react';
 import React from 'react';
 import TutorContainer from '~/lib/layout/TutorContainer';
 import useDashboardHook from './useDashboard';
 import { PiCrownSimple } from 'react-icons/pi';
 import { FaStar } from 'react-icons/fa';
 import { GoPeople } from 'react-icons/go';
+import OverallRating from '~/lib/components/OverallRating';
 const dashboardItems = [
   {
     id: 1,
@@ -75,6 +88,33 @@ const Dashboard = () => {
               {data?.user?.bio}
             </Text>
           </VStack>
+        </HStack>
+        <SimpleGrid columns={4} spacing={10} mt={7}>
+          {dashboardItems?.map((item) => (
+            <HStack key={item.id} bg={'#fff'} padding={'20px'} gap={5}>
+              <IconButton
+                aria-label="aria"
+                icon={<Image src={item.icon} alt={item.name} />}
+                w={'60px'}
+                h={'60px'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                bg={item.bg}
+                borderRadius={'1px'}
+              />
+              <VStack alignItems={'flex-start'}>
+                <Text color={'#1D2026'} fontSize={24}>
+                  {item.count}
+                </Text>
+                <Text color={'#4E5566'} fontSize={14}>
+                  {item.name}
+                </Text>
+              </VStack>
+            </HStack>
+          ))}
+        </SimpleGrid>
+        <HStack mt={20}>
+          <OverallRating />
         </HStack>
       </Stack>
     </TutorContainer>
