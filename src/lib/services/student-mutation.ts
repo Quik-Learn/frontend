@@ -99,7 +99,7 @@ export const studentService = createApi({
     getStudentSession: builder.query({
       query(params) {
         return {
-          url: `student/sessions/`,
+          url: `student/sessions`,
           params,
         };
       },
@@ -135,7 +135,7 @@ export const studentService = createApi({
       query: (meeting_id) => {
         return {
           url: `student/leave-meeting/${meeting_id}/`,
-          method: 'post',
+          method: 'PATCH',
           body: {},
         };
       },

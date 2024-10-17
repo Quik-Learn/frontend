@@ -42,13 +42,48 @@ import {
   eventStyleGetter,
   getRandomColor,
 } from '../helpers/paths';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useAppSelector } from '../store';
+import { meetingIdState } from '../store/reducers/meeting-id-slice';
+import { useLeaveMeetingMutation } from '../services/student-mutation';
 const localizer = momentLocalizer(moment);
 
 const CalenderComponent = ({ events, trigger, setRange }: any) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const toast = useToast();
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const id = localStorage.getItem('meetingId');
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
+  const leaveMeetingInfo = searchParams.get('leaveMeeting');
+
+  useEffect(() => {
+    if (leaveMeetingInfo) {
+      leaveMeeting(id);
+    }
+  }, [leaveMeetingInfo]);
+
+  useEffect(() => {
+    const { data, isLoading, isError, error, isSuccess } = leaveMeetingData;
+    if (isSuccess) {
+      onOpen();
+    }
+    if (isError) {
+      console.log(error);
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [leaveMeetingData]);
 
   const handleNavigate = (newDate: Date, newView: string) => {
     setCurrentDate(newDate);
@@ -93,7 +128,14 @@ const CalenderComponent = ({ events, trigger, setRange }: any) => {
         min={moment().set({ hour: 9, minute: 0 }).toDate()}
         max={moment().set({ hour: 18, minute: 0 }).toDate()}
         components={{
-          event: ({ event }) => <Events event={event} trigger={trigger} />,
+          event: ({ event }) => (
+            <Events
+              event={event}
+              trigger={trigger}
+              isOpen={isOpen}
+              onClose={onClose}
+            />
+          ),
           toolbar: ({ label, onNavigate, onView, view }: any) => (
             <Flex justify="space-between" align="center" mb={4}>
               <Flex>

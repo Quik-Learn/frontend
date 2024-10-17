@@ -28,6 +28,7 @@ import userReducer from './reducers/user-slice';
 import uiReducer from './reducers/ui-slice';
 import typeReducer from './reducers/type-slice';
 import redirectReducer from './reducers/redirect-slice';
+import meetingIdReducer from './reducers/meeting-id-slice';
 import { authService } from '../services/auth-service';
 import { userService } from '../services/user-service';
 import { parentService } from '../services/parent-mutation';
@@ -61,6 +62,7 @@ const rootReducer = combineReducers({
   ui: uiReducer,
   type: typeReducer,
   redirect: redirectReducer,
+  meetingId: meetingIdReducer,
   [authService.reducerPath]: authService.reducer,
   [userService.reducerPath]: userService.reducer,
   [parentService.reducerPath]: parentService.reducer,
