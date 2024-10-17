@@ -115,6 +115,64 @@ export const studentNav = [
     active: '/images/account-active.svg',
   },
 ];
+export const tutorNav = [
+  {
+    id: 1,
+    name: 'Dashboard',
+    route: '/tutor',
+    value: 'dashboard',
+    icon: '/images/dash-tutor-active.svg',
+    active: '/images/dash-tutor-active.svg',
+  },
+  {
+    id: 2,
+    name: 'My Sessions',
+    route: '/tutor/my-session',
+    value: 'session',
+    icon: '/images/dash-tutor-active.svg',
+    active: '/images/dash-tutor-active.svg',
+  },
+  {
+    id: 3,
+    name: 'Student',
+    value: 'students',
+    route: '/tutor/students',
+    icon: '/images/students.svg',
+    active: '/images/students-active.svg',
+  },
+  {
+    id: 4,
+    name: 'Teaching Resources',
+    value: 'resources',
+    route: '/tutor/resources',
+    icon: '/images/teach.svg',
+    active: '/images/teach.svg',
+  },
+  {
+    id: 5,
+    name: 'Performance',
+    route: '/tutor/performance',
+    value: 'performance',
+    icon: '/images/performance.svg',
+    active: '/images/performance.svg',
+  },
+  {
+    id: 6,
+    name: 'Profile',
+    value: 'profile',
+    route: '/tutor/profile',
+    icon: '/images/profile.svg',
+    active: '/images/profile.svg',
+  },
+  {
+    id: 7,
+    name: 'Support',
+    value: 'support',
+    route: '/tutor/support',
+    icon: '/images/profile.svg',
+    active: '/images/profile.svg',
+  },
+];
 export const lineData = [
   {
     name: 'Page A',

@@ -148,7 +148,7 @@ const ParentSignup = () => {
                 {/* <FormLabel color="white"> .</FormLabel> */}
                 <Input
                   placeholder="Last Name"
-                  bg="#F7F7F8"
+                  bg="#ffffff"
                   borderWidth={1}
                   borderColor="#E9EAF0"
                   value={values.lastname}

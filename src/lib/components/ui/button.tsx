@@ -21,7 +21,7 @@ const Button = (props: ButtonType) => {
     borderRadius = '4px',
     width = '100%',
     px,
-    py,
+    py = '10px',
     mx,
     my,
     bgGradient,
