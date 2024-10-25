@@ -93,9 +93,7 @@ const useSocialLogin = () => {
         router.push(redirect); // Redirect to original path
       } else {
         if (userData?.data?.account_type) {
-          redirectToDashboardOnLogin(
-            userData?.data?.account_type?.toLowerCase()
-          );
+          setUserRole(userData?.data?.account_type?.toLowerCase());
           dispatch(setType(userData?.data?.account_type?.toLowerCase()));
         }
       }
@@ -129,12 +127,12 @@ const useSocialLogin = () => {
     redirect,
   ]);
   console.log(userRole);
-  // useEffect(() => {
-  //   if (userRole) {
-  //     redirectToDashboardOnLogin(userRole);
-  //     dispatch(setType(userRole));
-  //   }
-  // }, [userRole]);
+  useEffect(() => {
+    if (userRole) {
+      redirectToDashboardOnLogin(userRole);
+      dispatch(setType(userRole));
+    }
+  }, [userRole]);
 
   const handleSocialLogin = async (
     provider: 'google' | 'facebook',

@@ -2,7 +2,13 @@ import { Box } from '@chakra-ui/react';
 import React from 'react';
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs';
 
-const Rating = ({ rate }: { rate: number }) => {
+const Rating = ({
+  rate,
+  color = '#E9AB2B',
+}: {
+  rate: number;
+  color?: string;
+}) => {
   return (
     <Box display="flex" alignItems="center" justifyContent="center">
       {Array(5)
@@ -14,7 +20,7 @@ const Rating = ({ rate }: { rate: number }) => {
               <BsStarFill
                 key={i}
                 style={{ marginLeft: '1' }}
-                color={i < rate ? '#E9AB2B' : '#fff'}
+                color={i < rate ? color : '#fff'}
               />
             );
           }
@@ -23,7 +29,7 @@ const Rating = ({ rate }: { rate: number }) => {
               <BsStarHalf
                 key={i}
                 style={{ marginLeft: '1' }}
-                color={i < rate ? '#E9AB2B' : '#fff'}
+                color={i < rate ? color : '#fff'}
               />
             );
           }
@@ -31,7 +37,7 @@ const Rating = ({ rate }: { rate: number }) => {
             <BsStar
               key={i}
               style={{ marginLeft: '1' }}
-              color={i < rate ? '#E9AB2B' : '#E9AB2B'}
+              color={i < rate ? color : color}
             />
           );
         })}

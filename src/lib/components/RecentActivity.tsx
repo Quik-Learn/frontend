@@ -1,0 +1,141 @@
+import {
+  HStack,
+  VStack,
+  Text,
+  Select,
+  Flex,
+  Icon,
+  Box,
+  IconButton,
+  Stack,
+} from '@chakra-ui/react';
+import React from 'react';
+import { FaComment, FaShoppingCart, FaStar } from 'react-icons/fa';
+
+const RecentActivity = () => {
+  const data = [
+    {
+      id: 1,
+      icon: <FaComment />,
+      user: 'Kevin',
+      action: 'comments on your lecture',
+      lecture: 'What is ux',
+      course: '2021 ui/ux design with figma',
+      time: 'Just now',
+    },
+    {
+      id: 2,
+      icon: <FaStar />,
+      user: 'John',
+      action: 'give a 5 star rating on your course',
+      course: '2021 ui/ux design with figma',
+      time: '5 mins ago',
+    },
+    {
+      id: 3,
+      icon: <FaShoppingCart />,
+      user: 'Sraboni',
+      action: 'purchase your course',
+      course: '2021 ui/ux design with figma',
+      time: '6 mins ago',
+    },
+    {
+      id: 4,
+      icon: <FaShoppingCart />,
+      user: 'Arif',
+      action: 'purchase your course',
+      course: '2021 ui/ux design with figma',
+      time: '7 mins ago',
+    },
+  ];
+  return (
+    <VStack bg={'#fff'} w={'100%'}>
+      <HStack
+        paddingX={'16px'}
+        w={'100%'}
+        alignItems={'center'}
+        justifyContent={'space-between'}
+        borderBottomWidth={'1px'}
+        borderColor={'#E9EAF0'}
+      >
+        <Text color={'#1D2026'} fontSize={16} fontWeight={500}>
+          Recent Activity
+        </Text>
+        <Select
+          w={'150px'}
+          placeholder="Today"
+          color="#6E7485"
+          _placeholder={{
+            color: '#6E7485',
+            fontWeight: '400',
+            fontSize: 12,
+          }}
+        >
+          <option>Today</option>
+        </Select>
+      </HStack>
+
+      <Stack w={'100%'} minH={'320px'}>
+        {data?.length !== 0 ? (
+          <Stack
+            w={'100%'}
+            h={'250px'}
+            alignItems={'center'}
+            justifyContent={'center'}
+          >
+            <Text
+              color={'#1D2026'}
+              fontWeight={500}
+              textAlign={'center'}
+              fontSize={'3xl'}
+            >
+              No Recent Activity
+            </Text>
+          </Stack>
+        ) : (
+          <>
+            {data.map((item) => (
+              <Flex
+                key={item.id}
+                alignItems="flex-start"
+                justifyContent={'flex-start'}
+                mb="3"
+                gap={3}
+              >
+                <IconButton
+                  aria-label="icon"
+                  icon={item.icon}
+                  borderRadius={'50%'}
+                  w={'32px'}
+                  h={'32px'}
+                  bg="#FF6636"
+                  color={'#fff'}
+                />
+                <Box>
+                  <Text fontSize="sm" color={'#1D2026'}>
+                    <Text as="span" fontWeight="bold">
+                      {item.user}
+                    </Text>{' '}
+                    {item.action}{' '}
+                    <Text as="span" fontWeight="bold">
+                      {item.lecture && `"${item.lecture}"`}
+                    </Text>{' '}
+                    in{' '}
+                    <Text as="span" fontWeight="bold">
+                      "{item.course}"
+                    </Text>
+                  </Text>
+                  <Text fontSize="xs" color="gray.400">
+                    {item.time}
+                  </Text>
+                </Box>
+              </Flex>
+            ))}
+          </>
+        )}
+      </Stack>
+    </VStack>
+  );
+};
+
+export default RecentActivity;

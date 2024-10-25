@@ -53,7 +53,7 @@ const data = [
 ];
 const AreaChartsComponent = () => {
   return (
-    <ResponsiveContainer width={'100%'} height="80%">
+    <ResponsiveContainer width={'100%'} height="100%">
       <AreaChart
         data={data}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
