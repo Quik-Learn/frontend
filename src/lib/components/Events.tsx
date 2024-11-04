@@ -47,39 +47,21 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
     { id: 1, name: `${start} to ${end}`, icon: GoClock },
     {
       id: 2,
-      name: `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`,
+      name: moment().isBefore(moment(event?.start, 'YYYYMMDD'))
+        ? `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`
+        : 'Ended',
       icon: CiBellOn,
     },
     { id: 3, name: event?.instructor?.name, icon: TiGroupOutline },
   ];
   useEffect(() => {
     const checkTimeDifference = () => {
-      const now = new Date().getTime(); // Current time in milliseconds
-      const oneHourInMs = 1 * 60 * 60 * 1000; // One hour in milliseconds
-      const threeHoursInMs = 3 * 60 * 60 * 1000; // Three hours in milliseconds
+      if (event?.meeting_link) {
+        console.log(event?.meeting_link);
 
-      if (event?.start && event?.end) {
-        const eventStartTime = new Date(event.start).getTime(); // Event start time in milliseconds
-        const eventEndTime = new Date(event.end).getTime(); // Event end time in milliseconds
-
-        // Calculate the time difference before the event starts
-        const timeDifferenceBeforeEventInMs = eventStartTime - now;
-        // Calculate the time difference after the event ends
-        const timeDifferenceAfterEventInMs = now - eventEndTime;
-
-        // Enable the button only if:
-        // 1. The current time is within 1 hour before the event starts (positive and within 1 hour)
-        // 2. The current time is within 3 hours after the event ends (positive and within 3 hours)
-        if (
-          (timeDifferenceBeforeEventInMs <= oneHourInMs &&
-            timeDifferenceBeforeEventInMs >= 0) || // Within 1 hour before the start
-          (timeDifferenceAfterEventInMs <= threeHoursInMs &&
-            timeDifferenceAfterEventInMs >= 0) // Within 3 hours after the end
-        ) {
-          setIsDisabled(false); // Enable the button
-        } else {
-          setIsDisabled(true); // Disable the button
-        }
+        setIsDisabled(true); // Enable the button
+      } else {
+        setIsDisabled(false); // Disable the button
       }
     };
 
@@ -91,8 +73,8 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
 
     // Cleanup the interval on component unmount
     return () => clearInterval(interval);
-  }, [event?.start, event?.end]); // Track both start and end times of the event
-
+  }, [event?.meeting_link]); // Track both start and end times of the event
+  console.log(event?.meeting_link);
   useEffect(() => {
     if (isSuccess) {
       console.log(data);
@@ -163,7 +145,7 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
               </Text>
 
               <Text fontSize="18px" color="#5F5F5FD1" mb={3}>
-                {event.desc}
+                {event?.desc}
               </Text>
               {array.map((item) => (
                 <HStack gap={5}>
@@ -179,7 +161,7 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
                 <Button
                   width={127}
                   bg={selected?.color}
-                  isDisabled={isDisabled}
+                  isDisabled={!event?.meeting_link}
                   isLoading={isLoading}
                   text="Join Session"
                   onClick={() => {
@@ -191,8 +173,8 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Image src={event.subject?.thumbnail} w={8} h={8} borderRadius={10} />
-      <Text fontSize={10}>{event.subject?.title}</Text>
+      <Image src={event?.subject?.thumbnail} w={8} h={8} borderRadius={10} />
+      <Text fontSize={10}>{event?.subject?.title}</Text>
       <FeedbackModal
         isOpen={isOpenJoin}
         onClose={onCloseJoin}

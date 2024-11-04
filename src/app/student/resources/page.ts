@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Resources from '~/lib/pages/parent-page/resources';
+import Resources from '~/lib/pages/student-page/resources';
 
 import Wards from '~/lib/pages/parent-page/wards';
 

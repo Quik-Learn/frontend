@@ -29,6 +29,8 @@ import { useRouter } from 'next/navigation';
 import ProgressBar from '~/lib/components/ui/progress-bar';
 import { SubscribePlan } from '~/lib/components/SubscribePlan';
 import { SECONDS_TO_OPEN_MODAL } from '~/lib/helpers/constants';
+import { GetServerSideProps } from 'next';
+import { requireAuthentication } from '~/lib/helpers/auth';
 
 const Dashboard = () => {
   const { data, isLoading, dashboardData } = useDashboardHook();
@@ -536,3 +538,10 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+export const getServerSideProps: GetServerSideProps = requireAuthentication(
+  async (_ctx) => {
+    return {
+      props: {},
+    };
+  }
+);

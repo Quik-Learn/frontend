@@ -28,6 +28,8 @@ const useLoginHook = () => {
 
   useEffect(() => {
     if (isSuccess) {
+      document.cookie = `token=${data?.data?.auth_token}; path=/;`;
+      document.cookie = `accountType=${data?.data?.user?.account_type}; path=/;`;
       // Set token in Redux state and cookies
       dispatch(setToken(data?.data?.auth_token));
       dispatch(setType(data?.data?.user?.account_type));
@@ -39,8 +41,12 @@ const useLoginHook = () => {
         // If no redirect path, use account type-based redirection
         if (data?.data?.user?.account_type === 'Parent') {
           router.push('/parent');
-        } else {
+        } else if (data?.data?.user?.account_type === 'Student') {
           router.push('/student');
+        } else if (data?.data?.user?.account_type === 'Tutor') {
+          router.push('/tutor');
+        } else {
+          router.push('/');
         }
       }
     }

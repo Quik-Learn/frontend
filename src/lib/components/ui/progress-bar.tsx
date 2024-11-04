@@ -3,12 +3,12 @@ import React from 'react';
 
 const ProgressBar = ({
   firstPercentage,
-  secondPercentage,
+  secondPercentage = '100%',
   bg1 = '#0065FF',
   bg2 = '#FFC727',
 }: {
   firstPercentage: string;
-  secondPercentage: string;
+  secondPercentage?: string;
   bg1?: string;
   bg2?: string;
 }) => {
