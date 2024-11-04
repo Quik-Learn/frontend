@@ -8,6 +8,8 @@ import { typeState } from '../store/reducers/type-slice';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { clearRedirect, setRedirect } from '../store/reducers/redirect-slice';
+import { GetServerSideProps } from 'next';
+import { requireAuthentication } from '../helpers/auth';
 
 const ParentContainer = ({ children }: any) => {
   const dispatch = useAppDispatch();
@@ -42,3 +44,10 @@ const ParentContainer = ({ children }: any) => {
 };
 
 export default ParentContainer;
+export const getServerSideProps: GetServerSideProps = requireAuthentication(
+  async (_ctx) => {
+    return {
+      props: {},
+    };
+  }
+);
