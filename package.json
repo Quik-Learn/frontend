@@ -4,11 +4,10 @@
   "private": true,
   "author": "faith",
   "scripts": {
-    "dev": "next dev -p 8082",
-    "build": "next build",
+    "dev": "next dev",
+    "build": "NODE_OPTIONS='--max_old_space_size=4096' next build",
     "turbo": "pnpm dlx turbo@2.0.9",
     "build:turbo": "pnpm turbo run build",
-    "postbuild": "next-sitemap --config next-sitemap.config.js",
     "start": "next start -p 8083",
     "type-check": "tsc --noEmit",
     "check:turbo": "pnpm turbo type-check",
