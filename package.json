@@ -5,7 +5,7 @@
   "author": "faith",
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS='--max_old_space_size=4096' next build",
+    "build": "next build",
     "turbo": "pnpm dlx turbo@2.0.9",
     "build:turbo": "pnpm turbo run build",
     "start": "next start -p 8083",
