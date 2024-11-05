@@ -22,7 +22,7 @@ const ProgressBar = ({
       gap={0}
     >
       <Stack w={secondPercentage} bg={bg1} h={'100%'}>
-        <Stack w={firstPercentage} bg={bg2} h={'100%'} />
+        <Stack w={firstPercentage} bg={bg2} h={'100%'} borderRadius={10} />
       </Stack>
     </HStack>
   );

@@ -79,7 +79,7 @@ const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
     if (isSuccess) {
       console.log(data);
       onClose();
-      window.open(data?.data);
+      window.open(data?.data, '_self');
       // dispatch(setMeetingId(event?.meeting_link?.meeting_id));
       localStorage.setItem('meetingId', event?.meeting_link?.meeting_id);
     }

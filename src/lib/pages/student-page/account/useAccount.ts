@@ -74,7 +74,9 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
         email: data?.data?.user?.email || '',
         province: data?.data?.user?.state || '',
         address: data?.data?.user?.address || '',
-        parentName: data?.data?.bio?.parent || '',
+        parentName:
+          `${data?.data?.bio?.parent?.firstname || ''} ${data?.data?.bio?.parent?.lastname || ''}` ||
+          '',
       });
     }
   }, [data, isSuccess]);

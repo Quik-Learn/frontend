@@ -16,11 +16,13 @@ import { useAppSelector } from '~/lib/store';
 import { meetingIdState } from '~/lib/store/reducers/meeting-id-slice';
 import Events from '~/lib/components/Events';
 import StudentTool from '~/lib/components/StudentTool';
+import { GetServerSideProps } from 'next';
+import { requireAuthentication } from '~/lib/helpers/auth';
 
 const MySessions = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
-
+  const router = useRouter();
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetStudentSessionQuery();
   const [range, setRange] = useState<{ start: any; end: any }>({
@@ -80,10 +82,17 @@ const MySessions = () => {
             onClose={onClose}
           />
         )}
-        ToolbarComponent={(props) => <StudentTool {...props} />}
+        ToolbarComponent={(props) => <StudentTool router={router} {...props} />}
       />
     </ParentContainer>
   );
 };
 
 export default MySessions;
+export const getServerSideProps: GetServerSideProps = requireAuthentication(
+  async (_ctx) => {
+    return {
+      props: {},
+    };
+  }
+);

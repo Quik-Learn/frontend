@@ -42,10 +42,13 @@ const useSocialLogin = () => {
   const redirectToDashboard = (role: string) => {
     if (role?.toLowerCase() === 'student') {
       router.push('/auth/subject');
+      document.cookie = `accountType=student; path=/;`;
     } else if (role?.toLowerCase() === 'parent') {
       router.push('/parent');
+      document.cookie = `accountType=parent; path=/;`;
     } else if (role?.toLowerCase() === 'tutor') {
       router.push('/dashboard/tutor');
+      document.cookie = `accountType=tutor; path=/;`;
     } else {
       router.push('/unauthorized');
     }
@@ -53,12 +56,13 @@ const useSocialLogin = () => {
   const redirectToDashboardOnLogin = (role: string) => {
     console.log(role?.toLowerCase());
     if (role === 'student') {
-      console.log('first');
       router.push('/student');
+      document.cookie = `accountType=student; path=/;`;
     } else if (role === 'parent') {
-      console.log('second');
+      document.cookie = `accountType=parent; path=/;`;
       router.push('/parent');
     } else if (role === 'tutor') {
+      document.cookie = `accountType=tutor; path=/;`;
       router.push('/tutor');
     } else {
       router.push('/unauthorized');
@@ -93,6 +97,7 @@ const useSocialLogin = () => {
         router.push(redirect); // Redirect to original path
       } else {
         if (userData?.data?.account_type) {
+          document.cookie = `accountType=${userData?.data?.account_type?.toLowerCase()}; path=/;`;
           setUserRole(userData?.data?.account_type?.toLowerCase());
           dispatch(setType(userData?.data?.account_type?.toLowerCase()));
         }
@@ -155,6 +160,7 @@ const useSocialLogin = () => {
       console.log(result);
 
       dispatch(setToken(result?.user?.accessToken));
+      document.cookie = `token=${result?.user?.accessToken}; path=/;`;
 
       if (result?._tokenResponse?.isNewUser) {
         setTypeFromSocial({ account_type: role });

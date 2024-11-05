@@ -139,17 +139,18 @@ export default function Pricing() {
                   }
                 >
                   <Box
-                    py={4}
+                    p={4}
                     alignItems="center"
                     display="flex"
                     flexDirection="column"
                   >
                     <Text
                       fontWeight="700"
-                      fontSize={{ base: 24, sm: 28, md: 35, lg: 40 }}
+                      fontSize={{ base: 20, sm: 24, md: 25, lg: 28 }}
                       my={3}
                       color={index === 1 ? 'white' : 'black'}
                       fontFamily="heading"
+                      textAlign={'center'}
                     >
                       {tier?.name}
                     </Text>
