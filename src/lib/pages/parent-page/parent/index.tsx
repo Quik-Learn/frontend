@@ -373,7 +373,7 @@ const Dashboard = () => {
                   bg={'#fff'}
                   height={'350px'}
                 >
-                  <Linecharts />
+                  <Linecharts weeklyStats={dashboardData?.weekly_stats} />
                 </Box>
               ) : (
                 <Box
