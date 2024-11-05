@@ -13,10 +13,12 @@ import {
   Spinner,
   HStack,
 } from '@chakra-ui/react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import AddWardComponent from '~/lib/components/AddWardComponent';
 import Button from '~/lib/components/ui/button';
+import { requireAuthentication } from '~/lib/helpers/auth';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useGetWardsQuery } from '~/lib/services/parent-mutation';
 
@@ -110,15 +112,24 @@ const Wards = () => {
                   setNew('');
                   onOpen();
                 }}
+                zIndex={60}
                 flexDirection={'column'}
                 justifyContent={'space-around'}
                 padding={5}
                 alignItems={'center'}
               >
                 <Text></Text>
-                <Image src="/images/add.svg" alt="add" />
+                <Image
+                  onClick={() => {
+                    // setNew('');
+                    // onOpen();
+                    console.log('click');
+                  }}
+                  src="/images/add.svg"
+                  alt="add"
+                />
                 <Text color="#5F5F5F" fontSize={24} fontWeight={500}>
-                  Add Ward
+                  Add Wardd
                 </Text>
               </GridItem>
 
@@ -188,3 +199,10 @@ const Wards = () => {
 };
 
 export default Wards;
+export const getServerSideProps: GetServerSideProps = requireAuthentication(
+  async (_ctx) => {
+    return {
+      props: {},
+    };
+  }
+);

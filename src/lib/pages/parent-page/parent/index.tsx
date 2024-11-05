@@ -492,7 +492,7 @@ const Dashboard = () => {
                         transition="all 0.3s ease-in-out"
                       /> */}
                         <ProgressBar
-                          firstPercentage={`${(item?.remaining_hours / item?.total_hours) * 100} %`}
+                          firstPercentage={`${(item?.remaining_hours / item?.total_hours) * 100}%`}
                           secondPercentage={`${(item?.total_hours / item?.total_hours) * 100}%`}
                         />
                         <HStack justifyContent={'space-between'}>

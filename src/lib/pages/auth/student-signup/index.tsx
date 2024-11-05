@@ -130,7 +130,9 @@ const StudentSignup = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('firstname', e.target.value)}
                 />
-                <Text>{errors.firstname || ''}</Text>
+                <Text color={'red'} fontSize={8}>
+                  {errors.firstname || ''}
+                </Text>
               </FormControl>
               <FormControl>
                 {/* <FormLabel color="white"> .</FormLabel> */}
@@ -145,7 +147,9 @@ const StudentSignup = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('lastname', e.target.value)}
                 />
-                <Text>{errors.lastname || ''}</Text>
+                <Text color={'red'} fontSize={8}>
+                  {errors.lastname || ''}
+                </Text>
               </FormControl>
               <FormControl gridColumn={{ sm: '1', md: 'span 2' }}>
                 <FormLabel fontSize={14} color="#1D2026">
@@ -163,7 +167,9 @@ const StudentSignup = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('phone', e.target.value)}
                 />
-                <Text>{errors.phone || ''}</Text>
+                <Text color={'red'} fontSize={8}>
+                  {errors.phone || ''}
+                </Text>
               </FormControl>
               <FormControl gridColumn={{ sm: '1', md: 'span 2' }}>
                 <FormLabel fontSize={14} color="#1D2026">
@@ -180,7 +186,9 @@ const StudentSignup = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('email', e.target.value)}
                 />
-                <Text>{errors.email || ''}</Text>
+                <Text color={'red'} fontSize={8}>
+                  {errors.email || ''}
+                </Text>
               </FormControl>
 
               <Stack gridColumn="span 2">

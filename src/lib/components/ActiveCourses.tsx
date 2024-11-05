@@ -15,16 +15,16 @@ function ActiveCourses({ data }: any) {
   const router = useRouter();
   var settings = {
     dots: false,
-    infinite: false,
+    infinite: data?.length > 4 ? true : false,
+    arrow: false,
     slidesToShow: 4,
     slidesToScroll: 1,
-    autoplay: false,
-    autoplaySpeed: 2000,
-    centerPadding: '60px',
-    className: 'center',
-    centerMode: false,
+    autoplay: data?.length > 4 ? true : false,
+    autoplaySpeed: 0,
+    speed: 5000,
     pauseOnHover: false,
     cssEase: 'linear',
+    useTransition: true,
     responsive: [
       {
         breakpoint: 1024,
@@ -60,6 +60,7 @@ function ActiveCourses({ data }: any) {
       },
     ],
   };
+  console.log(data);
   return (
     <Stack w={'100%'} spacing={10} justifyContent={'flex-start'}>
       {data?.length === 0 ? (
@@ -88,7 +89,7 @@ function ActiveCourses({ data }: any) {
         </Stack>
       ) : (
         <Slider {...settings} className="center">
-          {addRandomSoftColorsToEvents(data?.concat(data))?.map(
+          {addRandomSoftColorsToEvents(data)?.map(
             (item: any, index: number) => (
               <div key={index}>
                 <Stack

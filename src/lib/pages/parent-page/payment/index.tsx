@@ -179,6 +179,10 @@ const Payment = () => {
                 minH={400}
                 padding={5}
                 w={350}
+                onClick={() => {
+                  setNew('');
+                  onOpen();
+                }}
                 boxShadow={'sm'}
                 display={'flex'}
                 flexDirection={'column'}

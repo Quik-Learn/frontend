@@ -32,6 +32,7 @@ import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
 import { addRandomSoftColorsToEvents } from '~/lib/helpers/paths';
 import ActiveCourses from '~/lib/components/ActiveCourses';
+import moment from 'moment';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -94,7 +95,7 @@ const Dashboard = () => {
                   fontWeight={500}
                   bg="white"
                   text="View our Offerings"
-                  onClick={() => router?.push('/student/new-courses')}
+                  onClick={() => router?.push('/student/courses')}
                 />
               </VStack>
               <HStack alignItems={'flex-end'} gap={0} justifyContent={'center'}>
@@ -515,6 +516,7 @@ const Dashboard = () => {
                 bg={'#fff'}
                 w={'100%'}
                 maxHeight={'300px'}
+                overflowY={'auto'}
                 height={'300px'}
               >
                 {dashboardData?.recent_activity?.length === 0 ? (
@@ -539,7 +541,9 @@ const Dashboard = () => {
                       Recent Activities
                     </Text>
                     <VStack align="start" spacing={4}>
-                      {dashboardData?.recent_activity?.map((activity: any) => (
+                      {addRandomSoftColorsToEvents(
+                        dashboardData?.recent_activity
+                      )?.map((activity: any, index: number) => (
                         <Box
                           key={activity.id}
                           w="100%"
@@ -549,7 +553,16 @@ const Dashboard = () => {
                         >
                           <HStack spacing={4} align="start">
                             <IconButton
-                              icon={<Image src={activity.icon} alt="alt" />}
+                              icon={
+                                <Image
+                                  src={
+                                    index % 2
+                                      ? '/images/aa.svg'
+                                      : '/images/bb.svg'
+                                  }
+                                  alt="alt"
+                                />
+                              }
                               p={2}
                               bg={activity.color}
                               aria-label={'aria'}
@@ -560,14 +573,14 @@ const Dashboard = () => {
                                 color={'#333333'}
                                 fontWeight="700"
                               >
-                                {activity.type}
+                                {activity?.name}
                               </Text>
                               <Text
                                 fontSize="10px"
                                 color={'#8A8A8A'}
                                 fontWeight="700"
                               >
-                                {activity.description}
+                                {activity?.activity_type}
                               </Text>
                               {activity.course && (
                                 <Text
@@ -575,38 +588,28 @@ const Dashboard = () => {
                                   color={'#8A8A8A'}
                                   fontWeight="700"
                                 >
-                                  Course: {activity.course}
+                                  Course: {activity?.subject}
                                 </Text>
                               )}
                               {activity.tutor && (
                                 <Text
                                   fontSize="10px"
                                   color={'#8A8A8A'}
-                                  fontWeight="700"
+                                  fontWeight={700}
                                 >
-                                  Tutor: {activity.tutor}
+                                  Tutor: {activity?.tutor}
                                 </Text>
                               )}
-                              {activity.due && (
-                                <Text
-                                  fontSize="10px"
-                                  color={'#8A8A8A'}
-                                  fontWeight="700"
-                                >
-                                  Due: {activity.due}
+                              {activity.start && (
+                                <Text fontSize="10px" color="#8A8A8A">
+                                  From {moment(activity?.start).format('LL')}{' '}
+                                  <Text as={'span'}>
+                                    {' '}
+                                    Due {moment(activity?.end).format('LL')}
+                                  </Text>
                                 </Text>
                               )}
                             </Box>
-                            <HStack>
-                              <Text fontSize="sm" color="gray.500">
-                                {activity.time}
-                              </Text>
-                              {activity.link && (
-                                <Link color="blue.500" fontSize="sm">
-                                  {activity.link}
-                                </Link>
-                              )}
-                            </HStack>
                           </HStack>
                         </Box>
                       ))}

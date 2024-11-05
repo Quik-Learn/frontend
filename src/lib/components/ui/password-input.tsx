@@ -47,9 +47,9 @@ const PasswordInput = ({
           <Icon onClick={handleClick} as={show ? IoMdEye : IoMdEyeOff} />
         </InputRightElement>
       </InputGroup>
-      <FormErrorMessage fontSize={10} color={'red'}>
+      <Text fontSize={10} color={'red'}>
         {error || ''}
-      </FormErrorMessage>
+      </Text>
     </FormControl>
   );
 };

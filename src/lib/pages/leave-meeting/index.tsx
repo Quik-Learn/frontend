@@ -9,14 +9,10 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import React, { useEffect } from 'react';
-import FeedbackModal from '~/lib/components/FeedbackModal';
-import ParentContainer from '~/lib/layout/ParentContainer';
-import useDashboardHook from '../parent-page/parent/useDashboard';
 import useProfileHook from '~/lib/hooks/useProfile';
-import { useLeaveMeetingMutation } from '~/lib/services/student-mutation';
-import { meetingIdState } from '~/lib/store/reducers/meeting-id-slice';
-import { useAppSelector } from '~/lib/store';
 import { useRouter } from 'next/navigation';
+import { GetServerSideProps } from 'next';
+import { requireAuthentication } from '~/lib/helpers/auth';
 
 const LeaveMeeting = () => {
   const router = useRouter();
@@ -61,3 +57,11 @@ const LeaveMeeting = () => {
 };
 
 export default LeaveMeeting;
+
+export const getServerSideProps: GetServerSideProps = requireAuthentication(
+  async (_ctx) => {
+    return {
+      props: {},
+    };
+  }
+);
