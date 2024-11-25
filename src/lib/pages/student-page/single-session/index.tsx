@@ -48,6 +48,7 @@ import {
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
 } from '~/lib/services/parent-mutation';
+import PastSessions from '~/lib/components/PastSessions';
 const data = [
   { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
   { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
@@ -190,7 +191,7 @@ const SingleSession = () => {
                 fontWeight="500"
                 color={'#4E5566'}
               >
-                Reviews
+                Sessions
               </Tab>
               <Tab
                 fontSize={{
@@ -207,7 +208,24 @@ const SingleSession = () => {
                 fontWeight="500"
                 color={'#4E5566'}
               >
-                Tutors
+                Resources
+              </Tab>
+              <Tab
+                fontSize={{
+                  base: 16,
+                  sm: 18,
+                  md: 18,
+                }}
+                _selected={{
+                  color: '#1D2026',
+                  borderBottomWidth: 2,
+                  borderColor: '#FF6636',
+                }}
+                fontFamily="heading"
+                fontWeight="500"
+                color={'#4E5566'}
+              >
+                Review
               </Tab>
             </TabList>
 
@@ -271,10 +289,10 @@ const SingleSession = () => {
               </TabPanel>
 
               <TabPanel py={8}>
-                <Review />
+                <PastSessions />
               </TabPanel>
               <TabPanel py={8}>
-                {tutors?.length === 0 ? (
+                {/* {tutors?.length === 0 ? (
                   <Stack>
                     <Heading>No Tutor Found</Heading>
                   </Stack>
@@ -290,7 +308,7 @@ const SingleSession = () => {
                     previous={tutorData?.data?.previous}
                     getTutor={(page: number) => triggerTutor(page)}
                   />
-                )}
+                )} */}
               </TabPanel>
             </TabPanels>
           </Tabs>

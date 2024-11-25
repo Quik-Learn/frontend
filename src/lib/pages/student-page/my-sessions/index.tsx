@@ -1,6 +1,16 @@
 'use client';
 
-import { Text, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+  Grid,
+  HStack,
+  GridItem,
+  Text,
+  useDisclosure,
+  useToast,
+  VStack,
+  Avatar,
+  Image,
+} from '@chakra-ui/react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useRouter, useSearchParams } from 'next/navigation';
 import CalenderComponent from '~/lib/components/CalenderComponent';
@@ -18,11 +28,14 @@ import Events from '~/lib/components/Events';
 import StudentTool from '~/lib/components/StudentTool';
 import { GetServerSideProps } from 'next';
 import { requireAuthentication } from '~/lib/helpers/auth';
+import { usePastSessions } from '~/lib/hooks/usePastSession';
+import { Session } from '~/lib/types/data';
 
 const MySessions = () => {
   const toast = useToast();
   const [events, setEvents] = useState([]);
   const router = useRouter();
+  const { pastSessions, isLoading: isSessionsLoading } = usePastSessions();
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetStudentSessionQuery();
   const [range, setRange] = useState<{ start: any; end: any }>({
@@ -84,6 +97,45 @@ const MySessions = () => {
         )}
         ToolbarComponent={(props) => <StudentTool router={router} {...props} />}
       />
+      <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
+        Previous Sessions
+      </Text>
+      <Grid templateColumns="repeat(3, 1fr)" gap={6} p={6}>
+        {pastSessions?.map((session: Session) => (
+          <GridItem
+            key={session.id}
+            bg="white"
+            p={4}
+            borderRadius="lg"
+            boxShadow="md"
+          >
+            <HStack spacing={4}>
+              <Image
+                src={session.subject?.thumbnail}
+                alt={session.subject?.title}
+                boxSize="60px"
+                objectFit="cover"
+                borderRadius="md"
+              />
+              <VStack align="flex-start" spacing={2}>
+                <Text fontWeight="bold" fontSize="lg">
+                  {session.title}
+                </Text>
+                <HStack spacing={2}>
+                  <Avatar
+                    size="sm"
+                    name={session.instructor.name}
+                    src={session.instructor.name}
+                  />
+                  <Text fontSize="sm" color="gray.600">
+                    {session.instructor.name}
+                  </Text>
+                </HStack>
+              </VStack>
+            </HStack>
+          </GridItem>
+        ))}
+      </Grid>
     </ParentContainer>
   );
 };

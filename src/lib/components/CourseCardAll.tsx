@@ -30,7 +30,7 @@ const CourseCardAll = ({
     h={176}
     gap={5}
     p={2}
-    onClick={() => router.push(`/student/courses/${id}`)}
+    onClick={() => router.push(`/student/courses/${id}?activeTab=all`)}
   >
     <Image src={imageSrc} alt={title} w="154px" h={'100%'} objectFit="cover" />
     <VStack p={4} align="center" justify={'center'} gap={4} h={'100%'}>

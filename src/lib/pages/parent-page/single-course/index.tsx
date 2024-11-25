@@ -14,21 +14,32 @@ import {
   TabPanels,
   TabPanel,
   useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
-import TutorParent from '~/lib/components/tutor-parent';
 import {
+  useBookSessionParentMutation,
+  useGetWardsQuery,
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
 } from '~/lib/services/parent-mutation';
+import Button from '~/lib/components/ui/button';
+import ChooseWard from '~/lib/components/ChooseWard';
+import BookLesson from '~/lib/components/BookLesson';
 
 const SingleCourses = () => {
   const router = useRouter();
   const { id } = useParams();
   const toast = useToast();
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const {
+    onOpen: onOpenBook,
+    isOpen: isOpenBook,
+    onClose: onCloseBook,
+  } = useDisclosure();
   const searchParams = useSearchParams();
   const ward_id = searchParams.get('ward_id');
   const [courseData, setCourseData] = useState<any>([]);
@@ -36,7 +47,8 @@ const SingleCourses = () => {
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
   const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
-
+  const [bookSessionStudent, bookSessionStudentData] =
+    useBookSessionParentMutation();
   useEffect(() => {
     trigger(id);
     triggerTutor(id);
@@ -121,23 +133,6 @@ const SingleCourses = () => {
               >
                 Overview
               </Tab>
-              <Tab
-                fontSize={{
-                  base: 16,
-                  sm: 18,
-                  md: 18,
-                }}
-                _selected={{
-                  color: '#1D2026',
-                  borderBottomWidth: 2,
-                  borderColor: '#FF6636',
-                }}
-                fontFamily="heading"
-                fontWeight="500"
-                color={'#4E5566'}
-              >
-                Tutors
-              </Tab>
             </TabList>
 
             <TabPanels>
@@ -193,30 +188,32 @@ const SingleCourses = () => {
                     </List>
                   </Stack>
                 </Stack>
-              </TabPanel>
-
-              <TabPanel py={8}>
-                {tutors?.length === 0 ? (
-                  <Stack>
-                    <Heading>No Tutor Found</Heading>
-                  </Stack>
-                ) : (
-                  <TutorParent
-                    id={id}
-                    tutors={tutors}
-                    title={courseData?.title}
-                    total_pages={tutorData?.data?.total_pages}
-                    isLoading={tutorData?.isLoading}
-                    currentPage={tutorData?.data?.current_page}
-                    next={tutorData?.data?.next}
-                    previous={tutorData?.data?.previous}
-                    getTutor={(page: number) => triggerTutor(page)}
-                    ward_id={ward_id}
+                <Stack
+                  justifyContent={'flex-end'}
+                  alignItems={'flex-end'}
+                  w={'100%'}
+                  mt={30}
+                >
+                  <Button
+                    text="Next"
+                    bg="#02659C"
+                    width={'279px'}
+                    onClick={onOpen}
                   />
-                )}
+                </Stack>
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <BookLesson
+            isOpen={isOpenBook}
+            onClose={onCloseBook}
+            tutor={[]}
+            overview={[]}
+            bookSession={[]}
+            isLoading={false}
+            tutorCalender={[]}
+          />
+          <ChooseWard isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
         </VStack>
       </Stack>
     </ParentContainer>

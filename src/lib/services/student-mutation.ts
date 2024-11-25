@@ -104,6 +104,14 @@ export const studentService = createApi({
         };
       },
     }),
+    getPastSessions: builder.query({
+      query() {
+        return {
+          url: `student/past-sessions/`,
+        };
+      },
+    }),
+
     bookSessionStudent: builder.mutation({
       query: ({ body, subject_id, instructor_id }: any) => {
         return {
@@ -186,4 +194,5 @@ export const {
   useLeaveMeetingMutation,
   useLazyGetActiveCoursesQuery,
   useLazyGetCompletedCoursesQuery,
+  useLazyGetPastSessionsQuery,
 } = studentService;

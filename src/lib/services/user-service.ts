@@ -57,6 +57,16 @@ export const userService = createApi({
       //@ts-ignore
       invalidatesTags: ['cleanUp'],
     }),
+    getNotifications: builder.query({
+      query: () => {
+        return {
+          url: `accounts/user/get/notifications/`,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
+
     getConnection: builder.query({
       query: (token) => {
         return {
@@ -66,6 +76,15 @@ export const userService = createApi({
       //@ts-ignore
       invalidatesTags: ['cleanUp'],
     }),
+    sendFedback: builder.mutation({
+      query: (body) => {
+        return {
+          url: `accounts/user/send/feedback/`,
+          method: 'POST',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -73,4 +92,6 @@ export const {
   useLazyGetUserQuery,
   useGetSubjectsQuery,
   useLazyGetConnectionQuery,
+  useLazyGetNotificationsQuery,
+  useSendFedbackMutation,
 } = userService;

@@ -1,4 +1,15 @@
-import { Modal, ModalOverlay, useDisclosure, useToast } from '@chakra-ui/react';
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+  Text,
+  ModalFooter,
+} from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SuccessModal from './ui/success-modal';
 import { AddRegistered, AddWard, NewWard } from './AddWard';
@@ -11,18 +22,10 @@ import {
 } from '../services/parent-mutation';
 import { useSetSubjectHook } from '../pages/auth/subject/useSetSubject';
 import { AddSubject } from './AddSubject';
-import { useRouter } from 'next/navigation';
+import Button from './ui/button';
 
-const AddWardComponent = ({
-  onOpen,
-  onClose,
-  isOpen,
-  neww,
-  setNew,
-  wards,
-}: any) => {
+const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
   const toast = useToast();
-  const router = useRouter();
   const formRef = useRef(null);
   const [addWard, { data, isSuccess, isError, error, isLoading }] =
     useAddWardMutation();
@@ -112,10 +115,9 @@ const AddWardComponent = ({
       onClose();
 
       setSuccessData({
-        title: 'Invitation Sent!',
-        description:
-          'An email has been sent to the ward with their login details. Subscribe your ward to a Plan Now.',
-        buttonText: 'Subscribe to a Plan',
+        title: 'Successful!',
+        description: 'An email as been sent to ward with his login details',
+        buttonText: 'Close',
       });
       onOpenn();
     }
@@ -137,10 +139,9 @@ const AddWardComponent = ({
       onCloseSubject();
 
       setSuccessData({
-        title: 'Account Created Successfully',
-        description:
-          "We've sent an email to your ward with their login details. You can now subscribe to a plan and get started with their learning journey.",
-        buttonText: 'Subscribe to a Plan',
+        title: 'Successful!',
+        description: 'An email as been sent to ward with his login details',
+        buttonText: 'Close',
       });
       onOpenn();
     }
@@ -180,24 +181,36 @@ const AddWardComponent = ({
     <>
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
-        {neww === '' ? <AddWard setNew={setNew} /> : null}
-        {neww === 'new' ? (
-          <NewWard
-            initialValues={initialValues}
-            signInSchema={signInSchema}
-            formRef={formRef}
-            addWard={addWard}
-            isLoading={isLoading}
-          />
-        ) : null}
-        {neww === 'old' ? (
-          <AddRegistered
-            value={value}
-            setValue={setValue}
-            wards={filteredWards}
-            connectWard={connectWard}
-          />
-        ) : null}
+        <ModalContent bg={'white'} p={6}>
+          <ModalHeader
+            color={'#5F5F5F'}
+            fontSize={32}
+            fontWeight={700}
+            textAlign={'center'}
+          >
+            Add a Parent or a Guardian
+          </ModalHeader>
+          <ModalCloseButton borderColor={'#fff'} />
+          <ModalBody>
+            <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
+              Create a ward account or Add your already registered ward. You
+              stay in control of payment and are able to track their progress.
+            </Text>
+          </ModalBody>
+
+          <ModalFooter flexDir={'column'} gap={5}>
+            <Button
+              bg="#0A52A8"
+              text="Create new ward"
+              onClick={() => setNew('new')}
+            />
+            <Button
+              bg="#0A52A8"
+              text="Add already registered Ward"
+              onClick={() => setNew('old')}
+            />
+          </ModalFooter>
+        </ModalContent>
       </Modal>
 
       <AddSubject
@@ -221,10 +234,7 @@ const AddWardComponent = ({
         }}
       />
       <SuccessModal
-        onClose={() => {
-          onClosee();
-          router.push('/parent/wards');
-        }}
+        onClose={onClosee}
         isOpen={isOpenn}
         title={successData?.title}
         description={successData?.description}
@@ -234,4 +244,4 @@ const AddWardComponent = ({
   );
 };
 
-export default AddWardComponent;
+export default AddParent;

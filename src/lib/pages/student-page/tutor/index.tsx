@@ -483,7 +483,8 @@ const TutorPage = () => {
       <SuccessModal
         onClose={() => {
           onClosee();
-          triggerTutorCalender({ id });
+          // triggerTutorCalender({ id });
+          router.push('/student/my-sessions');
         }}
         isOpen={isOpenn}
         title={'Successful'}

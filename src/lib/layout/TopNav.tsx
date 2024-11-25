@@ -16,10 +16,12 @@ import {
 import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import useDashboardHook from '../pages/parent-page/parent/useDashboard';
 
 const TopNav = () => {
   const [search, setSearch] = useState('');
+  const router = useRouter();
   const { data, isLoading } = useDashboardHook();
   return (
     <HStack
@@ -71,6 +73,7 @@ const TopNav = () => {
       <IconButton
         icon={<FiBell color="black" size={23} />}
         aria-label="Notifications"
+        onClick={() => router.push('/notifications')}
       />
 
       <HStack>

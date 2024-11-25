@@ -86,5 +86,6 @@ export const useSetSubjectHook = () => {
     filterText,
     onboardStudent,
     isStudentLoading: onboardStudentDetails?.isLoading,
+    subjects,
   };
 };

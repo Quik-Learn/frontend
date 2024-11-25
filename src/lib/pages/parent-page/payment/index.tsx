@@ -276,7 +276,7 @@ const Payment = () => {
                     </Text>
                   )}
                   <HStack gap={3} mt={4}>
-                    {item?.subscription?.plan_name ? (
+                    {/* {item?.subscription?.plan_name ? (
                       <Button
                         border="#0A52A8"
                         bg="#0A52A8"
@@ -286,7 +286,7 @@ const Payment = () => {
                           console.log('first');
                         }}
                       />
-                    ) : null}
+                    ) : null} */}
 
                     <Button
                       border="#0A52A8"

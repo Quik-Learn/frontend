@@ -68,7 +68,7 @@ export const parentService = createApi({
       query: (body: any) => {
         return {
           url: `/accounts/user/`,
-          method: 'put',
+          method: 'PUT',
           body,
         };
       },

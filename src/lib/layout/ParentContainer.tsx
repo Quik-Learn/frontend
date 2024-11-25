@@ -25,8 +25,10 @@ const ParentContainer = ({ children }: any) => {
     }
   }, [token, router]);
   useEffect(() => {
-    if (type?.toLowerCase() !== path?.toLowerCase()) {
-      router.replace(`/${type?.toLowerCase()}`);
+    if (path !== 'notifications' && path !== 'leave-meeting') {
+      if (type?.toLowerCase() !== path?.toLowerCase()) {
+        router.replace(`/${type?.toLowerCase()}`);
+      }
     }
   }, [type, path]);
   useEffect(() => {

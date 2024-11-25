@@ -70,7 +70,8 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push(`/parent/courses/${id}?ward_id=${ward_id}`)}
+      // onClick={() => router.push(`/parent/courses/${id}?ward_id=${ward_id}`)}
+      onClick={() => router.push(`/parent/courses/${id}`)}
     >
       <Image
         src={imageSrc}

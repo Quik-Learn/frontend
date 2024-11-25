@@ -12,6 +12,7 @@ import {
   SimpleGrid,
   GridItem,
   Grid,
+  Skeleton,
 } from '@chakra-ui/react';
 import React from 'react';
 import TutorContainer from '~/lib/layout/TutorContainer';
@@ -23,6 +24,8 @@ import RecentActivity from '~/lib/components/RecentActivity';
 import ProfilevIew from '~/lib/components/ProfilevIew';
 import ProgressBar from '~/lib/components/ui/progress-bar';
 import Button from '~/lib/components/ui/button';
+import { addRandomSoftColorsToEvents } from '~/lib/helpers/paths';
+import { BsThreeDots } from 'react-icons/bs';
 const dashboardItems = [
   {
     id: 1,
@@ -31,13 +34,13 @@ const dashboardItems = [
     icon: '/images/active-courses.svg',
     bg: '#EBEBFF',
   },
-  {
-    id: 1,
-    name: 'Online Courses',
-    count: 3,
-    icon: '/images/online-courses.svg',
-    bg: '#E1F7E3',
-  },
+  // {
+  //   id: 1,
+  //   name: 'Online Courses',
+  //   count: 3,
+  //   icon: '/images/online-courses.svg',
+  //   bg: '#E1F7E3',
+  // },
   {
     id: 1,
     name: 'Completed Sessions',
@@ -47,7 +50,7 @@ const dashboardItems = [
   },
   {
     id: 1,
-    name: 'Enrolled Students',
+    name: 'Total Students',
     count: 1677,
     icon: '/images/enrolled-student.svg',
     bg: '#FFF0F0',
@@ -94,11 +97,11 @@ const Dashboard = () => {
             </VStack>
           </HStack>
           <HStack w={'450px'}>
-            <Text fontWeight={500} fontSize={14}>
+            <Text fontWeight={500} fontSize={14} color={'#fff'}>
               1/4 Steps
             </Text>
             <ProgressBar firstPercentage="25%" bg1="#F0F0F0" bg2="#23BD33" />
-            <Text fontWeight={600} fontSize={16}>
+            <Text fontWeight={600} fontSize={16} color={'#fff'}>
               25% Completed
             </Text>
           </HStack>
@@ -111,11 +114,12 @@ const Dashboard = () => {
               bg={'#FFFFFF0D'}
               w={'48px'}
               h={'48px'}
+              color={'#fff'}
               borderRadius={5}
             />
           </HStack>
         </HStack>
-        <SimpleGrid columns={4} spacing={10} mt={7}>
+        <SimpleGrid columns={3} spacing={10} mt={7}>
           {dashboardItems?.map((item) => (
             <HStack key={item.id} bg={'#fff'} padding={'20px'} gap={5}>
               <IconButton
@@ -147,7 +151,110 @@ const Dashboard = () => {
             <RecentActivity />
           </GridItem>
           <GridItem colSpan={2}>
-            <ProfilevIew />
+            {false ? (
+              <Skeleton
+                w={'100%'}
+                bg={'#fff'}
+                p={3}
+                mb={3}
+                borderRadius={10}
+                boxShadow={'base'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              ></Skeleton>
+            ) : (
+              <HStack
+                w={'100%'}
+                bg={'#fff'}
+                p={3}
+                mb={3}
+                borderRadius={10}
+                boxShadow={'base'}
+                justifyContent={'space-between'}
+                alignItems={'center'}
+              >
+                <Text color={'#000000'} fontSize={18}>
+                  Upcoming Event
+                </Text>
+                <BsThreeDots color={'#000000'} />
+              </HStack>
+            )}
+            {false ? (
+              <Skeleton
+                borderRadius={10}
+                boxShadow={'base'}
+                bg={'#fff'}
+                w={'100%'}
+                maxHeight={'300px'}
+                height={'300px'}
+              ></Skeleton>
+            ) : (
+              <VStack
+                bg={'#fff'}
+                px={3}
+                py={6}
+                mb={3}
+                borderRadius={10}
+                boxShadow={'base'}
+                w={'100%'}
+                maxHeight={'300px'}
+                height={'300px'}
+              >
+                {false ? (
+                  <Stack
+                    w={'100%'}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                  >
+                    <Text
+                      my="4"
+                      fontWeight={700}
+                      textAlign={'center'}
+                      color={'#5F5F5F'}
+                      fontSize={25}
+                    >
+                      No Upcoming Events
+                    </Text>
+                  </Stack>
+                ) : (
+                  <VStack
+                    align="start"
+                    width={'100%'}
+                    overflowY={'auto'}
+                    maxHeight={'280px'}
+                    height={'280px'}
+                  >
+                    {addRandomSoftColorsToEvents([])?.map(
+                      (event: any, i: number) => (
+                        <HStack
+                          key={i}
+                          w="100%"
+                          align="center"
+                          borderRadius={6}
+                          p={2}
+                          bg="rgba(165, 180, 203, 0.2)"
+                        >
+                          <Box
+                            bg={event?.color || '#118AB2'}
+                            w={8}
+                            h={8}
+                            borderRadius="md"
+                          />
+                          <Box flex="1">
+                            <Text fontSize="16px" color="#161736">
+                              {event.title}
+                            </Text>
+                            <Text fontSize="14px" color="#7D8DA6">
+                              • {event.date} • {event.start_time}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      )
+                    )}
+                  </VStack>
+                )}
+              </VStack>
+            )}
           </GridItem>
         </Grid>
       </Stack>

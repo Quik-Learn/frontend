@@ -17,6 +17,7 @@
     "paths": {
       "~/*": ["./*"]
     },
+    "typeRoots": ["./src/types", "node_modules/@types"],
     "incremental": true,
     "plugins": [
       {

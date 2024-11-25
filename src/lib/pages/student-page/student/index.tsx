@@ -33,6 +33,7 @@ import { GrFormNext } from 'react-icons/gr';
 import { addRandomSoftColorsToEvents } from '~/lib/helpers/paths';
 import ActiveCourses from '~/lib/components/ActiveCourses';
 import moment from 'moment';
+import AddParent from '~/lib/components/AddParent';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -49,6 +50,11 @@ const Dashboard = () => {
       setEmpty(false);
     }, 10000);
   }, []);
+  useEffect(() => {
+    if (data?.bio?.parent?.firstname) {
+      onOpen();
+    }
+  }, [data]);
 
   // Helper function to check if a date has an event
   const isDateWithEvent = (date: Date) => {
@@ -730,7 +736,7 @@ const Dashboard = () => {
         </GridItem>
       </Grid>
 
-      <AddWardComponent
+      <AddParent
         onClose={onClose}
         onOpen={onOpen}
         isOpen={isOpen}

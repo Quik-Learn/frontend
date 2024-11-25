@@ -74,11 +74,11 @@ export const AddSubject = ({
             mb={5}
           >
             <FormLabel fontSize={14} color="#1D2026">
-              Select 5 Subject of Interest
+              Select Subjects of Interest
             </FormLabel>
 
             <Input
-              placeholder="Search"
+              placeholder="Type to search"
               bg="#ffffff"
               borderWidth={1}
               borderColor="#E9EAF0"

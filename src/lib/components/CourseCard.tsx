@@ -21,6 +21,7 @@ const CourseCard = ({
   instructor,
   router,
   id,
+  activeTab,
 }: any) => (
   <Box
     borderRadius="md"
@@ -32,7 +33,7 @@ const CourseCard = ({
     h={176}
     gap={5}
     p={2}
-    onClick={() => router.push(`/student/courses/${id}`)}
+    onClick={() => router.push(`/student/courses/${id}?activeTab=${activeTab}`)}
   >
     <Image src={imageSrc} alt={title} w="154px" h={'100%'} objectFit="cover" />
     <VStack justify={'center'} gap={4} h={'100%'}>
