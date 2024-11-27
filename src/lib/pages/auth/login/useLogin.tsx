@@ -7,6 +7,7 @@ import { redirectState } from '~/lib/store/reducers/redirect-slice';
 
 import { setToken } from '~/lib/store/reducers/token-slice';
 import { setType } from '~/lib/store/reducers/type-slice';
+import { setUser } from '~/lib/store/reducers/user-slice';
 
 const useLoginHook = () => {
   const toast = useToast();
@@ -38,6 +39,7 @@ const useLoginHook = () => {
       if (redirect) {
         router.push(redirect); // Redirect to original path
       } else {
+        dispatch(setUser(data?.data?.user));
         // If no redirect path, use account type-based redirection
         if (data?.data?.user?.account_type === 'Parent') {
           router.push('/parent');

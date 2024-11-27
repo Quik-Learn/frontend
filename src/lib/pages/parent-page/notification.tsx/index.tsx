@@ -13,6 +13,7 @@ import { TfiEmail } from 'react-icons/tfi';
 import React, { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useLazyGetNotificationsQuery } from '~/lib/services/user-service';
+import moment from 'moment';
 
 const Notifications = () => {
   const [selected, setSelected] = useState('All');
@@ -30,7 +31,7 @@ const Notifications = () => {
         <Heading mb={3} fontWeight={700} fontSize={['28px', '32px']}>
           Notifications
         </Heading>
-        <HStack>
+        {/* <HStack>
           <Button
             bg={selected === 'All' ? '#555555' : '#BDBDBD'}
             color={'white'}
@@ -51,7 +52,7 @@ const Notifications = () => {
           >
             Unread
           </Button>
-        </HStack>
+        </HStack> */}
         <VStack spacing={4} align="stretch" w="100%" mt={6}>
           {notifications.map((item) => (
             <HStack
@@ -70,8 +71,12 @@ const Notifications = () => {
               </VStack>
 
               <VStack align="flex-end" spacing={1}>
-                <Text fontSize={['14px', '16px', '18px']}>10:30 AM</Text>
-                <Text fontSize={['14px', '16px', '18px']}>Oct 12, 2023</Text>
+                <Text fontSize={['14px', '16px', '18px']}>
+                  {moment(item?.created_at).format('hh:mm A')}
+                </Text>
+                <Text fontSize={['14px', '16px', '18px']}>
+                  {moment(item?.created_at).format('MMM DD, YYYY')}
+                </Text>
               </VStack>
             </HStack>
           ))}

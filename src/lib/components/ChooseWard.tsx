@@ -20,7 +20,7 @@ import { useGetWardsQuery } from '../services/parent-mutation';
 import { useRouter } from 'next/navigation';
 import Button from './ui/button';
 
-const ChooseWard = ({ isOpen, onClose }: any) => {
+const ChooseWard = ({ isOpen, onClose, handleSelectHandler }: any) => {
   const router = useRouter();
   const [wardData, setWardData] = useState<any>([]);
   const toast = useToast();
@@ -133,7 +133,7 @@ const ChooseWard = ({ isOpen, onClose }: any) => {
                           color="#0A52A8"
                           text="Select"
                           variant="outline"
-                          onClick={() => router.push('/parent/subscription')}
+                          onClick={() => handleSelectHandler(item?.user?.id)}
                         />
                       </HStack>
                     </GridItem>

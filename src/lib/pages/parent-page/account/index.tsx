@@ -38,9 +38,17 @@ const Account = () => {
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // Get the selected file
     if (file) {
-      const formData = new FormData();
-      formData.append('file', file);
-      updateUserProfile(formData);
+      console.log(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        const formData = {
+          image: base64String,
+        };
+
+        updateUserProfile({ profile_image: base64String });
+      };
     }
   };
   const allowedFiles = ['png', 'jpg', 'jpeg'].map((x) => '.' + x).join(',');

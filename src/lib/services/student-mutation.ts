@@ -113,9 +113,9 @@ export const studentService = createApi({
     }),
 
     bookSessionStudent: builder.mutation({
-      query: ({ body, subject_id, instructor_id }: any) => {
+      query: ({ body, subject_id }: any) => {
         return {
-          url: `student/book-session/${instructor_id}/${subject_id}/`,
+          url: `student/book-session/${subject_id}/`,
           method: 'post',
           body,
         };
@@ -176,6 +176,13 @@ export const studentService = createApi({
         };
       },
     }),
+    getCalendar: builder.query({
+      query: () => {
+        return {
+          url: `student/calender/`,
+        };
+      },
+    }),
   }),
 });
 
@@ -195,4 +202,5 @@ export const {
   useLazyGetActiveCoursesQuery,
   useLazyGetCompletedCoursesQuery,
   useLazyGetPastSessionsQuery,
+  useLazyGetCalendarQuery,
 } = studentService;

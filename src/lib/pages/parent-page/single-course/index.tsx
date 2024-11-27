@@ -25,14 +25,17 @@ import {
   useGetWardsQuery,
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
+  useLazyGetStudentCalenderQuery,
 } from '~/lib/services/parent-mutation';
 import Button from '~/lib/components/ui/button';
 import ChooseWard from '~/lib/components/ChooseWard';
 import BookLesson from '~/lib/components/BookLesson';
+import BookSession from '~/lib/components/BookSession';
 
 const SingleCourses = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const { id }: any = useParams();
+  const [studentCalenderData, setStudentCalenderData] = useState<any>([]);
   const toast = useToast();
   const { onOpen, isOpen, onClose } = useDisclosure();
   const {
@@ -40,19 +43,35 @@ const SingleCourses = () => {
     isOpen: isOpenBook,
     onClose: onCloseBook,
   } = useDisclosure();
-  const searchParams = useSearchParams();
-  const ward_id = searchParams.get('ward_id');
   const [courseData, setCourseData] = useState<any>([]);
-  const [tutors, setTutorData] = useState<any>([]);
+  const [selectedWard, setSelectedWard] = useState<any>(null);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
-  const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
-  const [bookSessionStudent, bookSessionStudentData] =
-    useBookSessionParentMutation();
+  const [
+    getStudentCalender,
+    {
+      data: studentCalender,
+      isSuccess: isSuccessCalender,
+      isError: isErrorCalender,
+      isLoading: isLoadingCalender,
+    },
+  ] = useLazyGetStudentCalenderQuery();
+  const [
+    bookSession,
+    {
+      isLoading: isLoadingBook,
+      isSuccess: isSuccessBook,
+      isError: isErrorBook,
+      error: errorBook,
+    },
+  ] = useBookSessionParentMutation();
   useEffect(() => {
     trigger(id);
-    triggerTutor(id);
   }, [id]);
+  const handleSelectHandler = (ward: any) => {
+    setSelectedWard(ward);
+    getStudentCalender(ward);
+  };
   useEffect(() => {
     if (isSuccess) {
       setCourseData(data?.data);
@@ -70,25 +89,42 @@ const SingleCourses = () => {
       router.back();
     }
   }, [isSuccess, data, isError, error]);
-  console.log(tutors);
   useEffect(() => {
-    const { data, isError, error, isSuccess } = tutorData;
-    if (isSuccess) {
-      setTutorData(data?.data);
+    if (isSuccessBook) {
+      toast({
+        title: 'Session Booked Successfully',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      onCloseBook();
+      trigger(id);
     }
-    if (isError) {
-      // toast({
-      //   //@ts-ignore
-      //   title: error?.data?.error?.message || 'An error occured',
-      //   description: 'An Error occured.',
-      //   status: 'error',
-      //   duration: 9000,
-      //   isClosable: true,
-      //   position: 'top',
-      // });
+    if (isErrorBook) {
+      toast({
+        //@ts-ignore
+        title: errorBook?.data?.error?.message || 'An error occured',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
     }
-  }, [tutorData]);
-
+  }, [isSuccessBook, isErrorBook, errorBook]);
+  useEffect(() => {
+    if (isSuccessCalender) {
+      const transformedData = studentCalender?.data.map((item: any) => ({
+        date: item.date,
+        start_time: item.start_time,
+        end_time: item.end_time,
+        title: item.title,
+      }));
+      setStudentCalenderData(transformedData);
+      onClose();
+      onOpenBook();
+    }
+  }, [isSuccessCalender]);
   return (
     <ParentContainer>
       <Stack alignItems={'center'}>
@@ -204,16 +240,22 @@ const SingleCourses = () => {
               </TabPanel>
             </TabPanels>
           </Tabs>
-          <BookLesson
+          <BookSession
             isOpen={isOpenBook}
             onClose={onCloseBook}
-            tutor={[]}
-            overview={[]}
-            bookSession={[]}
-            isLoading={false}
-            tutorCalender={[]}
+            id={selectedWard}
+            subject_id={id}
+            bookSessionFunction={bookSession}
+            isLoading={isLoadingBook}
+            studentCalenderData={studentCalenderData}
+            setStudentCalenderData={setStudentCalenderData}
           />
-          <ChooseWard isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+          <ChooseWard
+            isOpen={isOpen}
+            onOpen={onOpen}
+            handleSelectHandler={handleSelectHandler}
+            onClose={onClose}
+          />
         </VStack>
       </Stack>
     </ParentContainer>

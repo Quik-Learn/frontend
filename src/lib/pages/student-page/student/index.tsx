@@ -542,10 +542,7 @@ const Dashboard = () => {
                     </Text>
                   </Stack>
                 ) : (
-                  <Box bg="white" p={4} borderRadius="md" boxShadow="md">
-                    <Text fontSize="lg" fontWeight="bold" mb={4}>
-                      Recent Activities
-                    </Text>
+                  <Box bg="white" p={4}>
                     <VStack align="start" spacing={4}>
                       {addRandomSoftColorsToEvents(
                         dashboardData?.recent_activity

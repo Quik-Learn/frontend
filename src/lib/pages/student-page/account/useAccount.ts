@@ -10,7 +10,6 @@ import {
   useReceieveConnectionMutation,
 } from '~/lib/services/student-mutation';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useDispatch } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '~/lib/store';
 import {
   clearRedirect,
@@ -21,12 +20,14 @@ import {
   useLazyGetConnectionQuery,
   userService,
 } from '~/lib/services/user-service';
+import { setUser } from '~/lib/store/reducers/user-slice';
 
 const useAccount = (callbackRecieve: any, onOpen: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const redirect = useAppSelector(redirectState);
   const searchParams = useSearchParams();
+
   const [incomingData, setIncomingData] = useState();
   const action = searchParams.get('action');
   const token = searchParams.get('token');
@@ -78,6 +79,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
           `${data?.data?.bio?.parent?.firstname || ''} ${data?.data?.bio?.parent?.lastname || ''}` ||
           '',
       });
+      dispatch(setUser(data?.data?.user));
     }
   }, [data, isSuccess]);
   useEffect(() => {
