@@ -1,6 +1,5 @@
 'use client';
 import {
-  Button,
   Heading,
   HStack,
   VStack,
@@ -8,15 +7,25 @@ import {
   Text,
   Icon,
   Stack,
+  useDisclosure,
+  ModalHeader,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
 } from '@chakra-ui/react';
 import { TfiEmail } from 'react-icons/tfi';
 import React, { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useLazyGetNotificationsQuery } from '~/lib/services/user-service';
 import moment from 'moment';
+import Button from '~/lib/components/ui/button';
 
 const Notifications = () => {
   const [selected, setSelected] = useState('All');
+  const [selectedNotification, setSelectedNotification] = useState<any>(null);
+  const { onOpen, isOpen, onClose } = useDisclosure();
   const [notifications, setNotifications] = useState<any[]>([]);
   const [getNotifications, { isLoading }] = useLazyGetNotificationsQuery();
   useEffect(() => {
@@ -62,6 +71,10 @@ const Notifications = () => {
               borderRadius="md"
               boxShadow="sm"
               spacing={4}
+              onClick={() => {
+                setSelectedNotification(item);
+                onOpen();
+              }}
             >
               <Box w={6} h={6} borderRadius={'10px'} bg="#FF8C00"></Box>
 
@@ -81,6 +94,23 @@ const Notifications = () => {
             </HStack>
           ))}
         </VStack>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Notification</ModalHeader>
+            <ModalBody>
+              <Text>{selectedNotification?.description}</Text>
+              <Text>
+                {moment(selectedNotification?.created_at).format(
+                  'MMM DD, YYYY'
+                )}
+              </Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button onClick={onClose} text="Close" />
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Stack>
     </ParentContainer>
   );
