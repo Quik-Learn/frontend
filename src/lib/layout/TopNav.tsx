@@ -12,6 +12,7 @@ import {
   Icon,
   FormControl,
   calc,
+  VStack,
 } from '@chakra-ui/react';
 import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
@@ -31,8 +32,8 @@ const TopNav = () => {
       bg="white"
       boxShadow="sm"
       gap={17}
-      left={261}
-      width={`calc(100vw - 261px)`}
+      left={{ base: 0, md: 261 }}
+      width={{ base: '100vw', md: `calc(100vw - 261px)` }}
       position={'fixed'}
       zIndex={100}
     >
@@ -71,8 +72,9 @@ const TopNav = () => {
       </FormControl>
 
       <IconButton
-        icon={<FiBell color="black" size={23} />}
+        icon={<FiBell color="black" size={20} />}
         aria-label="Notifications"
+        boxSize={[10, 14]}
         onClick={() => router.push('/notifications')}
       />
 
@@ -80,17 +82,17 @@ const TopNav = () => {
         <Avatar
           bg={'#0065FF'}
           color={'#fff'}
-          size="sm"
+          size={{ base: 'xs', md: 'sm' }}
           name={`${data?.firstname} ${data?.lastname}`}
         />
-        <Box>
+        <VStack display={{ base: 'none', md: 'flex' }}>
           <Text color={'#5F5F5F'} fontSize={14}>
             {data?.firstname} {data?.lastname}
           </Text>
           <Text fontSize={14} color="#5F5F5F" fontWeight={700}>
             {data?.account_type}
           </Text>
-        </Box>
+        </VStack>
       </HStack>
     </HStack>
   );

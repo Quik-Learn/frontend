@@ -98,10 +98,14 @@ const Wards = () => {
               </VStack>
             </VStack>
           ) : (
-            <Grid templateColumns="repeat(3, 1fr)" gap={6} my={6} px={6}>
+            <Grid
+              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap={{ base: 0, md: 6 }}
+              my={{ base: 0, md: 6 }}
+              px={{ base: 0, md: 6 }}
+            >
               {/* Welcome Section */}
               <GridItem
-                colSpan={[3, 2, 1]}
                 // w={{lg: 410}}
                 h={{ lg: 500 }}
                 bg={'#fff'}
@@ -136,7 +140,6 @@ const Wards = () => {
               {wardData?.map((item: any) => (
                 <GridItem
                   key={item.id}
-                  colSpan={[3, 2, 1]}
                   // w={{lg: 410}}
                   h={{ lg: 500 }}
                   bg={'#fff'}

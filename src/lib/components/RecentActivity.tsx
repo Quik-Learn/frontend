@@ -9,10 +9,11 @@ import {
   IconButton,
   Stack,
 } from '@chakra-ui/react';
+import moment from 'moment';
 import React from 'react';
 import { FaComment, FaShoppingCart, FaStar } from 'react-icons/fa';
 
-const RecentActivity = () => {
+const RecentActivity = ({ activitiesData }: { activitiesData: any }) => {
   const data = [
     {
       id: 1,
@@ -76,7 +77,7 @@ const RecentActivity = () => {
       </HStack>
 
       <Stack w={'100%'} minH={'320px'}>
-        {data?.length !== 0 ? (
+        {activitiesData?.length !== 0 ? (
           <Stack
             w={'100%'}
             h={'250px'}
@@ -94,7 +95,7 @@ const RecentActivity = () => {
           </Stack>
         ) : (
           <>
-            {data.map((item) => (
+            {activitiesData?.map((item: any) => (
               <Flex
                 key={item.id}
                 alignItems="flex-start"
@@ -114,19 +115,19 @@ const RecentActivity = () => {
                 <Box>
                   <Text fontSize="sm" color={'#1D2026'}>
                     <Text as="span" fontWeight="bold">
-                      {item.user}
+                      {item.user?.first_name} {item.user?.last_name}
                     </Text>{' '}
                     {item.action}{' '}
                     <Text as="span" fontWeight="bold">
-                      {item.lecture && `"${item.lecture}"`}
+                      {item.activity_type && `${item.activity_type}`}
                     </Text>{' '}
                     in{' '}
                     <Text as="span" fontWeight="bold">
-                      "{item.course}"
+                      {item.description}
                     </Text>
                   </Text>
                   <Text fontSize="xs" color="gray.400">
-                    {item.time}
+                    {moment(item.created_at).format('DD MMMM YYYY')}
                   </Text>
                 </Box>
               </Flex>

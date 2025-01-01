@@ -171,7 +171,6 @@ const TutorPage = () => {
       setTutorCalender(data?.data);
     }
     if (isError) {
-      console.log(error);
       toast({
         //@ts-ignore
         title: error?.data?.error?.message || 'An error occured',

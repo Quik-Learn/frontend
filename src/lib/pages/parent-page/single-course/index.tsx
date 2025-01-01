@@ -133,7 +133,7 @@ const SingleCourses = () => {
             color={'#1D2026'}
             textAlign={'left'}
             alignSelf={'flex-start'}
-            fontSize={'36px'}
+            fontSize={{ base: 20, md: 36 }}
             fontWeight={700}
             mb={2}
           >
@@ -141,7 +141,7 @@ const SingleCourses = () => {
           </Text>
           <Text
             color={'#4E5566'}
-            fontSize={'24px'}
+            fontSize={{ base: 16, md: 24 }}
             mb={2}
             fontWeight={300}
             textAlign={'left'}
@@ -172,17 +172,21 @@ const SingleCourses = () => {
             </TabList>
 
             <TabPanels>
-              <TabPanel py={8}>
+              <TabPanel py={{ base: 4, md: 8 }}>
                 <Stack>
                   <Heading
                     color={'#1D2026'}
-                    fontSize={'26px'}
+                    fontSize={{ base: 16, md: 26 }}
                     fontWeight={700}
                     mb={2}
                   >
                     Description
                   </Heading>
-                  <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
+                  <Text
+                    color={'#4E5566'}
+                    fontSize={{ base: 14, md: 16 }}
+                    mb={2}
+                  >
                     {courseData?.description}
                   </Text>
 
@@ -214,7 +218,7 @@ const SingleCourses = () => {
                         <ListItem
                           key={item?.id}
                           color={'#4E5566'}
-                          w={'45%'}
+                          w={{ base: '100%', md: '45%' }}
                           fontSize={{ base: 14, md: 16 }}
                         >
                           <ListIcon as={FaCircleCheck} color="#009933" />

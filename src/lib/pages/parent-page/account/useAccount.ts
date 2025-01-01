@@ -29,6 +29,7 @@ const useAccount = () => {
     email: '',
     province: '',
     address: '',
+    bio: '',
   });
   useEffect(() => {
     trigger({});
@@ -43,6 +44,7 @@ const useAccount = () => {
         email: data?.data?.email || '',
         province: data?.data?.province || '',
         address: data?.data?.address || '',
+        bio: data?.data?.bio || '',
       });
       dispatch(setUser(data?.data?.user));
     }

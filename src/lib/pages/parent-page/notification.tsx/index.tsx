@@ -79,12 +79,14 @@ const Notifications = () => {
               <Box w={6} h={6} borderRadius={'10px'} bg="#FF8C00"></Box>
 
               <VStack align="flex-start" flex={1}>
-                <Text fontSize={['20px', '24px']}>New Course Available</Text>
+                <Text fontWeight={700} fontSize={['16px', '18px']}>
+                  New Course Available
+                </Text>
                 <Text fontSize={['20px', '24px']}>{item?.description}</Text>
               </VStack>
 
               <VStack align="flex-end" spacing={1}>
-                <Text fontSize={['14px', '16px', '18px']}>
+                <Text fontWeight={700} fontSize={['16px', '18px']}>
                   {moment(item?.created_at).format('hh:mm A')}
                 </Text>
                 <Text fontSize={['14px', '16px', '18px']}>

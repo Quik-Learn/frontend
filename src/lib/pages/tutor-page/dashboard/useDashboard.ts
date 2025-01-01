@@ -3,31 +3,52 @@ import {
   useLazyGetAuthUserQuery,
   useLazyGetStudentDashboardQuery,
 } from '~/lib/services/student-mutation';
+import {
+  useLazyGetTutorDashboardQuery,
+  useLazyGetRatingsQuery,
+  useLazyGetActivitiesQuery,
+} from '~/lib/services/tutor-mutation';
 import { useAppDispatch } from '~/lib/store';
 import { setType } from '~/lib/store/reducers/type-slice';
 
 const useDashboardHook = () => {
   const dispatch = useAppDispatch();
-  const [profileData, setProfileData] = useState<any>();
-  const [trigger, { data, isLoading, isSuccess }] = useLazyGetAuthUserQuery();
-  // const [triggerDashboard, dashboardData] = useLazyGetStudentDashboardQuery();
+
+  const [dashboardData, setDashboardData] = useState<any>();
+  const [ratingsData, setRatingsData] = useState<any>();
+  const [activitiesData, setActivitiesData] = useState<any>();
+
+  const [triggerDashboard, dashboardDetails] = useLazyGetTutorDashboardQuery();
+  const [triggerRatings, ratingsDetails] = useLazyGetRatingsQuery();
+  const [triggerActivities, activitiesDetails] = useLazyGetActivitiesQuery();
   useEffect(() => {
-    trigger({});
-    // triggerDashboard({});
+    triggerDashboard({});
+    triggerRatings({});
+    triggerActivities({});
   }, []);
 
   useEffect(() => {
-    if (isSuccess) {
-      setProfileData(data?.data);
-      setType(data?.data?.account_type?.toLowerCase());
+    if (dashboardDetails.isSuccess) {
+      setDashboardData(dashboardDetails?.data?.data);
     }
-  }, [data, isSuccess]);
-  console.log(data, profileData);
+  }, [dashboardDetails.isSuccess]);
+  useEffect(() => {
+    if (ratingsDetails.isSuccess) {
+      setRatingsData(ratingsDetails?.data?.data);
+    }
+  }, [ratingsDetails.isSuccess]);
+  useEffect(() => {
+    if (activitiesDetails.isSuccess) {
+      setActivitiesData(activitiesDetails?.data?.data);
+    }
+  }, [activitiesDetails.isSuccess]);
   return {
-    data: profileData,
-    isLoading: isLoading,
-    trigger,
-    // dashboardData: dashboardData?.data?.data,
+    isLoading: dashboardDetails.isLoading,
+    dashboardData,
+    ratingsData,
+    activitiesData,
+    ratingsLoading: ratingsDetails.isLoading,
+    activitiesLoading: activitiesDetails.isLoading,
   };
 };
 

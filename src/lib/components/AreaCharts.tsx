@@ -51,20 +51,40 @@ const data = [
     amt: 2100,
   },
 ];
-const AreaChartsComponent = () => {
+const AreaChartsComponent = ({ ratingsData }: { ratingsData: any }) => {
   return (
     <ResponsiveContainer width={'100%'} height="100%">
       <AreaChart
-        data={data}
+        data={[
+          {
+            rating: '1',
+            count: ratingsData?.ratings_count?.one_star || 0,
+          },
+          {
+            rating: '2',
+            count: ratingsData?.ratings_count?.two_stars || 0,
+          },
+          {
+            rating: '3',
+            count: ratingsData?.ratings_count?.three_stars || 0,
+          },
+          {
+            rating: '4',
+            count: ratingsData?.ratings_count?.four_stars || 0,
+          },
+          {
+            rating: '5',
+            count: ratingsData?.ratings_count?.five_stars || 0,
+          },
+        ]}
         margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
       >
-        <XAxis dataKey="name" hide />
-        <YAxis hide />
-
+        <XAxis dataKey="rating" hide />
+        <YAxis dataKey="count" hide />
         <Tooltip />
         <Area
           type="monotone"
-          dataKey="uv"
+          dataKey="count"
           stroke="#FD8E1F"
           fillOpacity={1}
           strokeWidth={3}

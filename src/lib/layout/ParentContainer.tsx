@@ -47,7 +47,7 @@ const ParentContainer = ({ children }: any) => {
     >
       <TopNav />
       <ParentNav />
-      <Box flex="1" ml={261} mt={98} overflowX={'hidden'}>
+      <Box flex="1" ml={{ base: 0, md: 261 }} mt={98} overflowX={'hidden'}>
         {children}
       </Box>
     </Flex>

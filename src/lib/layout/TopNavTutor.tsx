@@ -18,8 +18,10 @@ import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
 import useDashboardHook from '../pages/parent-page/parent/useDashboard';
+import { useRouter } from 'next/navigation';
 
 const TopNavTutor = () => {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const { data, isLoading } = useDashboardHook();
   return (
@@ -29,8 +31,8 @@ const TopNavTutor = () => {
       p="4"
       bg="#FFFFFF"
       gap={17}
-      left={261}
-      width={`calc(100vw - 261px)`}
+      left={{ base: 0, md: 261 }}
+      width={{ base: '100vw', md: `calc(100vw - 261px)` }}
       position={'fixed'}
       zIndex={100}
     >
@@ -77,11 +79,12 @@ const TopNavTutor = () => {
       </FormControl>
 
       <IconButton
-        icon={<FiBell color="black" size={23} />}
+        icon={<FiBell color="black" size={20} />}
         aria-label="Notifications"
         p={3}
         borderRadius={4}
         bg={'#F5F7FA'}
+        onClick={() => router.push('/notifications')}
       />
 
       <HStack>
@@ -91,14 +94,14 @@ const TopNavTutor = () => {
           size="sm"
           name={`${data?.firstname} ${data?.lastname}`}
         />
-        <Box>
+        <VStack display={{ base: 'none', md: 'flex' }}>
           <Text color={'#5F5F5F'} fontSize={14}>
             {data?.firstname} {data?.lastname}
           </Text>
           <Text fontSize={14} color="#5F5F5F" fontWeight={700}>
             {data?.account_type}
           </Text>
-        </Box>
+        </VStack>
       </HStack>
     </HStack>
   );

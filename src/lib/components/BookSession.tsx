@@ -8,6 +8,7 @@ import {
   Text,
   Stack,
   HStack,
+  VStack,
 } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
@@ -124,11 +125,23 @@ const BookSession: React.FC<BookSessionProps> = ({
           Book an Introductory Session
         </ModalHeader>
         <ModalCloseButton />
-        <ModalBody justifyContent={'center'} alignItems={'center'}>
+        <ModalBody
+          justifyContent={'center'}
+          alignItems={'center'}
+          w={'100%'}
+          display={'flex'}
+          flexDirection={'column'}
+        >
           <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
             Select a Date
           </Text>
-          <Stack w={'100%'} justifyContent={'center'} alignItems={'center'}>
+          <VStack
+            maxW={{ base: '100%', md: '500px' }}
+            w={'100%'}
+            justifyContent={'center'}
+            alignItems={'center'}
+            alignSelf={'center'}
+          >
             <StyledCalendarWrapper>
               <Calendar
                 onChange={(value) => setSelectedDate(value as Date)}
@@ -142,13 +155,13 @@ const BookSession: React.FC<BookSessionProps> = ({
                 minDate={new Date()}
               />
             </StyledCalendarWrapper>
-          </Stack>
+          </VStack>
           {selectedDate && (
             <>
               <Text m={6} color={'#5F5F5F'} fontSize={24} fontWeight={700}>
                 Select a Time
               </Text>
-              <HStack gap={4}>
+              <HStack gap={4} flexWrap={'wrap'}>
                 {availableTimes?.map((item) => (
                   <Stack
                     key={item}

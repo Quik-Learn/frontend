@@ -5,66 +5,50 @@ import {
   Grid,
   GridItem,
   Heading,
+  Skeleton,
   Text,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react';
-import ParentContainer from '~/lib/layout/ParentContainer';
-import { useRouter, useSearchParams } from 'next/navigation';
-import CalenderComponent from '~/lib/components/CalenderComponent';
-import {
-  useLazyGetStudentCalenderQuery,
-  useLazyGetStudentSessionQuery,
-  useLeaveMeetingMutation,
-} from '~/lib/services/student-mutation';
 import { useEffect, useState } from 'react';
-import { formatData } from '~/lib/helpers/paths';
+import { addRandomSoftColorsToEvents, formatData } from '~/lib/helpers/paths';
 import moment from 'moment';
-import { useAppSelector } from '~/lib/store';
-import { meetingIdState } from '~/lib/store/reducers/meeting-id-slice';
 import Events from '~/lib/components/Events';
-import StudentTool from '~/lib/components/StudentTool';
 import TutorTool from '~/lib/components/TutorTool';
-const students = [
-  { id: 1, name: 'Emily Adams' },
-  { id: 2, name: 'James Anderson' },
-  { id: 3, name: 'Matthew Armstrong' },
-  { id: 4, name: 'Aiden Atkinson' },
-  { id: 5, name: 'Natalie Brooks' },
-];
+import TutorContainer from '~/lib/layout/TutorContainer';
+import useSessionsHook from './sessions.hook';
+import ScheduleModal from '~/lib/components/ScheduleModal';
+import StudentsHook from '../student/students.hook';
+import CalenderComponent from '~/lib/components/CalenderComponent';
+
 const Sessions = () => {
   const toast = useToast();
-  const [events, setEvents] = useState([]);
-
-  const [trigger, { data, isLoading, isError, error, isSuccess }] =
-    useLazyGetStudentSessionQuery();
+  const { students, isLoading: isStudentLoading, getStudents } = StudentsHook();
+  const [availability, setAvailability] = useState<any>([
+    {
+      time: 'Pre 12pm',
+      availability: [false, false, false, false, false, false, false],
+    },
+    {
+      time: '12 - 5pm',
+      availability: [false, false, false, false, false, false, false],
+    },
+    {
+      time: 'After 5pm',
+      availability: [false, false, false, false, false, false, false],
+    },
+  ]);
+  const { isLoading, sessionsData, triggerSessions } = useSessionsHook();
   const [range, setRange] = useState<{ start: any; end: any }>({
     start: moment().startOf('week').toDate(),
     end: moment().endOf('week').toDate(),
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  useEffect(() => {
-    if (isSuccess) {
-      setEvents(formatData(data?.data));
-      console.log(data?.data, formatData(data?.data));
-    }
-    if (isError) {
-      console.log(error);
-      toast({
-        //@ts-ignore
-        title: error?.data?.error?.message || 'An error occured',
-        description: 'An Error occured.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [isSuccess, data, isError]);
-  useEffect(() => {
-    trigger({});
-  }, []);
+  const {
+    isOpen: isOpenSchedule,
+    onOpen: onOpenSchedule,
+    onClose: onCloseSchedule,
+  } = useDisclosure();
   console.log(range);
   // Fetch sessions when the range changes
   useEffect(() => {
@@ -73,55 +57,86 @@ const Sessions = () => {
         start_date: moment(range?.start).format('YYYY-MM-DD'),
         end_date: moment(range?.end).format('YYYY-MM-DD'),
       };
-      trigger(params);
+      triggerSessions(params);
     }
   }, [range]);
 
   return (
-    <ParentContainer>
+    <TutorContainer>
       <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
         My Sessions
       </Text>
 
       <CalenderComponent
-        events={events}
+        events={sessionsData}
         onOpen={onOpen}
         setRange={setRange}
         EventsComponent={(props) => (
           <Events
             {...props}
-            trigger={trigger}
+            trigger={triggerSessions}
             isOpen={isOpen}
             onClose={onClose}
           />
         )}
-        ToolbarComponent={(props) => <TutorTool {...props} />}
+        ToolbarComponent={(props) => (
+          <TutorTool onOpenSchedule={onOpenSchedule} {...props} />
+        )}
       />
-      <Heading color={'#1D2026'} fontWeight={600} fontSize={'20px'} mb={10}>
+      <Heading
+        px={4}
+        color={'#1D2026'}
+        fontWeight={600}
+        fontSize={'20px'}
+        mb={5}
+      >
         Students
       </Heading>
-      <Grid
-        templateColumns={{
-          base: 'repeat(1, 1fr)',
-          md: 'repeat(3, 1fr)',
-          xl: 'repeat(5, 1fr)',
-        }}
-      >
-        {students?.map((item) => (
-          <GridItem
-            key={item.id}
-            justifyItems={'center'}
-            alignItems={'center'}
-            display={'flex'}
-          >
-            <Box w={'50px'} h={'50px'} borderRadius={'5px'} />
-            <Text color={'#5F5F5F'} fontSize={'20px'}>
-              {item.name}
-            </Text>
-          </GridItem>
-        ))}
-      </Grid>
-    </ParentContainer>
+      {isStudentLoading ? (
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(3, 1fr)',
+            xl: 'repeat(5, 1fr)',
+          }}
+          px={4}
+        >
+          {['', '', '', '']?.map((item) => (
+            <Skeleton w={'50px'} h={'50px'} borderRadius={'5px'} />
+          ))}
+        </Grid>
+      ) : (
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(3, 1fr)',
+            xl: 'repeat(5, 1fr)',
+          }}
+          px={4}
+        >
+          {addRandomSoftColorsToEvents(students)?.map((item: any) => (
+            <GridItem
+              key={item?.id}
+              justifyItems={'center'}
+              alignItems={'center'}
+              display={'flex'}
+              gap={2}
+            >
+              <Box bg={item.color} w={'50px'} h={'50px'} borderRadius={'5px'} />
+              <Text color={'#5F5F5F'} fontSize={['14px', '16px', '18px']}>
+                {item?.student?.firstname} {item?.student?.lastname}
+              </Text>
+            </GridItem>
+          ))}
+        </Grid>
+      )}
+      <ScheduleModal
+        isOpen={isOpenSchedule}
+        onClose={onCloseSchedule}
+        availability={availability}
+        setAvailability={setAvailability}
+      />
+    </TutorContainer>
   );
 };
 

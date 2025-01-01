@@ -29,26 +29,30 @@ const useLoginHook = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      document.cookie = `token=${data?.data?.auth_token}; path=/;`;
-      document.cookie = `accountType=${data?.data?.user?.account_type}; path=/;`;
-      // Set token in Redux state and cookies
-      dispatch(setToken(data?.data?.auth_token));
-      dispatch(setType(data?.data?.user?.account_type));
-
-      // Redirect user to the originally intended path after login
-      if (redirect) {
-        router.push(redirect); // Redirect to original path
+      if (data?.data?.message?.includes('inactive')) {
+        router.push('/auth/success');
       } else {
-        dispatch(setUser(data?.data?.user));
-        // If no redirect path, use account type-based redirection
-        if (data?.data?.user?.account_type === 'Parent') {
-          router.push('/parent');
-        } else if (data?.data?.user?.account_type === 'Student') {
-          router.push('/student');
-        } else if (data?.data?.user?.account_type === 'Tutor') {
-          router.push('/tutor');
+        document.cookie = `token=${data?.data?.auth_token}; path=/;`;
+        document.cookie = `accountType=${data?.data?.user?.account_type}; path=/;`;
+        // Set token in Redux state and cookies
+        dispatch(setToken(data?.data?.auth_token));
+        dispatch(setType(data?.data?.user?.account_type));
+
+        // Redirect user to the originally intended path after login
+        if (redirect) {
+          router.push(redirect); // Redirect to original path
         } else {
-          router.push('/');
+          dispatch(setUser(data?.data?.user));
+          // If no redirect path, use account type-based redirection
+          if (data?.data?.user?.account_type === 'Parent') {
+            router.push('/parent');
+          } else if (data?.data?.user?.account_type === 'Student') {
+            router.push('/student');
+          } else if (data?.data?.user?.account_type === 'Instructor') {
+            router.push('/tutor');
+          } else {
+            router.push('/');
+          }
         }
       }
     }

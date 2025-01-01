@@ -48,6 +48,17 @@ export const userService = createApi({
       //@ts-ignore
       invalidatesTags: ['cleanUp'],
     }),
+    changePassword: builder.mutation({
+      query: (body) => {
+        return {
+          url: `accounts/user/update-password/`,
+          method: 'POST',
+          body,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
     getSubjects: builder.query({
       query: () => {
         return {
@@ -94,4 +105,5 @@ export const {
   useLazyGetConnectionQuery,
   useLazyGetNotificationsQuery,
   useSendFedbackMutation,
+  useChangePasswordMutation,
 } = userService;

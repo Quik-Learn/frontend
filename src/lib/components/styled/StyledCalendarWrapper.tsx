@@ -2,10 +2,9 @@ import styled from '@emotion/styled';
 import { Box } from '@chakra-ui/react';
 
 export const StyledCalendarWrapper = styled(Box)`
-  width: 490px;
+  width: 100%;
   justify-content: center;
   align-items: center;
-
   .react-calendar {
     width: 100%;
     background: white;
