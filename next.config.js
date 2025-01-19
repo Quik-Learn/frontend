@@ -11,7 +11,18 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  output: 'standalone',
+  experimental: {
+    serverActions: true,
+  },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'react-icons$': 'react-icons/lib/esm',
+      };
+    }
+    return config;
+  },
 };
 
 module.exports = withPWA(nextConfig);
