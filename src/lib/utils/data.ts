@@ -182,3 +182,43 @@ export const pricingData: any[] = [
     buttonText: '#fff',
   },
 ];
+export const dashboardItems = [
+  [
+    {
+      id: 1,
+      title: 'Introduction to Mathematics',
+      short_description:
+        'Learn fundamental mathematical concepts and problem-solving skills',
+      thumbnail: '/images/math-course.jpg',
+      lesson_hours: 40,
+      learners: 1250,
+    },
+    {
+      id: 2,
+      title: 'Advanced Physics',
+      short_description:
+        'Explore mechanics, thermodynamics, and quantum physics',
+      thumbnail: '/images/physics-course.jpg',
+      lesson_hours: 48,
+      learners: 850,
+    },
+    {
+      id: 3,
+      title: 'Chemistry Fundamentals',
+      short_description:
+        'Master the basics of chemical reactions and lab techniques',
+      thumbnail: '/images/chemistry-course.jpg',
+      lesson_hours: 36,
+      learners: 975,
+    },
+    {
+      id: 4,
+      title: 'Biology 101',
+      short_description:
+        'Study living organisms, cells, and biological processes',
+      thumbnail: '/images/biology-course.jpg',
+      lesson_hours: 42,
+      learners: 1100,
+    },
+  ],
+];

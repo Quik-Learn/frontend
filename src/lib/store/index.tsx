@@ -33,6 +33,7 @@ import { authService } from '../services/auth-service';
 import { userService } from '../services/user-service';
 import { parentService } from '../services/parent-mutation';
 import { studentService } from '../services/student-mutation';
+import { tutorService } from '../services/tutor-mutation';
 
 const createNoopStorage = () => {
   return {
@@ -67,6 +68,7 @@ const rootReducer = combineReducers({
   [userService.reducerPath]: userService.reducer,
   [parentService.reducerPath]: parentService.reducer,
   [studentService.reducerPath]: studentService.reducer,
+  [tutorService.reducerPath]: tutorService.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -77,6 +79,7 @@ export const store: any = configureStore({
     [userService.reducerPath]: userService.reducer,
     [parentService.reducerPath]: parentService.reducer,
     [studentService.reducerPath]: studentService.reducer,
+    [tutorService.reducerPath]: tutorService.reducer,
   },
   middleware: (getDefaultMiddleware: any) =>
     getDefaultMiddleware({
@@ -88,6 +91,7 @@ export const store: any = configureStore({
       userService.middleware,
       parentService.middleware,
       studentService.middleware,
+      tutorService.middleware,
     ]),
 });
 

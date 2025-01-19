@@ -28,6 +28,7 @@ import {
 } from '~/lib/services/parent-mutation';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
+import InvoicesData from '~/lib/components/InvoicesData';
 const SubscriptionPage = () => {
   const router = useRouter();
   const { id } = useParams();
@@ -190,49 +191,7 @@ const SubscriptionPage = () => {
           </HStack>
 
           {/* Invoices List */}
-          <Box p={8} borderRadius="md" boxShadow="sm">
-            <Heading
-              as="h3"
-              color="#5F5F5F"
-              fontSize={24}
-              fontWeight={500}
-              mb={4}
-            >
-              Invoices ({paymentData?.invoices?.length})
-            </Heading>
-            <VStack align="stretch" spacing={4}>
-              {paymentData?.invoices?.map((invoice: any) => (
-                <Flex
-                  key={invoice?.id}
-                  justify="space-between"
-                  align="center"
-                  p={4}
-                  bg="white"
-                  borderRadius="5px"
-                >
-                  <HStack spacing={3}>
-                    <Icon as={BiSolidFilePdf} w={6} h={6} />
-                    <Text color="#5F5F5F" fontSize={15} fontWeight={500}>
-                      {invoice?.id}.pdf
-                    </Text>
-                  </HStack>
-                  <Text
-                    color="#5F5F5F"
-                    fontSize={15}
-                    fontWeight={500}
-                    textAlign={'start'}
-                  >
-                    Date Of Invoice:{moment(invoice?.created_at).format('LL')}
-                  </Text>
-
-                  <HStack spacing={4}>
-                    <Icon as={TbFileSearch} w={6} h={6} color="#5F5F5F" />{' '}
-                    <Icon as={MdDownload} w={6} h={6} color="#5F5F5F" />
-                  </HStack>
-                </Flex>
-              ))}
-            </VStack>
-          </Box>
+          <InvoicesData data={paymentData?.invoices} />
         </Box>
       )}
     </ParentContainer>

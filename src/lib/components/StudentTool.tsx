@@ -52,7 +52,7 @@ const StudentTool = ({
       <Flex align="center">
         <Button
           width={'262px'}
-          text="Book a session"
+          text="Book New session"
           bg="#0177FB"
           onClick={() => router.push('/student/book-session')}
         />

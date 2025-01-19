@@ -4,7 +4,7 @@ import Rating from './Rating';
 import AreaChartsComponent from './AreaCharts';
 import ProgressBar from './ui/progress-bar';
 
-const OverallRating = () => {
+const OverallRating = ({ ratingsData }: { ratingsData: any }) => {
   // const data = [
   //   { id: 1, rating: 5, count: '56%' },
   //   { id: 2, rating: 4, count: '37%' },
@@ -13,14 +13,18 @@ const OverallRating = () => {
   //   { id: 5, rating: 1, count: '0.023%' },
   // ];
   const data = [
-    { id: 1, rating: 5, count: '0%' },
-    { id: 2, rating: 4, count: '0%' },
-    { id: 3, rating: 3, count: '0%' },
-    { id: 4, rating: 2, count: '0%' },
-    { id: 5, rating: 1, count: '0%' },
+    {
+      id: 1,
+      rating: 5,
+      count: ratingsData?.ratings_count?.five_stars || 0,
+    },
+    { id: 2, rating: 4, count: ratingsData?.ratings_count?.four_stars || 0 },
+    { id: 3, rating: 3, count: ratingsData?.ratings_count?.three_stars || 0 },
+    { id: 4, rating: 2, count: ratingsData?.ratings_count?.two_stars || 0 },
+    { id: 5, rating: 1, count: ratingsData?.ratings_count?.one_star || 0 },
   ];
   return (
-    <VStack bg={'#fff'} w={'100%'}>
+    <VStack bg={'#fff'} w={'100%'} maxWidth={600}>
       <HStack
         paddingX={'16px'}
         w={'100%'}
@@ -59,9 +63,9 @@ const OverallRating = () => {
           justifyContent={'center'}
         >
           <Text color={'#1D2026'} fontSize={40} fontWeight={600}>
-            0
+            {ratingsData?.ratings}
           </Text>
-          <Rating rate={4.5} color="#FD8E1F" />
+          <Rating rate={ratingsData?.ratings} color="#FD8E1F" />
           <Text fontWeight={500} color={'#1D2026'} fontSize={14}>
             Overall Rating
           </Text>
@@ -72,7 +76,7 @@ const OverallRating = () => {
           alignItems={'flex-end'}
           justifyContent={'flex-end'}
         >
-          <AreaChartsComponent />
+          <AreaChartsComponent ratingsData={ratingsData} />
         </Stack>
       </HStack>
       <Stack w={'100%'} mt={5}>

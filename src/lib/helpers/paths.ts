@@ -86,24 +86,27 @@ const convertToFullDate = (time: any, date: any) => {
 };
 
 export const formatData = (data: any) => {
-  return data.map((item: any) => {
-    const formattedStartTime = convertToFullDate(item.start_time, item.date);
-    const formattedEndTime = convertToFullDate(item.end_time, item.date);
+  return (
+    data ||
+    []?.map((item: any) => {
+      const formattedStartTime = convertToFullDate(item.start_time, item.date);
+      const formattedEndTime = convertToFullDate(item.end_time, item.date);
 
-    // Combine date with 23:00:00 and append Z for UTC
-    const formattedDate = `${item.date}T23:00:00.000Z`;
-    console.log(formattedStartTime);
-    return {
-      desc: item?.title,
-      start: formattedStartTime,
-      end: formattedEndTime,
-      date: formattedDate,
-      instructor: item?.instructor,
-      id: item?.id,
-      subject: item?.subject,
-      meeting_link: item?.meeting_link,
-    };
-  });
+      // Combine date with 23:00:00 and append Z for UTC
+      const formattedDate = `${item.date}T23:00:00.000Z`;
+      console.log(formattedStartTime);
+      return {
+        desc: item?.title,
+        start: formattedStartTime,
+        end: formattedEndTime,
+        date: formattedDate,
+        instructor: item?.instructor,
+        id: item?.id,
+        subject: item?.subject,
+        meeting_link: item?.meeting_link,
+      };
+    })
+  );
 };
 export const getRandomColor = () => {
   const letters = '0123456789ABCDEF';

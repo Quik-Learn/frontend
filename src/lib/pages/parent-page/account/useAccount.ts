@@ -5,8 +5,11 @@ import useDashboardHook from '../parent/useDashboard';
 import { useUpdateUserProfileMutation } from '~/lib/services/parent-mutation';
 import { useToast } from '@chakra-ui/react';
 import { useLazyGetUserQuery } from '~/lib/services/user-service';
+import { useAppDispatch } from '~/lib/store';
+import { setUser } from '~/lib/store/reducers/user-slice';
 
 const useAccount = () => {
+  const dispatch = useAppDispatch();
   const [trigger, { data, isLoading, isSuccess }] = useLazyGetUserQuery();
   const [updateUserProfile, responseData] = useUpdateUserProfileMutation();
   const toast = useToast();
@@ -26,6 +29,7 @@ const useAccount = () => {
     email: '',
     province: '',
     address: '',
+    bio: '',
   });
   useEffect(() => {
     trigger({});
@@ -40,7 +44,9 @@ const useAccount = () => {
         email: data?.data?.email || '',
         province: data?.data?.province || '',
         address: data?.data?.address || '',
+        bio: data?.data?.bio || '',
       });
+      dispatch(setUser(data?.data?.user));
     }
   }, [data, isSuccess]);
 

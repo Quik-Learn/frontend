@@ -11,6 +11,7 @@ import {
 } from '../services/parent-mutation';
 import { useSetSubjectHook } from '../pages/auth/subject/useSetSubject';
 import { AddSubject } from './AddSubject';
+import { useRouter } from 'next/navigation';
 
 const AddWardComponent = ({
   onOpen,
@@ -21,6 +22,7 @@ const AddWardComponent = ({
   wards,
 }: any) => {
   const toast = useToast();
+  const router = useRouter();
   const formRef = useRef(null);
   const [addWard, { data, isSuccess, isError, error, isLoading }] =
     useAddWardMutation();
@@ -110,9 +112,10 @@ const AddWardComponent = ({
       onClose();
 
       setSuccessData({
-        title: 'Successful!',
-        description: 'An email as been sent to ward with his login details',
-        buttonText: 'Close',
+        title: 'Invitation Sent!',
+        description:
+          'An email has been sent to the ward with their login details. Subscribe your ward to a Plan Now.',
+        buttonText: 'Subscribe to a Plan',
       });
       onOpenn();
     }
@@ -134,9 +137,10 @@ const AddWardComponent = ({
       onCloseSubject();
 
       setSuccessData({
-        title: 'Successful!',
-        description: 'An email as been sent to ward with his login details',
-        buttonText: 'Close',
+        title: 'Account Created Successfully',
+        description:
+          "We've sent an email to your ward with their login details. You can now subscribe to a plan and get started with their learning journey.",
+        buttonText: 'Subscribe to a Plan',
       });
       onOpenn();
     }
@@ -217,7 +221,10 @@ const AddWardComponent = ({
         }}
       />
       <SuccessModal
-        onClose={onClosee}
+        onClose={() => {
+          onClosee();
+          router.push('/parent/wards');
+        }}
         isOpen={isOpenn}
         title={successData?.title}
         description={successData?.description}

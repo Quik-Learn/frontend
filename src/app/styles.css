@@ -85,5 +85,12 @@ html {
 .rbc-button-link {
   color: black !important;
 }
+.center {
+  /* align-items: flex-start !important;
+  justify-content: flex-start !important;
+  display: flex !important;
+  max-width: '100%';
+  background-color: aqua; */
+}
 @media only screen and (min-width: 1440px) {
 }

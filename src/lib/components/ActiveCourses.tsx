@@ -19,6 +19,7 @@ function ActiveCourses({ data }: any) {
     arrow: false,
     slidesToShow: 4,
     slidesToScroll: 1,
+
     autoplay: data?.length > 4 ? true : false,
     autoplaySpeed: 0,
     speed: 5000,
@@ -31,8 +32,6 @@ function ActiveCourses({ data }: any) {
         settings: {
           slidesToShow: 4,
           slidesToScroll: 4,
-          infinite: false,
-          dots: false,
         },
       },
       {
@@ -62,7 +61,7 @@ function ActiveCourses({ data }: any) {
   };
   console.log(data);
   return (
-    <Stack w={'100%'} spacing={10} justifyContent={'flex-start'}>
+    <Stack w={'100%'}>
       {data?.length === 0 ? (
         <Stack
           p="6"
@@ -88,7 +87,7 @@ function ActiveCourses({ data }: any) {
           </Text>
         </Stack>
       ) : (
-        <Slider {...settings} className="center">
+        <Slider {...settings} centerMode={false} className="center">
           {addRandomSoftColorsToEvents(data)?.map(
             (item: any, index: number) => (
               <div key={index}>

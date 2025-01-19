@@ -191,6 +191,7 @@ const Courses = () => {
                             instructor={course?.instructor}
                             router={router}
                             id={course?.id}
+                            activeTab={activeTab}
                           />
                         )}
                       </GridItem>

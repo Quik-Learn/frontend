@@ -4,7 +4,14 @@ import { GrFormNext } from 'react-icons/gr';
 import { IoChevronBackOutline } from 'react-icons/io5';
 import Button from './ui/button';
 
-const TutorTool = ({ label, onNavigate, onView, view, Views, router }: any) => {
+const TutorTool = ({
+  label,
+  onNavigate,
+  onView,
+  view,
+  Views,
+  onOpenSchedule,
+}: any) => {
   return (
     <Flex justify="space-between" align="center" mb={4}>
       <Flex>
@@ -47,7 +54,7 @@ const TutorTool = ({ label, onNavigate, onView, view, Views, router }: any) => {
           width={'262px'}
           text="Schedule Availability"
           bg="#0177FB"
-          onClick={() => router.push('/student/book-session')}
+          onClick={onOpenSchedule}
         />
       </Flex>
     </Flex>

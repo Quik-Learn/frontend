@@ -8,23 +8,16 @@ import {
   VStack,
   Button as ChakraButton,
   useDisclosure,
-  Heading,
+  Stack,
   Progress,
-  SimpleGrid,
   Box,
   HStack,
-  List,
-  ListItem,
-  ListIcon,
-  Stack,
-  useToast,
   Avatar,
   Spinner,
+  useToast,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { IoMdCheckmark } from 'react-icons/io';
-import * as yup from 'yup';
-import { LiaWindowCloseSolid } from 'react-icons/lia';
+
 import Button from '~/lib/components/ui/button';
 import SuccessModal from '~/lib/components/ui/success-modal';
 
@@ -172,13 +165,18 @@ const Payment = () => {
               </VStack>
             </VStack>
           ) : (
-            <Grid templateColumns="repeat(3, 1fr)" gap={6} my={6} px={6}>
+            <Grid
+              templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(3, 1fr)' }}
+              gap={{ base: 2, md: 6 }}
+              my={{ base: 2, md: 6 }}
+              px={{ base: 0, md: 6 }}
+            >
               <GridItem
                 bg={'#fff'}
                 borderRadius={29}
-                minH={400}
+                minH={{ base: 250, md: 400 }}
                 padding={5}
-                w={350}
+                w={{ base: '100%', md: 350 }}
                 onClick={() => {
                   setNew('');
                   onOpen();
@@ -190,7 +188,12 @@ const Payment = () => {
                 alignItems={'center'}
               >
                 <Text></Text>
-                <Image src="/images/add.svg" alt="add" />
+                <Image
+                  w={{ base: 100, md: 200 }}
+                  h={{ base: 100, md: 200 }}
+                  src="/images/add.svg"
+                  alt="add"
+                />
                 <Text color="#5F5F5F" fontSize={24} fontWeight={500}>
                   Add Ward
                 </Text>
@@ -202,9 +205,9 @@ const Payment = () => {
 
                   bg={'#fff'}
                   borderRadius={29}
-                  minH={400}
+                  minH={{ base: 250, md: 400 }}
                   padding={5}
-                  w={350}
+                  w={{ base: '100%', md: 350 }}
                   boxShadow={'sm'}
                   display={'flex'}
                   flexDirection={'column'}
@@ -212,8 +215,8 @@ const Payment = () => {
                   alignItems={'center'}
                 >
                   <Avatar
-                    w={'200px'}
-                    h={'200px'}
+                    w={{ base: 100, md: 200 }}
+                    h={{ base: 100, md: 200 }}
                     fontSize={'xx-large'}
                     mb={5}
                     src={item?.profile_image}
@@ -222,7 +225,7 @@ const Payment = () => {
                   <VStack>
                     <Text
                       color="#272727"
-                      fontSize={20}
+                      fontSize={{ base: 16, md: 20 }}
                       fontWeight={700}
                       textAlign={'center'}
                       textTransform={'capitalize'}
@@ -230,7 +233,11 @@ const Payment = () => {
                       {item?.firstname} {item?.lastname}
                     </Text>
                     {item?.subscription?.plan_name ? (
-                      <Text color="#272727" fontSize={17} fontWeight={300}>
+                      <Text
+                        color="#272727"
+                        fontSize={{ base: 13, md: 15 }}
+                        fontWeight={300}
+                      >
                         {item?.subscription?.plan_name}
                       </Text>
                     ) : null}
@@ -276,7 +283,7 @@ const Payment = () => {
                     </Text>
                   )}
                   <HStack gap={3} mt={4}>
-                    {item?.subscription?.plan_name ? (
+                    {/* {item?.subscription?.plan_name ? (
                       <Button
                         border="#0A52A8"
                         bg="#0A52A8"
@@ -286,7 +293,7 @@ const Payment = () => {
                           console.log('first');
                         }}
                       />
-                    ) : null}
+                    ) : null} */}
 
                     <Button
                       border="#0A52A8"

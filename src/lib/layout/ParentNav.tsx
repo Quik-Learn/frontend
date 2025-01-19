@@ -52,6 +52,7 @@ const ParentNav = () => {
       width={{ lg: 261 }}
       position={'fixed'}
       minHeight={'100vh'}
+      display={{ base: 'none', md: 'flex' }}
     >
       {!nav.length ? (
         <Box

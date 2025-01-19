@@ -14,33 +14,64 @@ import {
   TabPanels,
   TabPanel,
   useToast,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
-import TutorParent from '~/lib/components/tutor-parent';
 import {
+  useBookSessionParentMutation,
+  useGetWardsQuery,
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
+  useLazyGetStudentCalenderQuery,
 } from '~/lib/services/parent-mutation';
+import Button from '~/lib/components/ui/button';
+import ChooseWard from '~/lib/components/ChooseWard';
+import BookLesson from '~/lib/components/BookLesson';
+import BookSession from '~/lib/components/BookSession';
 
 const SingleCourses = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const { id }: any = useParams();
+  const [studentCalenderData, setStudentCalenderData] = useState<any>([]);
   const toast = useToast();
-  const searchParams = useSearchParams();
-  const ward_id = searchParams.get('ward_id');
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const {
+    onOpen: onOpenBook,
+    isOpen: isOpenBook,
+    onClose: onCloseBook,
+  } = useDisclosure();
   const [courseData, setCourseData] = useState<any>([]);
-  const [tutors, setTutorData] = useState<any>([]);
+  const [selectedWard, setSelectedWard] = useState<any>(null);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
-  const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
-
+  const [
+    getStudentCalender,
+    {
+      data: studentCalender,
+      isSuccess: isSuccessCalender,
+      isError: isErrorCalender,
+      isLoading: isLoadingCalender,
+    },
+  ] = useLazyGetStudentCalenderQuery();
+  const [
+    bookSession,
+    {
+      isLoading: isLoadingBook,
+      isSuccess: isSuccessBook,
+      isError: isErrorBook,
+      error: errorBook,
+    },
+  ] = useBookSessionParentMutation();
   useEffect(() => {
     trigger(id);
-    triggerTutor(id);
   }, [id]);
+  const handleSelectHandler = (ward: any) => {
+    setSelectedWard(ward);
+    getStudentCalender(ward);
+  };
   useEffect(() => {
     if (isSuccess) {
       setCourseData(data?.data);
@@ -58,25 +89,42 @@ const SingleCourses = () => {
       router.back();
     }
   }, [isSuccess, data, isError, error]);
-  console.log(tutors);
   useEffect(() => {
-    const { data, isError, error, isSuccess } = tutorData;
-    if (isSuccess) {
-      setTutorData(data?.data);
+    if (isSuccessBook) {
+      toast({
+        title: 'Session Booked Successfully',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      onCloseBook();
+      trigger(id);
     }
-    if (isError) {
-      // toast({
-      //   //@ts-ignore
-      //   title: error?.data?.error?.message || 'An error occured',
-      //   description: 'An Error occured.',
-      //   status: 'error',
-      //   duration: 9000,
-      //   isClosable: true,
-      //   position: 'top',
-      // });
+    if (isErrorBook) {
+      toast({
+        //@ts-ignore
+        title: errorBook?.data?.error?.message || 'An error occured',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
     }
-  }, [tutorData]);
-
+  }, [isSuccessBook, isErrorBook, errorBook]);
+  useEffect(() => {
+    if (isSuccessCalender) {
+      const transformedData = studentCalender?.data.map((item: any) => ({
+        date: item.date,
+        start_time: item.start_time,
+        end_time: item.end_time,
+        title: item.title,
+      }));
+      setStudentCalenderData(transformedData);
+      onClose();
+      onOpenBook();
+    }
+  }, [isSuccessCalender]);
   return (
     <ParentContainer>
       <Stack alignItems={'center'}>
@@ -85,7 +133,7 @@ const SingleCourses = () => {
             color={'#1D2026'}
             textAlign={'left'}
             alignSelf={'flex-start'}
-            fontSize={'36px'}
+            fontSize={{ base: 20, md: 36 }}
             fontWeight={700}
             mb={2}
           >
@@ -93,7 +141,7 @@ const SingleCourses = () => {
           </Text>
           <Text
             color={'#4E5566'}
-            fontSize={'24px'}
+            fontSize={{ base: 16, md: 24 }}
             mb={2}
             fontWeight={300}
             textAlign={'left'}
@@ -121,37 +169,24 @@ const SingleCourses = () => {
               >
                 Overview
               </Tab>
-              <Tab
-                fontSize={{
-                  base: 16,
-                  sm: 18,
-                  md: 18,
-                }}
-                _selected={{
-                  color: '#1D2026',
-                  borderBottomWidth: 2,
-                  borderColor: '#FF6636',
-                }}
-                fontFamily="heading"
-                fontWeight="500"
-                color={'#4E5566'}
-              >
-                Tutors
-              </Tab>
             </TabList>
 
             <TabPanels>
-              <TabPanel py={8}>
+              <TabPanel py={{ base: 4, md: 8 }}>
                 <Stack>
                   <Heading
                     color={'#1D2026'}
-                    fontSize={'26px'}
+                    fontSize={{ base: 16, md: 26 }}
                     fontWeight={700}
                     mb={2}
                   >
                     Description
                   </Heading>
-                  <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
+                  <Text
+                    color={'#4E5566'}
+                    fontSize={{ base: 14, md: 16 }}
+                    mb={2}
+                  >
                     {courseData?.description}
                   </Text>
 
@@ -183,7 +218,7 @@ const SingleCourses = () => {
                         <ListItem
                           key={item?.id}
                           color={'#4E5566'}
-                          w={'45%'}
+                          w={{ base: '100%', md: '45%' }}
                           fontSize={{ base: 14, md: 16 }}
                         >
                           <ListIcon as={FaCircleCheck} color="#009933" />
@@ -193,30 +228,38 @@ const SingleCourses = () => {
                     </List>
                   </Stack>
                 </Stack>
-              </TabPanel>
-
-              <TabPanel py={8}>
-                {tutors?.length === 0 ? (
-                  <Stack>
-                    <Heading>No Tutor Found</Heading>
-                  </Stack>
-                ) : (
-                  <TutorParent
-                    id={id}
-                    tutors={tutors}
-                    title={courseData?.title}
-                    total_pages={tutorData?.data?.total_pages}
-                    isLoading={tutorData?.isLoading}
-                    currentPage={tutorData?.data?.current_page}
-                    next={tutorData?.data?.next}
-                    previous={tutorData?.data?.previous}
-                    getTutor={(page: number) => triggerTutor(page)}
-                    ward_id={ward_id}
+                <Stack
+                  justifyContent={'flex-end'}
+                  alignItems={'flex-end'}
+                  w={'100%'}
+                  mt={30}
+                >
+                  <Button
+                    text="Next"
+                    bg="#02659C"
+                    width={'279px'}
+                    onClick={onOpen}
                   />
-                )}
+                </Stack>
               </TabPanel>
             </TabPanels>
           </Tabs>
+          <BookSession
+            isOpen={isOpenBook}
+            onClose={onCloseBook}
+            id={selectedWard}
+            subject_id={id}
+            bookSessionFunction={bookSession}
+            isLoading={isLoadingBook}
+            studentCalenderData={studentCalenderData}
+            setStudentCalenderData={setStudentCalenderData}
+          />
+          <ChooseWard
+            isOpen={isOpen}
+            onOpen={onOpen}
+            handleSelectHandler={handleSelectHandler}
+            onClose={onClose}
+          />
         </VStack>
       </Stack>
     </ParentContainer>

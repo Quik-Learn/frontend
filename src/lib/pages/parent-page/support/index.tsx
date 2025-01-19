@@ -10,17 +10,24 @@ import {
   Textarea,
   useDisclosure,
   VStack,
+  useToast,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { useRouter } from 'next/navigation';
 import Button from '~/lib/components/ui/button';
 import SuccessModal from '~/lib/components/ui/success-modal';
+import { useSendFedbackMutation } from '~/lib/services/user-service';
+import { useSetSubjectHook } from '../../auth/subject/useSetSubject';
 const Support = () => {
   const formRef = useRef<any>(null);
   const router = useRouter();
+  const toast = useToast();
+  const { subjects } = useSetSubjectHook();
+  const [sendFedback, { isLoading, isSuccess, isError, error, reset }] =
+    useSendFedbackMutation();
   const {
     isOpen: isOpenn,
     onOpen: onOpenn,
@@ -48,6 +55,29 @@ const Support = () => {
       formRef?.current?.handleSubmit();
     }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setSuccessData({
+        title: 'Sent Successfully!',
+        description: 'We have received your feedback',
+        buttonText: 'Close',
+      });
+      onOpenn();
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, isError]);
+  console.log(subjects);
   return (
     <ParentContainer>
       <VStack p={6} w={'100%'}>
@@ -76,13 +106,13 @@ const Support = () => {
             initialValues={initialValues}
             innerRef={formRef}
             onSubmit={(values) => {
-              console.log(values);
+              sendFedback(values);
             }}
             validateOnChange={false}
             validateOnBlur={false}
             validationSchema={signInSchema}
           >
-            {({ errors, setFieldValue, values }) => (
+            {({ errors, setFieldValue, values }: any) => (
               <>
                 <FormControl mb={4}>
                   <FormLabel fontSize={14} color="#262626">
@@ -97,11 +127,15 @@ const Support = () => {
                     w={'100%'}
                     color="#262626"
                     _placeholder={{ color: '#656567' }}
-                    onSelect={(e) => {}}
+                    onChange={(e) => setFieldValue('category', e.target.value)}
                   >
-                    <option value="Value 1">Value</option>
+                    <option value="Complaint">Complaint</option>
+                    <option value="Suggestion">Suggestion</option>
+                    <option value="Enquiry">Enquiry</option>
                   </Select>
-                  <FormErrorMessage></FormErrorMessage>
+                  <FormErrorMessage color={'red'} fontSize={12}>
+                    {errors?.category}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl mb={4}>
                   <FormLabel fontSize={14} color="#262626">
@@ -111,15 +145,21 @@ const Support = () => {
                     placeholder="Select Subject"
                     bg="#FCFCFD"
                     borderWidth={1}
-                    value={values.category}
+                    value={values.subject}
                     borderColor="#F1F1F3"
                     color="#262626"
                     _placeholder={{ color: '#656567' }}
-                    onSelect={(e) => {}}
+                    onChange={(e) => setFieldValue('subject', e.target.value)}
                   >
-                    <option value="Value 1">Value</option>
+                    {subjects?.map((subject: any) => (
+                      <option key={subject?.id} value={subject?.id}>
+                        {subject?.name}
+                      </option>
+                    ))}
                   </Select>
-                  <FormErrorMessage></FormErrorMessage>
+                  <FormErrorMessage color={'red'} fontSize={12}>
+                    {errors?.subject}
+                  </FormErrorMessage>
                 </FormControl>
                 <FormControl mb={4}>
                   <FormLabel fontSize={14} color="#262626">
@@ -136,7 +176,9 @@ const Support = () => {
                     h={249}
                     onChange={(e) => setFieldValue('message', e.target.value)}
                   />
-                  <FormErrorMessage></FormErrorMessage>
+                  <FormErrorMessage color={'red'} fontSize={12}>
+                    {errors?.message}
+                  </FormErrorMessage>
                 </FormControl>
 
                 <Stack mt={5} alignItems={'flex-end'} w={'100%'}>
@@ -145,13 +187,9 @@ const Support = () => {
                     bg="#0065FF"
                     fontSize={10}
                     width={135}
+                    isLoading={isLoading}
                     onClick={() => {
-                      setSuccessData({
-                        title: 'Sent Successfully!',
-                        description: 'We have received your feedback',
-                        buttonText: 'Close',
-                      });
-                      onOpenn();
+                      handleSubmit();
                     }}
                   />
                 </Stack>

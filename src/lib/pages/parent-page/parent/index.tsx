@@ -105,7 +105,6 @@ const Dashboard = () => {
               color="white"
               px="6"
               py="10"
-              h={'207px'}
               borderRadius="md"
               alignItems={'flex-start'}
             >
@@ -115,7 +114,12 @@ const Dashboard = () => {
               <Text mb="4">
                 Enroll your ward in Courses and find the best Tutors!
               </Text>
-              <HStack spacing="4">
+              <HStack
+                gap="4"
+                flexDirection={{ base: 'column', md: 'row' }}
+                alignItems={'center'}
+                width={{ base: '100%', md: 'auto' }}
+              >
                 <Button
                   color="#5F5F5F"
                   fontWeight={500}

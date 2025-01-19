@@ -64,11 +64,21 @@ export const parentService = createApi({
       },
     }),
 
-    updateUserProfile: builder.mutation({
+    // updateUserProfile: builder.mutation({
+    //   query: (body: any) => {
+    //     return {
+    //       url: ``,
+    //       method: 'PUT',
+    //       body,
+    //       formData: true,
+    //     };
+    //   },
+    // }),
+    updateUserProfile: builder.mutation<any, any>({
       query: (body: any) => {
         return {
-          url: `/accounts/user/`,
-          method: 'put',
+          url: '/accounts/user/',
+          method: 'PUT',
           body,
         };
       },
@@ -137,6 +147,13 @@ export const parentService = createApi({
           url: 'accounts/user/set/account/type/from/social/',
           method: 'PATCH',
           body,
+        };
+      },
+    }),
+    getStudentCalender: builder.query({
+      query: (id) => {
+        return {
+          url: `/parent/get-ward-calender/${id}`,
         };
       },
     }),
@@ -217,9 +234,9 @@ export const parentService = createApi({
       },
     }),
     bookSessionParent: builder.mutation({
-      query: ({ body, subject_id, instructor_id, ward_id }: any) => {
+      query: ({ body, subject_id, ward_id }: any) => {
         return {
-          url: `parent/book-session/${instructor_id}/${subject_id}/${ward_id}/`,
+          url: `parent/book-session/${subject_id}/${ward_id}/`,
           method: 'POST',
           body,
         };
@@ -262,4 +279,5 @@ export const {
   useLazyGetTutorRatingQuery,
   useBookSessionParentMutation,
   useLazyGetTutorCalenderQuery,
+  useLazyGetStudentCalenderQuery,
 } = parentService;

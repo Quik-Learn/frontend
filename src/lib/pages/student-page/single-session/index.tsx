@@ -1,29 +1,15 @@
 'use client';
 
 import {
-  Grid,
-  GridItem,
-  Image,
   Stack,
   Text,
   VStack,
   useDisclosure,
-  HStack,
-  FormControl,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Select,
-  SimpleGrid,
-  Box,
   Heading,
-  Icon,
-  Tooltip,
   List,
   ListItem,
   ListIcon,
   Button as ChakraButton,
-  IconButton,
   Tabs,
   TabList,
   Tab,
@@ -32,72 +18,58 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
-import { SiPinboard } from 'react-icons/si';
 import ParentContainer from '~/lib/layout/ParentContainer';
-import { coursesArray } from '~/lib/utils/nav';
-import {
-  MdKeyboardDoubleArrowLeft,
-  MdKeyboardDoubleArrowRight,
-} from 'react-icons/md';
 import { useParams, useRouter } from 'next/navigation';
 import { FaCircleCheck } from 'react-icons/fa6';
-import Tutor from '~/lib/components/tutor';
 import Button from '~/lib/components/ui/button';
 import Review from '~/lib/components/Review';
 import {
   useLazyGetACourseQuery,
   useLazyGetCourseTutorQuery,
 } from '~/lib/services/parent-mutation';
-const data = [
-  { id: 1, name: 'Joseph Doe', class: 'K6', img: '/images/ward.svg' },
-  { id: 2, name: 'Simisola James', class: 'K8', img: '/images/ward-2.svg' },
-];
-const oldData = [
-  {
-    id: 1,
-    name: 'You will learn how to design beautiful websites using Figma, an interface design tool used by designers at Uber, Airbnb and Microsoft. ',
-    value: 'Nickjonas34@gmail.com',
-  },
-  {
-    id: 2,
-    name: 'You will learn how to take your designs and build them into powerful websites using Webflow, a state of the art site builder used by teams at Dell, NASA and more. ',
-    value: 'Nickjonas34@gmail.com',
-  },
-  {
-    id: 3,
-    name: 'You will learn secret tips of Freelance Web Designers and how they make great money freelancing online. ',
-    value: 'Nickjonas34@gmail.com',
-  },
-  {
-    id: 4,
-    name: 'Learn to use Python professionally, learning both Python 2 and Python 3!',
-    value: 'Nickjonas34@gmail.com',
-  },
-  {
-    id: 5,
-    name: 'Understand how to use both the Jupyter Notebook and create .py files ',
-    value: 'Nickjonas34@gmail.com',
-  },
-  {
-    id: 6,
-    name: 'Get an understanding of how to create GUIs in the Jupyter Notebook system!',
-    value: 'Nickjonas34@gmail.com',
-  },
-];
+
+import Reviews from '~/lib/components/Reviews';
+import { userState } from '~/lib/store/reducers/user-slice';
+import { useAppSelector } from '~/lib/store';
+import BookSession from '~/lib/components/BookSession';
+import {
+  useBookSessionStudentMutation,
+  useLazyGetCalendarQuery,
+} from '~/lib/services/student-mutation';
+
 const SingleSession = () => {
   const router = useRouter();
-  const { id } = useParams();
+  const { id }: any = useParams();
   const toast = useToast();
+  const [studentCalenderData, setStudentCalenderData] = useState<any[]>([]);
+  const user = useAppSelector(userState);
   const [courseData, setCourseData] = useState<any>([]);
-  const [tutors, setTutorData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
-  const [triggerTutor, tutorData] = useLazyGetCourseTutorQuery();
-
+  const [
+    getStudentCalender,
+    {
+      data: studentCalender,
+      isSuccess: isSuccessCalender,
+      isError: isErrorCalender,
+      isLoading: isLoadingCalender,
+    },
+  ] = useLazyGetCalendarQuery();
+  const [
+    bookSession,
+    {
+      isLoading: isLoadingBook,
+      isError: isErrorBook,
+      error: errorBook,
+      isSuccess: isSuccessBook,
+    },
+  ] = useBookSessionStudentMutation();
+  const { onOpen, isOpen, onClose } = useDisclosure();
   useEffect(() => {
     trigger(id);
-    triggerTutor(id);
+    getStudentCalender(id);
   }, [id]);
+
   useEffect(() => {
     if (isSuccess) {
       setCourseData(data?.data);
@@ -116,23 +88,40 @@ const SingleSession = () => {
     }
   }, [isSuccess, data, isError, error]);
   useEffect(() => {
-    const { data, isError, error, isSuccess } = tutorData;
-    if (isSuccess) {
-      setTutorData(data?.data);
+    if (isSuccessBook) {
+      toast({
+        title: 'Session Booked Successfully',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      onClose();
+      trigger(id);
     }
-    if (isError) {
-      // toast({
-      //   //@ts-ignore
-      //   title: error?.data?.error?.message || 'An error occured',
-      //   description: 'An Error occured.',
-      //   status: 'error',
-      //   duration: 9000,
-      //   isClosable: true,
-      //   position: 'top',
-      // });
+    if (isErrorBook) {
+      toast({
+        //@ts-ignore
+        title: errorBook?.data?.error?.message || 'An error occured',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
     }
-  }, [tutorData]);
+  }, [isSuccessBook, isErrorBook, errorBook]);
+  useEffect(() => {
+    if (isSuccessCalender) {
+      const transformedData = studentCalender?.data.map((item: any) => ({
+        date: item.date,
+        start_time: item.start_time,
+        end_time: item.end_time,
+        title: item.title,
+      }));
 
+      setStudentCalenderData(transformedData);
+    }
+  }, [isSuccessCalender]);
   return (
     <ParentContainer>
       <Stack>
@@ -175,6 +164,7 @@ const SingleSession = () => {
               >
                 Overview
               </Tab>
+
               <Tab
                 fontSize={{
                   base: 16,
@@ -190,24 +180,7 @@ const SingleSession = () => {
                 fontWeight="500"
                 color={'#4E5566'}
               >
-                Reviews
-              </Tab>
-              <Tab
-                fontSize={{
-                  base: 16,
-                  sm: 18,
-                  md: 18,
-                }}
-                _selected={{
-                  color: '#1D2026',
-                  borderBottomWidth: 2,
-                  borderColor: '#FF6636',
-                }}
-                fontFamily="heading"
-                fontWeight="500"
-                color={'#4E5566'}
-              >
-                Tutors
+                Review
               </Tab>
             </TabList>
 
@@ -271,37 +244,28 @@ const SingleSession = () => {
               </TabPanel>
 
               <TabPanel py={8}>
-                <Review />
-              </TabPanel>
-              <TabPanel py={8}>
-                {tutors?.length === 0 ? (
-                  <Stack>
-                    <Heading>No Tutor Found</Heading>
-                  </Stack>
-                ) : (
-                  <Tutor
-                    tutors={tutors}
-                    id={id}
-                    title={courseData?.title}
-                    total_pages={tutorData?.data?.total_pages}
-                    isLoading={tutorData?.isLoading}
-                    currentPage={tutorData?.data?.current_page}
-                    next={tutorData?.data?.next}
-                    previous={tutorData?.data?.previous}
-                    getTutor={(page: number) => triggerTutor(page)}
-                  />
-                )}
+                <Reviews />
               </TabPanel>
             </TabPanels>
           </Tabs>
-          {/* <Stack justifyContent={'flex-end'} alignItems={'flex-end'} w={'100%'}>
-            <Button
-              text="Next"
-              bg="#02659C"
-              width={'279px'}
-              onClick={() => router.push(`/student/book-session/${id}/tutors`)}
-            />
-          </Stack> */}
+          <Stack
+            justifyContent={'flex-end'}
+            alignItems={'flex-end'}
+            w={'100%'}
+            mt={30}
+          >
+            <Button text="Next" bg="#02659C" width={'279px'} onClick={onOpen} />
+          </Stack>
+          <BookSession
+            isOpen={isOpen}
+            onClose={onClose}
+            id={user?.id}
+            subject_id={id}
+            bookSessionFunction={bookSession}
+            isLoading={isLoadingBook}
+            studentCalenderData={studentCalenderData}
+            setStudentCalenderData={setStudentCalenderData}
+          />
         </VStack>
       </Stack>
     </ParentContainer>

@@ -171,7 +171,6 @@ const TutorPage = () => {
       setTutorCalender(data?.data);
     }
     if (isError) {
-      console.log(error);
       toast({
         //@ts-ignore
         title: error?.data?.error?.message || 'An error occured',
@@ -483,7 +482,8 @@ const TutorPage = () => {
       <SuccessModal
         onClose={() => {
           onClosee();
-          triggerTutorCalender({ id });
+          // triggerTutorCalender({ id });
+          router.push('/student/my-sessions');
         }}
         isOpen={isOpenn}
         title={'Successful'}

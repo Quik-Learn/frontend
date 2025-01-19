@@ -37,9 +37,9 @@ export const AddWard = ({ setNew }: any) => {
       </ModalHeader>
       <ModalCloseButton borderColor={'#fff'} />
       <ModalBody>
-        <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
-          Create a ward account or Add your already registered ward. You stay in
-          control of payment and are able to track their progress.
+        <Text color={'#5F5F5F'} fontSize={[24, 20]} textAlign={'center'}>
+          Add your ward. Create a new ward account or add an existing one. You
+          will have complete control over payments and oversee their progress.
         </Text>
       </ModalBody>
 
@@ -78,10 +78,10 @@ export const NewWard = ({
       </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
-        {/* <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
-          Form Builder is free to use. Sign up using your email address or phone
-          number below to get started.
-        </Text> */}
+        <Text color={'#5F5F5F'} fontSize={[24, 20]} textAlign={'center'}>
+          Enter your ward's details below. This information will help us
+          personalize their learning experience.
+        </Text>
 
         <Formik
           initialValues={initialValues}
@@ -314,10 +314,14 @@ export const AddRegistered = ({ value, setValue, wards, connectWard }: any) => {
         fontWeight={700}
         textAlign={'center'}
       >
-        Add already Registered Ward
+        Find Your Ward's Existing Account
       </ModalHeader>
       <ModalCloseButton />
       <ModalBody>
+        <Text color={'#5F5F5F'} fontSize={[24, 20]} textAlign={'center'}>
+          Enter your ward’s name or email address to find their existing
+          account.
+        </Text>
         <FormControl mb={5}>
           <Input
             placeholder="Enter Name or email address to search"

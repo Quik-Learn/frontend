@@ -54,8 +54,14 @@ const Verify = () => {
       dispatch(setType(data?.data?.user?.account_type));
       if (data?.data?.user?.account_type === 'Parent') {
         router.push('/parent');
-      } else {
+      }
+      if (data?.data?.user?.account_type === 'Tutor') {
+        router.push('/tutor');
+      }
+      if (data?.data?.user?.account_type === 'Student') {
         router.push('/auth/subject');
+      } else {
+        router.push('/auth/login');
       }
     }
     if (isError) {

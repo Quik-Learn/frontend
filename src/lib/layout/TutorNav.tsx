@@ -52,6 +52,7 @@ const TutorNav = () => {
       width={{ lg: 261 }}
       position={'fixed'}
       height={'100vh'}
+      display={{ base: 'none', md: 'flex' }}
     >
       {!tutorNav.length ? (
         <Box
@@ -93,7 +94,10 @@ const TutorNav = () => {
                     backgroundColor: '#FBA333',
                     color: '#fff',
                   }}
-                  borderColor={path === item.value ? '#0A52A8' : 'transparent'}
+                  borderColor={path === item.value ? '#FBA333' : 'transparent'}
+                  backgroundColor={
+                    path === item.value ? '#FBA333' : 'transparent'
+                  }
                   color={'#FFFFFF'}
                   borderLeftWidth={path === item.value ? '3px' : '0px'}
                 >

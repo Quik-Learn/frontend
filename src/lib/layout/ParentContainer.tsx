@@ -25,8 +25,10 @@ const ParentContainer = ({ children }: any) => {
     }
   }, [token, router]);
   useEffect(() => {
-    if (type?.toLowerCase() !== path?.toLowerCase()) {
-      router.replace(`/${type?.toLowerCase()}`);
+    if (path !== 'notifications' && path !== 'leave-meeting') {
+      if (type?.toLowerCase() !== path?.toLowerCase()) {
+        router.replace(`/${type?.toLowerCase()}`);
+      }
     }
   }, [type, path]);
   useEffect(() => {
@@ -45,7 +47,7 @@ const ParentContainer = ({ children }: any) => {
     >
       <TopNav />
       <ParentNav />
-      <Box flex="1" ml={261} mt={98} overflowX={'hidden'}>
+      <Box flex="1" ml={{ base: 0, md: 261 }} mt={98} overflowX={'hidden'}>
         {children}
       </Box>
     </Flex>

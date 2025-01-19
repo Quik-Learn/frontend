@@ -13,7 +13,7 @@ import {
   HStack,
   Stack,
 } from '@chakra-ui/react';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Button from '~/lib/components/ui/button';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import useDashboardHook from '../parent/useDashboard';
@@ -22,6 +22,8 @@ import * as yup from 'yup';
 import useAccount from './useAccount';
 const Account = () => {
   const formRef = useRef<any>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<any>('');
   const {
     initialValues,
     signInSchema,
@@ -29,6 +31,27 @@ const Account = () => {
     buttonLoading,
     updateUserProfile,
   } = useAccount();
+
+  const handleClick = () => {
+    fileInputRef.current?.click(); // Trigger click on file input
+  };
+  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // Get the selected file
+    if (file) {
+      console.log(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        const formData = {
+          image: base64String,
+        };
+
+        updateUserProfile({ profile_image: base64String });
+      };
+    }
+  };
+  const allowedFiles = ['png', 'jpg', 'jpeg'].map((x) => '.' + x).join(',');
   return (
     <ParentContainer>
       <VStack p={6} w={'100%'} alignItems={'flex-start'}>
@@ -42,6 +65,7 @@ const Account = () => {
           <Text color={'#4C535F'} fontSize={'md'} fontWeight={500} mb={2}>
             Your Profile Picture
           </Text>
+
           <VStack
             p={6}
             borderWidth={2}
@@ -52,7 +76,18 @@ const Account = () => {
             alignItems={'center'}
             bg={'#EDF2F6'}
             mb={4}
+            onClick={handleClick}
           >
+            <Input
+              ref={fileInputRef}
+              onChange={handleSelectFile}
+              type={'file'}
+              name={'logo-upload'}
+              id={'logo-upload'}
+              display={'none'}
+              accept={allowedFiles}
+              zIndex={200}
+            />
             <Image src="/images/upload.svg" alt="upload" />
             <Text mt={2} color={'#4C535F'} fontWeight={500} fontSize={10}>
               Upload your photo

@@ -27,7 +27,7 @@ import { useSearchParams } from 'next/navigation';
 const Account = () => {
   const formRef = useRef<any>(null);
   const { onOpen, onClose, isOpen } = useDisclosure();
-
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const {
     initialValues,
     signInSchema,
@@ -43,7 +43,23 @@ const Account = () => {
     () => onClose(),
     () => onOpen()
   );
+  const handleClick = () => {
+    fileInputRef.current?.click(); // Trigger click on file input
+  };
+  const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]; // Get the selected file
+    if (file) {
+      console.log(file);
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const base64String = reader.result as string;
 
+        updateUserProfile({ profile_image: base64String });
+      };
+    }
+  };
+  const allowedFiles = ['png', 'jpg', 'jpeg'].map((x) => '.' + x).join(',');
   return (
     <ParentContainer>
       {isConnectionLoading ? (
@@ -79,7 +95,18 @@ const Account = () => {
               alignItems={'center'}
               bg={'#EDF2F6'}
               mb={4}
+              onClick={handleClick}
             >
+              <Input
+                ref={fileInputRef}
+                onChange={handleSelectFile}
+                type={'file'}
+                name={'logo-upload'}
+                id={'logo-upload'}
+                display={'none'}
+                accept={allowedFiles}
+                zIndex={200}
+              />
               <Image src="/images/upload.svg" alt="upload" />
               <Text mt={2} color={'#4C535F'} fontWeight={500} fontSize={10}>
                 Upload your photo

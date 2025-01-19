@@ -70,13 +70,14 @@ const Courses = () => {
       h={176}
       gap={5}
       p={2}
-      onClick={() => router.push(`/parent/courses/${id}?ward_id=${ward_id}`)}
+      // onClick={() => router.push(`/parent/courses/${id}?ward_id=${ward_id}`)}
+      onClick={() => router.push(`/parent/courses/${id}`)}
     >
       <Image
         src={imageSrc}
         alt={title}
-        w="154px"
-        h={'100%'}
+        w={{ base: 100, md: 154 }}
+        h={{ base: 100, md: '100%' }}
         objectFit="cover"
       />
       <VStack p={4} align="center" justify={'center'} gap={4} h={'100%'}>
@@ -121,9 +122,15 @@ const Courses = () => {
         </Stack>
       ) : (
         <>
-          <Grid templateColumns="repeat(4, 1fr)" w={'100%'} gap={4} m={6}>
-            <GridItem borderRadius={10} flex={1} colSpan={2}>
+          <Grid
+            templateColumns={{ base: 'repeat(1, 1fr)', md: 'repeat(4, 1fr)' }}
+            w={'100%'}
+            gap={4}
+            px={{ base: 2, md: 6 }}
+          >
+            <GridItem borderRadius={10} flex={1} colSpan={{ base: 1, md: 2 }}>
               <InputGroup
+                w={{ base: '100%', md: '100%' }}
                 color="#1D2026"
                 _placeholder={{ color: '#8C94A3' }}
                 bg="#fff"
@@ -137,7 +144,7 @@ const Courses = () => {
                   borderRadius={10}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  pl={10}
+                  pl={{ base: 4, md: 10 }}
                   _active={{
                     border: 'none',
                     outlineColor: 'transparent',
@@ -164,8 +171,9 @@ const Courses = () => {
                 </InputRightElement>
               </InputGroup>
             </GridItem>{' '}
-            <GridItem borderRadius={10} flex={1} colSpan={1}>
+            <GridItem borderRadius={10} flex={1}>
               <InputGroup
+                w={{ base: '100%', md: '100%' }}
                 color="#1D2026"
                 _placeholder={{ color: '#8C94A3' }}
                 borderRadius={10}
@@ -179,7 +187,7 @@ const Courses = () => {
                   width={'100%'}
                   value={baseSubject}
                   onChange={(e) => setBaseSubject(e.target.value)}
-                  pl={10}
+                  pl={{ base: 0, md: 10 }}
                   _active={{
                     border: 'none',
                     outlineColor: 'transparent',

@@ -31,8 +31,9 @@ export const SubscribePlan = ({ isOpen, onClose }: any) => {
         <ModalCloseButton borderColor={'#fff'} />
         <ModalBody>
           <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
-            You are yet to add a course for your newly added ward, Click on the
-            button below to View available Plans
+            To provide your child with the best educational experience, choose
+            from our available learning plans. Click below to explore our
+            options.
           </Text>
         </ModalBody>
 
