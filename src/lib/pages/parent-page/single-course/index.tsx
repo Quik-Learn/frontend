@@ -31,6 +31,7 @@ import Button from '~/lib/components/ui/button';
 import ChooseWard from '~/lib/components/ChooseWard';
 import BookLesson from '~/lib/components/BookLesson';
 import BookSession from '~/lib/components/BookSession';
+import BookError from '~/lib/components/BookError';
 
 const SingleCourses = () => {
   const router = useRouter();
@@ -42,6 +43,11 @@ const SingleCourses = () => {
     onOpen: onOpenBook,
     isOpen: isOpenBook,
     onClose: onCloseBook,
+  } = useDisclosure();
+  const {
+    onOpen: onOpenError,
+    isOpen: isOpenError,
+    onClose: onCloseError,
   } = useDisclosure();
   const [courseData, setCourseData] = useState<any>([]);
   const [selectedWard, setSelectedWard] = useState<any>(null);
@@ -65,12 +71,13 @@ const SingleCourses = () => {
       error: errorBook,
     },
   ] = useBookSessionParentMutation();
+
   useEffect(() => {
     trigger(id);
   }, [id]);
   const handleSelectHandler = (ward: any) => {
     setSelectedWard(ward);
-    getStudentCalender(ward);
+    getStudentCalender(ward?.id);
   };
   useEffect(() => {
     if (isSuccess) {
@@ -247,12 +254,31 @@ const SingleCourses = () => {
           <BookSession
             isOpen={isOpenBook}
             onClose={onCloseBook}
-            id={selectedWard}
+            id={selectedWard?.id}
             subject_id={id}
-            bookSessionFunction={bookSession}
+            bookSessionFunction={(data: any) =>{ 
+              if(selectedWard?.has_subscription){ 
+                bookSession(data)
+
+              }else{
+                onCloseBook()
+                onOpenError()
+              }
+            }}
             isLoading={isLoadingBook}
             studentCalenderData={studentCalenderData}
             setStudentCalenderData={setStudentCalenderData}
+          
+          />
+          <BookError
+            isOpen={isOpenError}
+            onClose={onCloseError}
+            description="You need to subscribe for this ward to book a session for this course"
+            hasAction={true}
+            actionText="Activate Subscription"
+            actionFunction={() => {
+              router.push('/parent/payment')
+            }}
           />
           <ChooseWard
             isOpen={isOpen}
@@ -260,6 +286,7 @@ const SingleCourses = () => {
             handleSelectHandler={handleSelectHandler}
             onClose={onClose}
           />
+
         </VStack>
       </Stack>
     </ParentContainer>

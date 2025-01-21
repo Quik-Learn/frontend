@@ -20,6 +20,7 @@ const useAccount = () => {
     email: yup.string().required('Please enter your email'),
     province: yup.string(),
     address: yup.string(),
+    profile_image: yup.string(),
   });
 
   const [initialValues, setInitialData] = useState({
@@ -30,6 +31,7 @@ const useAccount = () => {
     province: '',
     address: '',
     bio: '',
+    profile_image: '',
   });
   useEffect(() => {
     trigger({});
@@ -45,6 +47,7 @@ const useAccount = () => {
         province: data?.data?.province || '',
         address: data?.data?.address || '',
         bio: data?.data?.bio || '',
+        profile_image: data?.data?.profile_image || '',
       });
       dispatch(setUser(data?.data?.user));
     }

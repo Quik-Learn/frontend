@@ -51,6 +51,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
     email: yup.string().required('Please enter your email'),
     province: yup.string(),
     address: yup.string(),
+    profile_image: yup.string(),
   });
 
   const [initialValues, setInitialData] = useState({
@@ -61,6 +62,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
     province: '',
     address: '',
     parentName: '',
+    profile_image: '',
   });
   useEffect(() => {
     trigger({});
@@ -75,6 +77,7 @@ const useAccount = (callbackRecieve: any, onOpen: any) => {
         email: data?.data?.user?.email || '',
         province: data?.data?.user?.state || '',
         address: data?.data?.user?.address || '',
+        profile_image: data?.data?.user?.profile_image || '',
         parentName:
           `${data?.data?.bio?.parent?.firstname || ''} ${data?.data?.bio?.parent?.lastname || ''}` ||
           '',

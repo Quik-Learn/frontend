@@ -30,7 +30,7 @@ const VerifyWard = () => {
     useVerifyOTPMutation();
   const token = useMemo(() => searchParams.get('token'), [searchParams]);
   const email = useMemo(() => searchParams.get('email'), [searchParams]);
-
+  const [isLoadingData, setIsLoadingData] = useState(true);
   useEffect(() => {
     if (token && email && !hasVerified.current) {
       hasVerified.current = true;
@@ -40,19 +40,25 @@ const VerifyWard = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title: 'Verified Successfully',
-        description: 'You have successfully verified your email address',
-        status: 'success',
-        duration: 9000,
-        position: 'top',
-        isClosable: true,
-      });
+    
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
-
-      dispatch(setType('Student'));
-      router.push('/student');
+      if (isSuccess) {
+        setTimeout(() => {
+          setIsLoadingData(false);
+          toast({
+            title: 'Verified Successfully',
+            description: 'You have successfully verified your email address',
+            status: 'success',
+            duration: 9000,
+            position: 'top',
+            isClosable: true,
+          });
+          dispatch(setType('Student'));
+          router.push('/student');
+        }, 4 * 1000);
+      }
+    
     }
     if (isError) {
       toast({
@@ -67,6 +73,7 @@ const VerifyWard = () => {
     }
   }, [isSuccess, data?.data, isError, error]);
 
+
   return (
     <SignupWrapper img="/images/login.png" bg="#FF8C00">
       <VStack
@@ -74,9 +81,10 @@ const VerifyWard = () => {
         maxHeight="100vh"
         overflowY="auto"
       >
-        {isLoading ? (
+        {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Bars />
+            <Bars height="80" width="80"   />
+            <Bars height="80" width="80"   />
           </Stack>
         ) : (
           <VStack

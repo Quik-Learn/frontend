@@ -24,6 +24,8 @@ const TopNav = () => {
   const [search, setSearch] = useState('');
   const router = useRouter();
   const { data, isLoading } = useDashboardHook();
+  console.log(data, 'data');
+
   return (
     <HStack
       justify="space-between"
@@ -83,6 +85,7 @@ const TopNav = () => {
           bg={'#0065FF'}
           color={'#fff'}
           size={{ base: 'xs', md: 'sm' }}
+          src={data?.profile_image}
           name={`${data?.firstname} ${data?.lastname}`}
         />
         <VStack display={{ base: 'none', md: 'flex' }}>

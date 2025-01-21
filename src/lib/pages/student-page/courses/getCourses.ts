@@ -105,14 +105,14 @@ const useGetCourses = () => {
   }, [isCompleteSuccess, completedData]);
   console.log(courses, isLoadingActive, isLoadingCompleted, isLoadingSubjects);
   return {
-    ...pageData,
+ 
     courses,
     isLoading: isLoadingSubjects || isLoadingActive || isLoadingCompleted,
-    currentPage,
     getSubjects,
     getActiveCourses,
     getCompletedCourses,
     setCourses,
+    ...pageData,
   };
 };
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Calendar as BigCalendar,
   momentLocalizer,
@@ -21,6 +21,8 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '../store';
 import { useLeaveMeetingMutation } from '../services/student-mutation';
+import Events from './Events';
+
 const localizer = momentLocalizer(moment);
 
 interface CalenderComponentProps {
@@ -30,6 +32,7 @@ interface CalenderComponentProps {
   EventsComponent: React.ComponentType<any>;
   ToolbarComponent: React.ComponentType<any>;
 }
+
 
 const CalenderComponent: React.FC<CalenderComponentProps> = ({
   events,
@@ -44,9 +47,10 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
   const id = localStorage.getItem('meetingId');
-
+  console.log('event',events,addRandomColorsToEvents(events))
   const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
   const leaveMeetingInfo = searchParams.get('leaveMeeting');
+  const calenderRef = useRef(null)
 
   useEffect(() => {
     if (leaveMeetingInfo) {
@@ -70,7 +74,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
       });
     }
   }, [leaveMeetingData]);
-
+console.log(new Date(2025, 0, 20, 9, 30, 0, 0),'new Date(y, m, d, 9, 30, 0, 0)')
   const handleNavigate = (newDate: Date, newView: string) => {
     setCurrentDate(newDate);
 
@@ -88,6 +92,8 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     setRange({ start, end });
     console.log(`Start: ${start}, End: ${end}`);
   };
+console.log(calenderRef?.current)
+ 
 
   return (
     <Box p={5} sx={calendarStyle}>
@@ -99,24 +105,45 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
         style={{ height: '800px' }}
         eventPropGetter={eventStyleGetter}
         defaultView={Views.WEEK}
+        allDayAccessor={'notAllDay'}
+        showMultiDayTimes
+        dayLayoutAlgorithm="no-overlap"
         views={[Views.WEEK, Views.MONTH]}
         date={currentDate}
         onNavigate={(newDate) => handleNavigate(newDate, view)}
         view={view}
         onView={(e: any) => setView(e)}
         step={60}
-        timeslots={1}
+        timeslots={1} 
         formats={{
           timeGutterFormat: (date: any, culture: any, localizer: any) =>
-            localizer?.format(date, 'hh:mm A', culture),
-          dayFormat: 'ddd',
+            {
+              console.log(date,'date',culture,localizer?.format(date, 'hh:mm A', culture))
+               return localizer?.format(date, 'hh:mm A', culture)
+            },
+            dayFormat: 'ddd',
         }}
         dayPropGetter={customDayPropGetter}
         slotPropGetter={customSlotPropGetter}
         min={moment().set({ hour: 9, minute: 0 }).toDate()}
         max={moment().set({ hour: 18, minute: 0 }).toDate()}
+        onSelectEvent={(e:any)=>{
+          console.log('e',e)
+        }}
+        onSelectSlot={(e:any)=>{
+          console.log('slot',e)
+        }}
+    
+
         components={{
-          event: (props) => <EventsComponent {...props} />,
+        
+          event: ({event}) => {
+            console.log('props', event)
+            return <EventsComponent
+            event={event}
+
+            />
+          },
           toolbar: (props) => <ToolbarComponent Views={Views} {...props} />,
         }}
       />
