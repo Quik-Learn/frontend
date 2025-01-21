@@ -92,7 +92,7 @@ const Dashboard = () => {
             >
               <VStack alignItems={'flex-start'}>
                 <Text fontSize="2xl">
-                  Welcome, {data?.user?.firstname} {data?.user?.lastname}!
+                  Welcome, {!data?.user?.firstname && !data?.user?.lastname && 'User'} {data?.user?.firstname || ''} {data?.user?.lastname || ''  }!
                 </Text>
                 <Text mb="4">Enroll in Courses and find the best Tutors!</Text>
 
@@ -115,7 +115,7 @@ const Dashboard = () => {
                       lineHeight={'50%'}
                       fontWeight={700}
                     >
-                      {dashboardData?.streaks}
+                      {dashboardData?.streaks || 0}
                     </Text>
                   )}
                 </HStack>

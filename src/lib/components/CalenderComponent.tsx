@@ -107,7 +107,7 @@ console.log(calenderRef?.current)
         defaultView={Views.WEEK}
         allDayAccessor={'notAllDay'}
         showMultiDayTimes
-        dayLayoutAlgorithm="no-overlap"
+        dayLayoutAlgorithm="overlap"
         views={[Views.WEEK, Views.MONTH]}
         date={currentDate}
         onNavigate={(newDate) => handleNavigate(newDate, view)}
