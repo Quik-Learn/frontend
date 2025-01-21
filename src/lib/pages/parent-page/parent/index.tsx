@@ -237,9 +237,9 @@ const Dashboard = () => {
                 gap={4}
                 borderRadius="md"
               >
-                <Image src="/images/pending.svg" w={12} h={12} alt="active" />
+                <Image src="/images/pending.svg" w={10} h={10} alt="active" />
                 <Text
-                  fontSize="64px"
+                  fontSize="54px"
                   fontWeight={900}
                   textAlign={'center'}
                   color={'#5F5F5F'}
@@ -247,7 +247,7 @@ const Dashboard = () => {
                   {dashboardData?.notifications || 0}
                 </Text>
                 <Text
-                  fontSize="15px"
+                  fontSize="12px"
                   fontWeight={900}
                   textAlign={'center'}
                   color={'#5F5F5F'}

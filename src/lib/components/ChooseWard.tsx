@@ -133,7 +133,7 @@ const ChooseWard = ({ isOpen, onClose, handleSelectHandler }: any) => {
                           color="#0A52A8"
                           text="Select"
                           variant="outline"
-                          onClick={() => handleSelectHandler(item?.user?.id)}
+                          onClick={() => handleSelectHandler(item?.user)}
                         />
                       </HStack>
                     </GridItem>

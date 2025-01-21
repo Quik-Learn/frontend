@@ -61,6 +61,8 @@ const BookSession: React.FC<BookSessionProps> = ({
   isLoading,
   studentCalenderData,
   setStudentCalenderData,
+  hasSubscription,
+  onOpenError
 }: any) => {
   const [selected, setSelected] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);

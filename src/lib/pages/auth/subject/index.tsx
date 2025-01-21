@@ -154,6 +154,27 @@ const Subject = () => {
                   borderColor="#E9EAF0"
                   value={values.DOB}
                   p={5}
+                  sx={{
+                    'input': {
+                      border: 'none',
+                      boxSizing: 'border-box',
+                      outline: '0',
+                      position: 'relative',
+                    
+                    },
+                    '::-webkit-calendar-picker-indicator': {
+                      background: 'transparent',
+                      bottom: '0',
+                      color: 'transparent',
+                      cursor: 'pointer',
+                      height: 'auto',
+                      left: '0',
+                      position: 'absolute',
+                      right: '0',
+                      top: '0',
+                      width: 'auto'
+                    }
+                  }}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('DOB', e.target.value)}

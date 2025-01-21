@@ -36,6 +36,7 @@ import {
   useBookSessionStudentMutation,
   useLazyGetCalendarQuery,
 } from '~/lib/services/student-mutation';
+import BookError from '~/lib/components/BookError';
 
 const SingleSession = () => {
   const router = useRouter();
@@ -43,9 +44,15 @@ const SingleSession = () => {
   const toast = useToast();
   const [studentCalenderData, setStudentCalenderData] = useState<any[]>([]);
   const user = useAppSelector(userState);
+  console.log(user,'user')
   const [courseData, setCourseData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
+    const {
+      onOpen: onOpenError,
+      isOpen: isOpenError,
+      onClose: onCloseError,
+    } = useDisclosure();
   const [
     getStudentCalender,
     {
@@ -256,12 +263,27 @@ const SingleSession = () => {
           >
             <Button text="Next" bg="#02659C" width={'279px'} onClick={onOpen} />
           </Stack>
+          <BookError
+            isOpen={isOpenError}
+            onClose={onCloseError}
+            description="You need to be subscribed to book a session for this course, Notify your parent to subscribe"
+            hasAction={false}
+          
+          />
           <BookSession
             isOpen={isOpen}
             onClose={onClose}
             id={user?.id}
             subject_id={id}
-            bookSessionFunction={bookSession}
+            bookSessionFunction={(data: any) =>{ 
+              if(user?.has_subscription){ 
+                bookSession(data)
+
+              }else{
+                onClose()
+                onOpenError()
+              }
+            }}
             isLoading={isLoadingBook}
             studentCalenderData={studentCalenderData}
             setStudentCalenderData={setStudentCalenderData}

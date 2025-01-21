@@ -2,17 +2,18 @@
 
 import { VStack, Text, Stack, Spinner } from '@chakra-ui/react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { useVerifyPaymentMutation } from '~/lib/services/parent-mutation';
 import { Image } from '@chakra-ui/react';
 import ParentContainer from '~/lib/layout/ParentContainer';
+import { Bars } from 'react-loader-spinner';
 
 const PaymentSuccess = () => {
   const router = useRouter();
   const hasVerifiedPayment = useRef(false); // Use ref to track first call
   const [verifyPayment, { data, isSuccess, isLoading, isError, error }] =
     useVerifyPaymentMutation();
-
+  const [isLoadingData, setIsLoadingData] = useState(true);
   const searchParams = useSearchParams();
   const reference = searchParams.get('reference');
 
@@ -26,7 +27,10 @@ const PaymentSuccess = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      router.push('/parent/wards');
+      setTimeout(() => {
+        setIsLoadingData(false);
+        router.push('/parent/wards');
+      }, 4 * 1000);
     }
     if (isError) {
       console.log(error);
@@ -43,9 +47,10 @@ const PaymentSuccess = () => {
         align="center"
         gap={10}
       >
-        {isLoading ? (
+        {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Spinner />
+            <Bars height="80" width="80"   />
+            <Bars height="80" width="80"   />
           </Stack>
         ) : (
           <>

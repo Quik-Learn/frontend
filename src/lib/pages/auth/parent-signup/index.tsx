@@ -90,8 +90,15 @@ const ParentSignup = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
         bg={'white'}
+        sx={
+          { 
+         '::-webkit-scrollbar':{
+                display:'none'
+            }
+         }
+       }
       >
         <Heading
           fontSize={{ base: '28px', lg: '40px' }}

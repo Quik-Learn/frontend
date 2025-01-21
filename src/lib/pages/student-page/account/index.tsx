@@ -107,10 +107,22 @@ const Account = () => {
                 accept={allowedFiles}
                 zIndex={200}
               />
-              <Image src="/images/upload.svg" alt="upload" />
+              {isLoading ? <Spinner height="20" width="20" /> : 
+              
+              <>
+              {initialValues?.profile_image
+               ? <Image src={initialValues?.profile_image} alt="upload"  borderRadius={10} objectFit={'cover'} width={100} height={100} /> :   
+                <>
+              
+              <Image src="/images/upload.svg"  width={40} height={40} alt="upload" />
+              
               <Text mt={2} color={'#4C535F'} fontWeight={500} fontSize={10}>
                 Upload your photo
               </Text>
+                </>
+              }
+           
+              </>}
             </VStack>
           </VStack>
           <Divider />
@@ -293,13 +305,13 @@ const Account = () => {
               onClick={() => formRef?.current?.handleSubmit()}
               isLoading={buttonLoading}
             />
-            <Button
+            {/* <Button
               text="Reset"
               bg="transparent"
               variant="outline"
               border="transparent"
               color="#4C535F"
-            />
+            /> */}
           </HStack>
         </VStack>
       )}

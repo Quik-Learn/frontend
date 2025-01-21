@@ -33,6 +33,7 @@ import { setMeetingId } from '../store/reducers/meeting-id-slice';
 import { useAppDispatch } from '../store';
 
 const Events = ({ event, isOpen: isOpenJoin, onClose: onCloseJoin }: any) => {
+  console.log('eee',event)
   const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useAppDispatch();
   const [selected, setSelceted] = useState<any>();

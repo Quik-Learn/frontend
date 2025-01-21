@@ -48,7 +48,7 @@ const Courses = () => {
     isLoading,
     getSubjects,
     total_pages,
-    currentPage,
+    current_page,
     getActiveCourses,
     getCompletedCourses,
     setCourses,
@@ -60,13 +60,13 @@ const Courses = () => {
   const fetchCourses = useCallback((page: number, active: string) => {
     switch (active) {
       case 'active':
-        getActiveCourses(page);
+        getActiveCourses({ page_size: page });
         break;
       case 'completed':
-        getCompletedCourses(page);
+        getCompletedCourses({ page_size: page });
         break;
       default:
-        getSubjects(page);
+        getSubjects({ page_size: page });
     }
   }, []);
 
@@ -204,7 +204,7 @@ const Courses = () => {
           <Pagination
             totalPages={total_pages}
             isLoading={isLoading}
-            currentPage={currentPage}
+            currentPage={current_page}
             next={next}
             previous={previous}
             onPageChange={(page: number) => fetchCourses(page, activeTab)}

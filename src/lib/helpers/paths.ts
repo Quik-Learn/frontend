@@ -78,7 +78,7 @@ export const convertTo12HourFormatt = (time24: string) => {
 const convertToFullDate = (time: any, date: any) => {
   // Combine date and time into an ISO string
   const dateTimeString = `${date}T${time}`;
-
+console.log(dateTimeString,'dateTimeString')
   // Create a new Date object
   const fullDate = new Date(dateTimeString);
 
@@ -86,15 +86,17 @@ const convertToFullDate = (time: any, date: any) => {
 };
 
 export const formatData = (data: any) => {
+  console.log(data,'data')
+
   return (
-    data ||
-    []?.map((item: any) => {
+    data?.map((item: any) => {
       const formattedStartTime = convertToFullDate(item.start_time, item.date);
       const formattedEndTime = convertToFullDate(item.end_time, item.date);
 
       // Combine date with 23:00:00 and append Z for UTC
       const formattedDate = `${item.date}T23:00:00.000Z`;
-      console.log(formattedStartTime);
+      console.log(formattedStartTime,formattedEndTime,formattedDate,'formattedDate');
+
       return {
         desc: item?.title,
         start: formattedStartTime,
@@ -104,6 +106,7 @@ export const formatData = (data: any) => {
         id: item?.id,
         subject: item?.subject,
         meeting_link: item?.meeting_link,
+        allDay:false
       };
     })
   );
@@ -165,7 +168,7 @@ export const addRandomSoftColorsToEvents: any = (data: any) => {
 };
 
 export const eventStyleGetter = (event: any) => {
-  console.log(event);
+  console.log(event,'eeeerr');
   const backgroundColor = event.color || 'blue';
   const style = {
     backgroundColor,

@@ -30,6 +30,8 @@ const Verify = () => {
     useVerifyOTPMutation();
   const token = useMemo(() => searchParams.get('token'), [searchParams]);
   const email = useMemo(() => searchParams.get('email'), [searchParams]);
+  const [isLoadingData, setIsLoadingData] = useState(true);
+
 
   useEffect(() => {
     if (token && email && !hasVerified.current) {
@@ -40,29 +42,34 @@ const Verify = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      toast({
-        title: 'Verified Successfully',
-        description: 'You have successfully verified your email address',
-        status: 'success',
-        duration: 9000,
-        position: 'top',
-        isClosable: true,
-      });
+     
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
 
       dispatch(setType(data?.data?.user?.account_type));
-      if (data?.data?.user?.account_type === 'Parent') {
-        router.push('/parent');
-      }
-      if (data?.data?.user?.account_type === 'Tutor') {
-        router.push('/tutor');
-      }
-      if (data?.data?.user?.account_type === 'Student') {
-        router.push('/auth/subject');
-      } else {
-        router.push('/auth/login');
-      }
+    
+      setTimeout(() => {
+        setIsLoadingData(false);
+        toast({
+          title: 'Verified Successfully',
+          description: 'You have successfully verified your email address',
+          status: 'success',
+          duration: 9000,
+          position: 'top',
+          isClosable: true,
+        });
+        if (data?.data?.user?.account_type === 'Parent') {
+          router.push('/parent');
+        }
+        if (data?.data?.user?.account_type === 'Tutor') {
+          router.push('/tutor');
+        }
+        if (data?.data?.user?.account_type === 'Student') {
+          router.push('/auth/subject');
+        } else {
+          router.push('/auth/login');
+        }
+      }, 4 *1000);
     }
     if (isError) {
       // toast({
@@ -84,9 +91,10 @@ const Verify = () => {
         maxHeight="100vh"
         overflowY="auto"
       >
-        {isLoading ? (
+        {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Bars />
+            <Bars height="80" width="80"   />
+            <Bars height="80" width="80"   />
           </Stack>
         ) : (
           <VStack

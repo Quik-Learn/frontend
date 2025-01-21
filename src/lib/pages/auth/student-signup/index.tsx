@@ -78,7 +78,15 @@ const StudentSignup = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        scrollWidth="none"
+        sx={
+          { 
+         '::-webkit-scrollbar':{
+                display:'none'
+            }
+         }
+       }
         bg={'white'}
       >
         <Heading
