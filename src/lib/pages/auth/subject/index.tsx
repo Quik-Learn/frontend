@@ -36,12 +36,13 @@ import * as yup from 'yup';
 import Button from '~/lib/components/ui/button';
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import { useSetSubjectHook } from './useSetSubject';
+import useGetCities from '~/lib/hooks/useCities';
 
 const Subject = () => {
   const router = useRouter();
   const formRef = useRef<any>(null);
   const [selected, setSelected] = useState([]);
-
+  const { cities, isLoading: isCityLoading } = useGetCities();
   const {
     data,
     isLoading,
@@ -73,7 +74,12 @@ const Subject = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
       >
         <Heading
           fontSize={{ base: '28px', lg: '40px' }}
@@ -105,19 +111,21 @@ const Subject = () => {
             <>
               <FormControl mb={5}>
                 <FormLabel fontSize={14} color="#1D2026">
-                  State of Residence
+                  City of Residence
                 </FormLabel>
                 <Select
-                  placeholder="Enter your state"
+                  placeholder="Select your city"
                   bg="#ffffff"
                   borderWidth={1}
                   borderColor="#E9EAF0"
                   value={values.state}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
-                  onSubmit={(e) => setFieldValue('state', e.target.value)}
+                  onChange={(e) => setFieldValue('state', e.target.value)}
                 >
-                  <option></option>
+                  {cities?.map((item) => (
+                    <option value={item?.city}>{item?.city}</option>
+                  ))}
                 </Select>
                 <FormErrorMessage fontSize={10} color={'#f00'}>
                   {errors.state || ''}
@@ -155,12 +163,11 @@ const Subject = () => {
                   value={values.DOB}
                   p={5}
                   sx={{
-                    'input': {
+                    input: {
                       border: 'none',
                       boxSizing: 'border-box',
                       outline: '0',
                       position: 'relative',
-                    
                     },
                     '::-webkit-calendar-picker-indicator': {
                       background: 'transparent',
@@ -172,8 +179,8 @@ const Subject = () => {
                       position: 'absolute',
                       right: '0',
                       top: '0',
-                      width: 'auto'
-                    }
+                      width: 'auto',
+                    },
                   }}
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}

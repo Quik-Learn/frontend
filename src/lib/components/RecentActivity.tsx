@@ -73,11 +73,14 @@ const RecentActivity = ({ activitiesData }: { activitiesData: any }) => {
           }}
         >
           <option>Today</option>
+          <option>This week</option>
+          <option>This month</option>
+          <option>This year</option>
         </Select>
       </HStack>
 
       <Stack w={'100%'} minH={'320px'}>
-        {activitiesData?.length !== 0 ? (
+        {activitiesData?.length === 0 ? (
           <Stack
             w={'100%'}
             h={'250px'}
@@ -91,6 +94,9 @@ const RecentActivity = ({ activitiesData }: { activitiesData: any }) => {
               fontSize={'3xl'}
             >
               No Recent Activity
+            </Text>
+            <Text color={'#6E7485'} fontSize={12}>
+              You will see your recent activity here
             </Text>
           </Stack>
         ) : (

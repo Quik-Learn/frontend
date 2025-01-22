@@ -96,6 +96,13 @@ export const userService = createApi({
         };
       },
     }),
+    getCities: builder.query({
+      query: () => {
+        return {
+          url: `accounts/user/get/cities/`,
+        };
+      },
+    }),
   }),
 });
 
@@ -106,4 +113,5 @@ export const {
   useLazyGetNotificationsQuery,
   useSendFedbackMutation,
   useChangePasswordMutation,
+  useLazyGetCitiesQuery,
 } = userService;

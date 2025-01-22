@@ -38,7 +38,7 @@ const OverallRating = ({ ratingsData }: { ratingsData: any }) => {
         </Text>
         <Select
           w={'150px'}
-          placeholder="This week"
+          placeholder="Select"
           color="#6E7485"
           _placeholder={{
             color: '#6E7485',
@@ -47,6 +47,8 @@ const OverallRating = ({ ratingsData }: { ratingsData: any }) => {
           }}
         >
           <option>This week</option>
+          <option>This month</option>
+          <option>This year</option>
         </Select>
       </HStack>
       <HStack

@@ -32,7 +32,6 @@ const Verify = () => {
   const email = useMemo(() => searchParams.get('email'), [searchParams]);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-
   useEffect(() => {
     if (token && email && !hasVerified.current) {
       hasVerified.current = true;
@@ -42,12 +41,11 @@ const Verify = () => {
 
   useEffect(() => {
     if (isSuccess) {
-     
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
 
       dispatch(setType(data?.data?.user?.account_type));
-    
+
       setTimeout(() => {
         setIsLoadingData(false);
         toast({
@@ -69,7 +67,7 @@ const Verify = () => {
         } else {
           router.push('/auth/login');
         }
-      }, 4 *1000);
+      }, 4 * 1000);
     }
     if (isError) {
       // toast({
@@ -89,12 +87,16 @@ const Verify = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
       >
         {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Bars height="80" width="80"   />
-            <Bars height="80" width="80"   />
+            <Bars height="80" width="80" color="#0A52A8" />
           </Stack>
         ) : (
           <VStack

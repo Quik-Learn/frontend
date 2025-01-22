@@ -94,7 +94,6 @@ const AddTopic = ({
                 name={'logo-upload'}
                 id={'logo-upload'}
                 display={'none'}
-                accept={allowedFiles}
                 zIndex={200}
               />
               <Stack
@@ -133,6 +132,14 @@ const AddTopic = ({
               />
               <Button
                 onClick={() => {
+                  if (!title) {
+                    alert('Please enter a title');
+                    return;
+                  }
+                  if (!file) {
+                    alert('Please upload an image');
+                    return;
+                  }
                   createTopic({ title, file });
                 }}
                 width={100}

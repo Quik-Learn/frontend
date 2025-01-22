@@ -22,6 +22,8 @@ const LeaveMeeting = () => {
     if (isSuccess) {
       if (type?.toLowerCase() === 'student') {
         router.push('/student/my-sessions?leaveMeeting=true');
+      } else if (type?.toLowerCase() === 'tutor') {
+        router.push('/tutor/sessions?leaveMeeting=true');
       }
     }
   }, [type, isSuccess]);

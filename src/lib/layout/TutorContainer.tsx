@@ -34,6 +34,11 @@ const TutorContainer = ({ children }: any) => {
       bg={'#FCFCFC'}
       overflowX={'hidden'}
       overflowY={'scroll'}
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+      }}
     >
       <TopNavTutor />
       <TutorNav />

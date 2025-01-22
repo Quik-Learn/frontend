@@ -241,7 +241,7 @@ const Dashboard = () => {
               )}
             </GridItem>
             <GridItem colSpan={{ base: 3, md: 2 }}>
-              {false ? (
+              {isLoading ? (
                 <Skeleton
                   w={'100%'}
                   bg={'#fff'}
@@ -269,7 +269,7 @@ const Dashboard = () => {
                   <BsThreeDots color={'#000000'} />
                 </HStack>
               )}
-              {false ? (
+              {isLoading ? (
                 <Skeleton
                   borderRadius={10}
                   boxShadow={'base'}
@@ -310,9 +310,14 @@ const Dashboard = () => {
                     <VStack
                       align="start"
                       width={'100%'}
-                      overflowY={'auto'}
+                      overflowY={'scroll'}
                       maxHeight={'280px'}
                       height={'280px'}
+                      sx={{
+                        '::-webkit-scrollbar': {
+                          display: 'none',
+                        },
+                      }}
                     >
                       {addRandomSoftColorsToEvents(
                         dashboardData?.upcoming_events

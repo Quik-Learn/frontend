@@ -36,7 +36,14 @@ const ScheduleModal = ({
             unchecked
           </Text>
         </ModalHeader>
-        <ModalBody overflowY={'scroll'}>
+        <ModalBody
+          overflowY={'scroll'}
+          sx={{
+            '::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
+        >
           <Box my={4}>
             <Text fontSize={{ base: 16, md: 20 }} fontWeight={300}>
               General Availability

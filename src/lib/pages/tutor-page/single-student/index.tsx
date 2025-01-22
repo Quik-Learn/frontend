@@ -25,10 +25,16 @@ import {
   convertTo12HourFormat,
   convertTo12HourFormatt,
 } from '~/lib/helpers/paths';
+import moment from 'moment';
 
 const SingleStudent = () => {
   const { id }: { id: string } = useParams();
-
+  const { onOpen, isOpen, onClose } = useDisclosure();
+  const {
+    onOpen: onEditOpen,
+    isOpen: isEditOpen,
+    onClose: onEditClose,
+  } = useDisclosure();
   const {
     sessions,
     isLoading,
@@ -36,19 +42,15 @@ const SingleStudent = () => {
     createSessionLoading,
     editSession,
     editSessionLoading,
-  } = useSingleStudent(id);
-  const { onOpen, isOpen, onClose } = useDisclosure();
-  const {
-    onOpen: onEditOpen,
-    isOpen: isEditOpen,
-    onClose: onEditClose,
-  } = useDisclosure();
+  } = useSingleStudent(id, onClose, onEditClose);
+
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const onOpenHandler = (day: string) => {
     setSelectedDay(day);
 
     onEditOpen();
   };
+  console.log(sessions);
   return (
     <TutorContainer>
       <Stack p={[4, 8]}>
@@ -71,10 +73,10 @@ const SingleStudent = () => {
           gap={[4, 8]}
         >
           {sessions.map((item: any) => (
-            <GridItem key={item?.id} p={3}>
+            <GridItem key={item?.id} p={3} opacity={item?.isPast ? 0.5 : 1}>
               <HStack justifyContent="space-between" mb={2}>
-                <Text fontSize={[14, 16]} color={'#303354'} fontWeight="bold">
-                  {item?.day}
+                <Text fontSize={[12, 14]} color={'#303354'} fontWeight="bold">
+                  {item?.day} - {moment(item?.date).format('ll')}
                 </Text>
                 <Icon as={BsThreeDots} />
               </HStack>
@@ -89,14 +91,16 @@ const SingleStudent = () => {
                     {convertTo12HourFormatt(item?.start_time)} -{' '}
                     {convertTo12HourFormatt(item?.end_time)}
                   </Text>
-                  <IconButton
-                    icon={<PiPencilSimpleLineFill />}
-                    color="#0A52A8"
-                    bg="transparent"
-                    variant="ghost"
-                    aria-label="edit"
-                    onClick={() => onOpenHandler(item)}
-                  />
+                  {!item?.isPast && (
+                    <IconButton
+                      icon={<PiPencilSimpleLineFill />}
+                      color="#0A52A8"
+                      bg="transparent"
+                      variant="ghost"
+                      aria-label="edit"
+                      onClick={() => onOpenHandler(item)}
+                    />
+                  )}
                 </HStack>
                 <Text fontSize={[12, 14]} color="#5F5F5F">
                   {item?.title}

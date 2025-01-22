@@ -40,7 +40,6 @@ const VerifyWard = () => {
 
   useEffect(() => {
     if (isSuccess) {
-    
       console.log(data);
       dispatch(setToken(data?.data?.auth_token));
       if (isSuccess) {
@@ -58,7 +57,6 @@ const VerifyWard = () => {
           router.push('/student');
         }, 4 * 1000);
       }
-    
     }
     if (isError) {
       toast({
@@ -73,18 +71,21 @@ const VerifyWard = () => {
     }
   }, [isSuccess, data?.data, isError, error]);
 
-
   return (
     <SignupWrapper img="/images/login.png" bg="#FF8C00">
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
       >
         {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Bars height="80" width="80"   />
-            <Bars height="80" width="80"   />
+            <Bars height="80" width="80" color="#0A52A8" />
           </Stack>
         ) : (
           <VStack

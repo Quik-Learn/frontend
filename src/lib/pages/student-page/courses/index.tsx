@@ -54,7 +54,7 @@ const Courses = () => {
     setCourses,
   } = useGetCourses();
 
-  const [activeTab, setActiveTab] = useState('active'); // Default is all courses
+  const [activeTab, setActiveTab] = useState('all'); // Default is all courses
 
   // Fetch courses based on the active tab
   const fetchCourses = useCallback((page: number, active: string) => {
@@ -81,7 +81,7 @@ const Courses = () => {
         w={'100%'}
         mt={8}
         onChange={(index) => {
-          const tabs = ['active', 'completed', 'all'];
+          const tabs = ['all', 'active', 'completed'];
           setCourses([]);
           setActiveTab(tabs[index]);
         }}
@@ -93,12 +93,30 @@ const Courses = () => {
               sm: 18,
               md: 18,
             }}
-            value="active"
+            value="all"
             _selected={{
               color: '#FF8C00',
               borderBottomWidth: 2,
               borderColor: '#FF8C00',
             }}
+            fontFamily="heading"
+            fontWeight="500"
+            color={'#5F5F5F'}
+          >
+            All Courses
+          </Tab>
+          <Tab
+            fontSize={{
+              base: 16,
+              sm: 18,
+              md: 18,
+            }}
+            _selected={{
+              color: '#FF8C00',
+              borderBottomWidth: 2,
+              borderColor: '#FF8C00',
+            }}
+            value="active"
             fontFamily="heading"
             fontWeight="500"
             color={'#5F5F5F'}
@@ -122,24 +140,6 @@ const Courses = () => {
             color={'#5F5F5F'}
           >
             Completed Courses
-          </Tab>
-          <Tab
-            fontSize={{
-              base: 16,
-              sm: 18,
-              md: 18,
-            }}
-            _selected={{
-              color: '#FF8C00',
-              borderBottomWidth: 2,
-              borderColor: '#FF8C00',
-            }}
-            value="all"
-            fontFamily="heading"
-            fontWeight="500"
-            color={'#5F5F5F'}
-          >
-            All Courses
           </Tab>
         </TabList>
 

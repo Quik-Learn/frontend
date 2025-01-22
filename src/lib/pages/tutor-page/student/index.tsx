@@ -96,7 +96,6 @@ const dummyTutorData = [
   },
 ];
 const columns = [
-  { key: 'id', header: 'ID' },
   { key: 'name', header: 'Name' },
   { key: 'subject', header: 'Subject' },
   { key: 'class', header: 'Class' },
@@ -151,6 +150,8 @@ const Students = () => {
                 email: student?.student?.email,
                 gender: student.gender || '-',
                 extra: student.is_new,
+                profile: student?.student?.profile_image || '',
+                hasProfile: true,
               }))}
               maxHeight="60vh"
               handleRowClick={handleRowClick}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { formatData } from '~/lib/helpers/paths';
+import { formatData, formatDataTutor } from '~/lib/helpers/paths';
 
 import { useLazyGetSessionsQuery } from '~/lib/services/tutor-mutation';
 
@@ -13,7 +13,7 @@ const useSessionsHook = () => {
 
   useEffect(() => {
     if (sessionsDetails.isSuccess) {
-      setSessionsData(formatData(sessionsDetails?.data?.data || []));
+      setSessionsData(formatDataTutor(sessionsDetails?.data?.data || []));
     }
   }, [sessionsDetails.isSuccess]);
   return {

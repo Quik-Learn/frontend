@@ -120,7 +120,7 @@ export const tutorNav = [
     id: 1,
     name: 'Dashboard',
     route: '/tutor',
-    value: '',
+    value: 'dashboard',
     icon: '/images/home.svg',
     active: '/images/home.svg',
   },

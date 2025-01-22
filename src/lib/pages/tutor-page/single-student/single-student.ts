@@ -1,12 +1,17 @@
 import { useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { sortEventsByDateTime } from '~/lib/helpers/paths';
 import {
   useCreateSessionMutation,
   useEditSessionMutation,
   useLazyGetStudentSessionsQuery,
 } from '~/lib/services/tutor-mutation';
 
-const useSingleStudent = (id: string) => {
+const useSingleStudent = (
+  id: string,
+  onClose: () => void,
+  onEditClose: () => void
+) => {
   const [sessions, setSessions] = useState<any>([]);
   const toast = useToast();
   const [trigger, { data, isLoading, error, isSuccess, isError }] =
@@ -34,7 +39,9 @@ const useSingleStudent = (id: string) => {
   }, [id]);
   useEffect(() => {
     if (isSuccess) {
-      setSessions(data?.data);
+      const sortedEvents = sortEventsByDateTime(data?.data);
+      setSessions(sortedEvents);
+      onEditClose();
     }
     if (isError) {
       toast({
@@ -50,6 +57,7 @@ const useSingleStudent = (id: string) => {
   }, [isSuccess, data, isError, error]);
   useEffect(() => {
     if (isCreateSessionSuccess) {
+      onClose();
       toast({
         title: 'Success!',
         description: 'Session created successfully',

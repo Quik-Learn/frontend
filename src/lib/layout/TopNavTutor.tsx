@@ -18,12 +18,15 @@ import { FiBell } from 'react-icons/fi';
 import { CiSearch } from 'react-icons/ci';
 import { useState } from 'react';
 import useDashboardHook from '../pages/parent-page/parent/useDashboard';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const TopNavTutor = () => {
   const router = useRouter();
   const [search, setSearch] = useState('');
   const { data, isLoading } = useDashboardHook();
+  const pathname = usePathname();
+  const currentPath = pathname.split('/')[2] || 'dashboard';
+
   return (
     <HStack
       justify="space-between"
@@ -38,10 +41,15 @@ const TopNavTutor = () => {
     >
       <VStack flex={1} alignItems={'flex-start'}>
         <Text fontSize={14} color={'#6E7485'} fontWeight={500}>
-          Good Morning
+          Hello, {data?.firstname}
         </Text>
-        <Text color={'#1D2026'} fontWeight={600} fontSize={20}>
-          Dashboard
+        <Text
+          color={'#1D2026'}
+          fontWeight={600}
+          fontSize={20}
+          textTransform={'capitalize'}
+        >
+          {currentPath === '' ? 'Dashboard' : currentPath}
         </Text>
       </VStack>
       <FormControl borderRadius={7} w={312}>
@@ -84,7 +92,7 @@ const TopNavTutor = () => {
         p={3}
         borderRadius={4}
         bg={'#F5F7FA'}
-        onClick={() => router.push('/notifications')}
+        onClick={() => router.push('/tutor/notifications')}
       />
 
       <HStack>
@@ -92,6 +100,7 @@ const TopNavTutor = () => {
           bg={'#0065FF'}
           color={'#fff'}
           size="sm"
+          src={data?.profile_image || ''}
           name={`${data?.firstname} ${data?.lastname}`}
         />
         <VStack display={{ base: 'none', md: 'flex' }}>

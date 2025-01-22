@@ -51,7 +51,7 @@ const Dashboard = () => {
     }, 10000);
   }, []);
   useEffect(() => {
-    if (data?.bio?.parent?.firstname) {
+    if (!data?.bio?.parent?.firstname) {
       onOpen();
     }
   }, [data]);
@@ -92,7 +92,9 @@ const Dashboard = () => {
             >
               <VStack alignItems={'flex-start'}>
                 <Text fontSize="2xl">
-                  Welcome, {!data?.user?.firstname && !data?.user?.lastname && 'User'} {data?.user?.firstname || ''} {data?.user?.lastname || ''  }!
+                  Welcome,{' '}
+                  {!data?.user?.firstname && !data?.user?.lastname && 'User'}{' '}
+                  {data?.user?.firstname || ''} {data?.user?.lastname || ''}!
                 </Text>
                 <Text mb="4">Enroll in Courses and find the best Tutors!</Text>
 
@@ -522,7 +524,12 @@ const Dashboard = () => {
                 bg={'#fff'}
                 w={'100%'}
                 maxHeight={'300px'}
-                overflowY={'auto'}
+                overflowY={'scroll'}
+                sx={{
+                  '::-webkit-scrollbar': {
+                    display: 'none',
+                  },
+                }}
                 height={'300px'}
               >
                 {dashboardData?.recent_activity?.length === 0 ? (
@@ -695,7 +702,12 @@ const Dashboard = () => {
                 <VStack
                   align="start"
                   width={'100%'}
-                  overflowY={'auto'}
+                  overflowY={'scroll'}
+                  sx={{
+                    '::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                  }}
                   maxHeight={'280px'}
                   height={'280px'}
                 >

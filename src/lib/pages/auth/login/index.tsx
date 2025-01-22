@@ -69,7 +69,12 @@ const Login = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
         alignSelf={'center'}
       >
         <Heading
