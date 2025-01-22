@@ -26,6 +26,7 @@ import {
   convertTo12HourFormatt,
 } from '~/lib/helpers/paths';
 import moment from 'moment';
+import { AiTwotoneDelete } from 'react-icons/ai';
 
 const SingleStudent = () => {
   const { id }: { id: string } = useParams();
@@ -42,6 +43,8 @@ const SingleStudent = () => {
     createSessionLoading,
     editSession,
     editSessionLoading,
+    deleteSession,
+    deleteSessionLoading,
   } = useSingleStudent(id, onClose, onEditClose);
 
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -87,24 +90,45 @@ const SingleStudent = () => {
                 boxShadow={'0px 0px 10px 0px #0000000A'}
               >
                 <HStack justifyContent="space-between" borderRadius="md">
-                  <Text fontSize={[12, 14]} color={'#5F5F5F'} fontWeight={700}>
-                    {convertTo12HourFormatt(item?.start_time)} -{' '}
-                    {convertTo12HourFormatt(item?.end_time)}
-                  </Text>
-                  {!item?.isPast && (
-                    <IconButton
-                      icon={<PiPencilSimpleLineFill />}
-                      color="#0A52A8"
-                      bg="transparent"
-                      variant="ghost"
-                      aria-label="edit"
-                      onClick={() => onOpenHandler(item)}
-                    />
-                  )}
+                  <VStack>
+                    <Text
+                      fontSize={[12, 14]}
+                      color={'#5F5F5F'}
+                      fontWeight={700}
+                    >
+                      {convertTo12HourFormatt(item?.start_time)} -{' '}
+                      {convertTo12HourFormatt(item?.end_time)}
+                    </Text>
+                    <Text fontSize={[12, 14]} color="#5F5F5F">
+                      {item?.title}
+                    </Text>
+                  </VStack>
+                  <VStack>
+                    {!item?.isPast && (
+                      <IconButton
+                        icon={<PiPencilSimpleLineFill />}
+                        color="#0A52A8"
+                        bg="transparent"
+                        variant="ghost"
+                        aria-label="edit"
+                        isLoading={editSessionLoading}
+                        onClick={() => onOpenHandler(item)}
+                      />
+                    )}
+
+                    {!item?.isPast && (
+                      <IconButton
+                        icon={<AiTwotoneDelete />}
+                        color="#FF0002"
+                        bg="transparent"
+                        variant="ghost"
+                        aria-label="delete"
+                        isLoading={deleteSessionLoading}
+                        onClick={() => deleteSession(item?.id)}
+                      />
+                    )}
+                  </VStack>
                 </HStack>
-                <Text fontSize={[12, 14]} color="#5F5F5F">
-                  {item?.title}
-                </Text>
               </Box>
             </GridItem>
           ))}

@@ -65,9 +65,7 @@ export const authService = createApi({
           body,
         };
       },
-      extraOptions: {
-        
-      },
+      extraOptions: {},
     }),
 
     forgotPassword: builder.mutation({
@@ -98,6 +96,15 @@ export const authService = createApi({
         };
       },
     }),
+    registerParentInvite: builder.mutation({
+      query: (body: any) => {
+        return {
+          url: 'accounts/user/parent-invite/register/',
+          method: 'post',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -109,4 +116,5 @@ export const {
   useVerifyPasswordMutation,
   useForgotPasswordMutation,
   useSetTypeFromSocialMutation,
+  useRegisterParentInviteMutation,
 } = authService;

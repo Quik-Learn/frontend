@@ -24,6 +24,7 @@ const SuccessModal = ({
   description,
   buttonText,
   onClose,
+  closeFunction = () => {},
 }: any) => {
   const dispatch = useAppDispatch();
 
@@ -62,6 +63,7 @@ const SuccessModal = ({
             bg="#0A52A8"
             onClick={() => {
               onClose();
+              closeFunction();
             }}
             text={buttonText}
           />

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { sortEventsByDateTime } from '~/lib/helpers/paths';
 import {
   useCreateSessionMutation,
+  useDeleteSessionMutation,
   useEditSessionMutation,
   useLazyGetStudentSessionsQuery,
 } from '~/lib/services/tutor-mutation';
@@ -34,6 +35,15 @@ const useSingleStudent = (
       error: editSessionError,
     },
   ] = useEditSessionMutation();
+  const [
+    deleteSession,
+    {
+      isLoading: deleteSessionLoading,
+      isSuccess: isDeleteSessionSuccess,
+      isError: isDeleteSessionError,
+      error: deleteSessionError,
+    },
+  ] = useDeleteSessionMutation();
   useEffect(() => {
     trigger(id);
   }, [id]);
@@ -106,6 +116,31 @@ const useSingleStudent = (
       });
     }
   }, [isEditSessionSuccess, editSessionError, isEditSessionError]);
+  useEffect(() => {
+    if (isDeleteSessionSuccess) {
+      toast({
+        title: 'Success!',
+        description: 'Session deleted successfully',
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      trigger(id);
+    }
+    if (isDeleteSessionError) {
+      toast({
+        title: 'Error!',
+        description:
+          //@ts-ignore
+          deleteSessionError?.data?.error?.message || 'An error occured',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isDeleteSessionSuccess, deleteSessionError, isDeleteSessionError]);
   return {
     sessions,
     isLoading,
@@ -113,6 +148,8 @@ const useSingleStudent = (
     createSessionLoading,
     editSession,
     editSessionLoading,
+    deleteSession,
+    deleteSessionLoading,
   };
 };
 

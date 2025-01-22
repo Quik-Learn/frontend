@@ -52,8 +52,10 @@ const Dashboard = () => {
   }, []);
   console.log(data, 'data', data?.bio?.parent === null);
   useEffect(() => {
-    if (!data?.bio?.parent?.id && !data?.bio?.parent?.email) {
+    if (data?.bio?.parent?.id.length === 0) {
       onOpen();
+    } else {
+      onClose();
     }
   }, [data?.bio?.parent]);
 
