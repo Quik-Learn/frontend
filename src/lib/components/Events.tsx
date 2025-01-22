@@ -32,6 +32,7 @@ import FeedbackModal from './FeedbackModal';
 import { setMeetingId } from '../store/reducers/meeting-id-slice';
 import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
+import SuccessModal from './ui/success-modal';
 
 const Events = ({
   event,
@@ -116,6 +117,28 @@ const Events = ({
     }
   }, [isSuccess, isError, error, data, event]);
 
+  useEffect(() => {
+    if (isSuccessTutor) {
+      console.log(dataTutor);
+      onClose();
+      window.open(dataTutor?.data, '_self');
+      // dispatch(setMeetingId(event?.meeting_link?.meeting_id));
+      localStorage.setItem('meetingId', event?.meeting_link?.meeting_id);
+    }
+    if (isErrorTutor) {
+      console.log(errorTutor);
+      toast({
+        //@ts-ignore
+        title: errorTutor?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccessTutor, isErrorTutor, errorTutor, dataTutor, event]);
+
   return (
     <Box
       bg={selected?.color}
@@ -198,14 +221,25 @@ const Events = ({
       </Modal>
       <Image src={event?.subject?.thumbnail} w={8} h={8} borderRadius={10} />
       <Text fontSize={10}>{event?.subject?.title}</Text>
-      <FeedbackModal
-        isOpen={isOpenJoin}
-        onClose={onCloseJoin}
-        session_id={event?.id}
-        isJoinLoading={isLoading}
-        isDisabled={isDisabled}
-        joinMeeting={(id: string) => joinMeeting(id)}
-      />
+      {type === 'student' && (
+        <FeedbackModal
+          isOpen={isOpenJoin}
+          onClose={onCloseJoin}
+          session_id={event?.id}
+          isJoinLoading={isLoading}
+          isDisabled={isDisabled}
+          joinMeeting={(id: string) => joinMeeting(id)}
+        />
+      )}
+      {type === 'tutor' && (
+        <SuccessModal
+          onClose={onCloseJoin}
+          isOpen={isOpenJoin}
+          title={'Successful'}
+          description={'Session successfully completed!'}
+          buttonText={'Close'}
+        />
+      )}
     </Box>
   );
 };

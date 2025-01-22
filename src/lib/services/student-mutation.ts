@@ -183,6 +183,16 @@ export const studentService = createApi({
         };
       },
     }),
+
+    inviteParent: builder.mutation({
+      query: (body) => {
+        return {
+          url: `accounts/user/invite/parent/`,
+          method: 'POST',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -203,4 +213,5 @@ export const {
   useLazyGetCompletedCoursesQuery,
   useLazyGetPastSessionsQuery,
   useLazyGetCalendarQuery,
+  useInviteParentMutation,
 } = studentService;
