@@ -146,10 +146,10 @@ const Courses = () => {
         <TabPanels>
           <Box m={6}>
             {isLoading ? (
-              <Stack>
-                <Skeleton height="20px" />
-                <Skeleton height="20px" />
-                <Skeleton height="20px" />
+              <Stack w={'100%'} height={'50vh'}>
+                {['', '', '', '', '', '', '', '', '', ''].map((item, index) => (
+                  <Skeleton height="20px" key={index} />
+                ))}
               </Stack>
             ) : (
               <Grid
@@ -161,8 +161,8 @@ const Courses = () => {
               >
                 {courses?.length == 0 ? (
                   <Stack
-                    w={'100%'}
-                    height={'100%'}
+                    w={'70vw'}
+                    height={'50vh'}
                     alignItems={'center'}
                     justifyContent={'center'}
                   >

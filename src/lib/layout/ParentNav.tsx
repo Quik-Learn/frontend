@@ -68,7 +68,12 @@ const ParentNav = () => {
       ) : (
         <>
           <Stack>
-            <Image src="/images/tutor-logo.png" alt="logo" />
+            <Image
+              src="/images/tutor-logo.png"
+              alt="logo"
+              width={100}
+              height={100}
+            />
           </Stack>
           <VStack mt={30} p={5}>
             {nav?.map((item) => (
