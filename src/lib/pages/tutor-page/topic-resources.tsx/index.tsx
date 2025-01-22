@@ -35,6 +35,22 @@ const TopicResources = () => {
     createLoading,
     isSuccess,
   } = useGetResources(topicId);
+  const onOpenHandler = (topic: any) => {
+    if (topic?.attachment) {
+      // Open in new tab for viewing
+      window.open(topic.attachment, '_blank');
+
+      // Create a temporary anchor element for downloading
+      const link = document.createElement('a');
+      link.href = topic.attachment;
+      link.download = topic.topic || 'document.pdf'; // Use topic name or default name
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      alert('No attachment available');
+    }
+  };
   return (
     <TutorContainer>
       <Stack p={{ base: 4, md: 6 }}>
@@ -105,6 +121,7 @@ const TopicResources = () => {
                       alignItems={'center'}
                       justifyContent={'center'}
                       key={topic?.id}
+                      onClick={() => onOpenHandler(topic)}
                       maxWidth={'250px'}
                       boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
                       w={{ base: '100%', md: '230px' }}
@@ -122,7 +139,7 @@ const TopicResources = () => {
                         <Image src={'/images/filesearch.png'} />
                         <Text>{topic?.media_type}</Text>
                       </VStack>
-                      <Text>{topic?.title || ' No Topic'}</Text>
+                      <Text>{topic?.topic || ' No Topic'}</Text>
                     </VStack>
                   ))}
                 </SimpleGrid>
