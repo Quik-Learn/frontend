@@ -172,6 +172,14 @@ export const tutorService = createApi({
         };
       },
     }),
+    deleteSession: builder.mutation({
+      query: (id) => {
+        return {
+          url: `tutor/delete/session/${id}/`,
+          method: 'DELETE',
+        };
+      },
+    }),
   }),
 });
 
@@ -194,4 +202,5 @@ export const {
   useCreateResourceMutation,
   useJoinMeetingTutorMutation,
   useLeaveMeetingTutorMutation,
+  useDeleteSessionMutation,
 } = tutorService;

@@ -80,11 +80,12 @@ const AddParent = ({ onClose, isOpen }: any) => {
           <ModalCloseButton borderColor={'#fff'} />
           <ModalBody>
             <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
-              Enter your parents email address to notify them
+              Enter your parents/guardian email address to notify them to
+              register.
             </Text>
             <FormControl mb={5} mt={5}>
               <Input
-                placeholder="Enter your parents email address"
+                placeholder="Enter your parents/guardian email address"
                 bg="#ffffff"
                 borderWidth={1}
                 borderColor="#E9EAF0"

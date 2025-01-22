@@ -33,7 +33,7 @@ import { setMeetingId } from '../store/reducers/meeting-id-slice';
 import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
 import SuccessModal from './ui/success-modal';
-
+import { useRouter } from 'next/navigation';
 const Events = ({
   event,
   isOpen: isOpenJoin,
@@ -42,7 +42,7 @@ const Events = ({
 }: any) => {
   console.log('eee', event);
   const [isDisabled, setIsDisabled] = useState(true);
-  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [selected, setSelceted] = useState<any>();
   const [joinMeeting, { data, isLoading, isSuccess, isError, error, reset }] =
     useJoinMeetingMutation();
@@ -238,6 +238,9 @@ const Events = ({
           title={'Successful'}
           description={'Session successfully completed!'}
           buttonText={'Close'}
+          closeFunction={() => {
+            router.push('/tutor/sessions');
+          }}
         />
       )}
     </Box>

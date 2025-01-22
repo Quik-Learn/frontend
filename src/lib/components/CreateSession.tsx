@@ -132,6 +132,7 @@ const CreateSession = ({
                     placeholder="Date"
                     type="date"
                     bg="#ffffff"
+                    min={new Date().toISOString().split('T')[0]}
                     borderWidth={1}
                     borderColor="#E9EAF0"
                     value={values.date}
@@ -158,7 +159,17 @@ const CreateSession = ({
                     }}
                     color="#1D2026"
                     _placeholder={{ color: '#8C94A3' }}
-                    onChange={(e) => setFieldValue('date', e.target.value)}
+                    onChange={(e) => {
+                      const selectedDate = new Date(e.target.value);
+                      const today = new Date();
+                      today.setHours(0, 0, 0, 0); // Reset time part for accurate date comparison
+
+                      if (selectedDate >= today) {
+                        setFieldValue('date', e.target.value);
+                      } else {
+                        alert('Please select today or a future date');
+                      }
+                    }}
                   />
                   <Text color={'red'} fontSize={8}>
                     {errors.date || ''}
@@ -173,6 +184,8 @@ const CreateSession = ({
                       borderWidth={1}
                       borderColor="#E9EAF0"
                       value={values.start_time}
+                      min="09:00"
+                      max="17:00"
                       p={5}
                       sx={{
                         input: {
@@ -196,9 +209,17 @@ const CreateSession = ({
                       }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
-                      onChange={(e) =>
-                        setFieldValue('start_time', e.target.value)
-                      }
+                      onChange={(e) => {
+                        const time = e.target.value;
+                        const [hours] = time.split(':');
+                        const hourNum = parseInt(hours);
+                        console.log(hourNum);
+                        if (hourNum >= 9 && hourNum <= 17) {
+                          setFieldValue('start_time', time);
+                        } else {
+                          alert('Start time must be between 09:00 and 17:00');
+                        }
+                      }}
                     />
                     <Text color={'red'} fontSize={8}>
                       {errors.start_time || ''}
@@ -212,6 +233,8 @@ const CreateSession = ({
                       borderWidth={1}
                       borderColor="#E9EAF0"
                       value={values.end_time}
+                      min="10:00"
+                      max="18:00"
                       p={5}
                       sx={{
                         input: {
@@ -235,9 +258,16 @@ const CreateSession = ({
                       }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
-                      onChange={(e) =>
-                        setFieldValue('end_time', e.target.value)
-                      }
+                      onChange={(e) => {
+                        const time = e.target.value;
+                        const [hours] = time.split(':');
+                        const hourNum = parseInt(hours);
+                        if (hourNum >= 10 && hourNum <= 18) {
+                          setFieldValue('end_time', time);
+                        } else {
+                          alert('End time must be between 10:00 and 18:00');
+                        }
+                      }}
                     />
                     <Text color={'red'} fontSize={8}>
                       {errors.end_time || ''}
@@ -255,7 +285,9 @@ const CreateSession = ({
                       p={5}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
-                      onChange={(e) => setFieldValue('repeat', e.target.value)}
+                      onChange={(e) => {
+                        setFieldValue('repeat', e.target.value);
+                      }}
                     >
                       <option value="true">Yes</option>
                       <option value="false">No</option>

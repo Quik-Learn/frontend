@@ -25,11 +25,12 @@ import {
   Center,
   Link as ChakraLink,
   Icon,
+  useToast,
 } from '@chakra-ui/react';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FaGoogle, FaFacebook, FaApple } from 'react-icons/fa';
 import { FaArrowRightLong } from 'react-icons/fa6';
 import PasswordInput from '~/lib/components/ui/password-input';
@@ -40,17 +41,24 @@ import Link from 'next/link';
 import useSocialLogin from '../../../hooks/useSocialLogin';
 import useSignup from './useSignup';
 import { useAppDispatch, useAppSelector } from '~/lib/store';
-import { tokenState } from '~/lib/store/reducers/token-slice';
-const ParentSignup = () => {
+import { setToken, tokenState } from '~/lib/store/reducers/token-slice';
+import { useRegisterParentInviteMutation } from '~/lib/services/auth-service';
+
+import { setUser } from '~/lib/store/reducers/user-slice';
+import { setType } from '~/lib/store/reducers/type-slice';
+const ParentInvite = () => {
   const router = useRouter();
+  const toast = useToast();
   const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
+  const email = useMemo(() => searchParams.get('email'), [searchParams]);
+  const ward_id = useMemo(() => searchParams.get('ward_id'), [searchParams]);
+
   const token = useAppSelector(tokenState);
   const formRef = useRef<any>(null);
   const { handleSocialLogin, loading } = useSocialLogin();
-  const { registerAccount, isLoading } = useSignup(
-    () => {},
-    () => {}
-  );
+  const [registerParentInvite, { isLoading, isSuccess, isError, error, data }] =
+    useRegisterParentInviteMutation();
 
   const signInSchema = yup.object().shape({
     firstname: yup.string().required('Please enter your firstname'),
@@ -64,6 +72,7 @@ const ParentSignup = () => {
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/,
         'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and One Special Case Character'
       ),
+    ward_id: yup.string().required('Please select a ward'),
     // confirm_password: yup
     //   .string()
     //   .required('Please confirm password')
@@ -71,20 +80,57 @@ const ParentSignup = () => {
     //   .oneOf([yup.ref('password'), null], 'Passwords must match'),
   });
 
-  const initialValues: any = {
+  const [initialValues, setInitialValues] = useState({
     firstname: '',
     lastname: '',
     phone: '',
-    email: '',
+    email: email,
     password: '',
-    account_type: 'Parent',
-  };
+    ward_id: ward_id,
+  });
 
   const handleSubmit = () => {
     if (formRef.current) {
       formRef?.current?.handleSubmit();
     }
   };
+  useEffect(() => {
+    if (isSuccess) {
+      toast({
+        title: 'Account created.',
+        description: "We've created your account for you.",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+      document.cookie = `token=${data?.data?.auth_token}; path=/;`;
+      document.cookie = `accountType=${data?.data?.user?.account_type}; path=/;`;
+      dispatch(setUser(data?.data?.user));
+      dispatch(setToken(data?.data?.auth_token));
+
+      dispatch(
+        setType(
+          data?.data?.user?.account_type === 'Instructor'
+            ? 'Tutor'
+            : data?.data?.user?.account_type
+        )
+      );
+
+      router.push('/parent');
+    }
+    if (isError) {
+      toast({
+        //@ts-ignore
+        title: error?.data?.error?.message || 'An error occured',
+        description: 'An Error occured.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  }, [isSuccess, isError, error]);
   return (
     <SignupWrapper img="/images/big-parent.png" bg="#FF8C00">
       <VStack
@@ -114,7 +160,7 @@ const ParentSignup = () => {
           initialValues={initialValues}
           innerRef={formRef}
           onSubmit={(values) => {
-            registerAccount(values);
+            registerParentInvite(values);
           }}
           validateOnChange={false}
           validateOnBlur={false}
@@ -245,7 +291,7 @@ const ParentSignup = () => {
           )}
         </Formik>
 
-        <Box border="none" p={4} mt={1} width="full" textAlign="center">
+        {/* <Box border="none" p={4} mt={1} width="full" textAlign="center">
           <HStack align="center" mb={3}>
             <Divider orientation="horizontal" bg="#E9EAF0" />
             <VStack
@@ -300,7 +346,7 @@ const ParentSignup = () => {
               <Image src="/images/apple.svg" alt="google" w="20px" h="20px" />
             </HStack>
           </HStack>
-        </Box>
+        </Box> */}
         <HStack width="full" justify="center" align="center">
           <Text color="#262626" fontSize={15}>
             Already have an account?{' '}
@@ -324,4 +370,4 @@ const ParentSignup = () => {
   );
 };
 
-export default ParentSignup;
+export default ParentInvite;
