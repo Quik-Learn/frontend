@@ -27,43 +27,25 @@ import {
 import { useSetSubjectHook } from '../pages/auth/subject/useSetSubject';
 import { AddSubject } from './AddSubject';
 import Button from './ui/button';
+import { useInviteParentMutation } from '../services/student-mutation';
 
-const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
+const AddParent = ({ onClose, isOpen }: any) => {
   const toast = useToast();
-  const formRef = useRef(null);
-  const [addWard, { data, isSuccess, isError, error, isLoading }] =
-    useAddWardMutation();
-  const [connectWard, connectWardDetails] = useConnectWardMutation();
-  const [searchWard, serachWardData] = useLazySearchWardQuery();
-  const [addSubjectForWard, addSubjectForWardData] =
-    useAddSubjectForWardMutation();
-  const [filteredWards, setFilteredWards] = useState([]);
-  const [selected, setSelected] = useState([]);
-  const [id, setId] = useState([]);
-  const [successData, setSuccessData] = useState({
-    title: '',
-    description: '',
-    buttonText: '',
-  });
+  const [inviteParent, { data, isSuccess, isError, error, isLoading }] =
+    useInviteParentMutation();
+
   const {
     isOpen: isOpenn,
     onOpen: onOpenn,
     onClose: onClosee,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenSubject,
-    onOpen: onOpenSubject,
-    onClose: onCloseSubject,
   } = useDisclosure();
 
   const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (isSuccess) {
-      setNew('');
       onClose();
-      setId(data?.data?.user?.id);
-      onOpenSubject();
+      onOpenn();
     }
     if (isError) {
       toast({
@@ -78,82 +60,8 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
     }
   }, [isError, error, isSuccess, data]);
 
-  useEffect(() => {
-    const { data, isSuccess, isError, error, isLoading } = connectWardDetails;
-    if (isSuccess) {
-      setNew('');
-      onClose();
-
-      setSuccessData({
-        title: 'Successful!',
-        description: 'An email as been sent to ward with his login details',
-        buttonText: 'Close',
-      });
-      onOpenn();
-    }
-    if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.data?.error?.message || 'An error occured',
-        description: 'An Error occured.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [connectWardDetails]);
-  useEffect(() => {
-    const { isSuccess, isError, error } = addSubjectForWardData;
-    if (isSuccess) {
-      onCloseSubject();
-
-      setSuccessData({
-        title: 'Successful!',
-        description: 'An email as been sent to parent ',
-        buttonText: 'Close',
-      });
-      onOpenn();
-    }
-    if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.data?.error?.message || 'An error occured',
-        description: 'An Error occured.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [addSubjectForWardData]);
-  useEffect(() => {
-    const { data, isSuccess, isError, error, isLoading } = serachWardData;
-    if (isSuccess) {
-      console.log(data);
-
-      setFilteredWards(data?.data);
-    }
-    if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.data?.error?.message || 'An error occured',
-        description: 'An Error occured.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [serachWardData]);
   const onSubmit = () => {
-    onClose();
-    setSuccessData({
-      title: 'Successful!',
-      description: 'An email as been sent to parent ',
-      buttonText: 'Close',
-    });
-    onOpenn();
+    inviteParent({ email });
   };
 
   return (
@@ -190,7 +98,13 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
           </ModalBody>
 
           <ModalFooter flexDir={'column'} gap={5}>
-            <Button bg="#0A52A8" text="Submit" onClick={onSubmit} />
+            <Button
+              isLoading={isLoading}
+              bg="#0A52A8"
+              text="Submit"
+              onClick={onSubmit}
+              isDisabled={!email}
+            />
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -198,9 +112,9 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
       <SuccessModal
         onClose={onClosee}
         isOpen={isOpenn}
-        title={successData?.title}
-        description={successData?.description}
-        buttonText={successData?.buttonText}
+        title={'Success'}
+        description={'An Invite has been successfully sent to your parent!'}
+        buttonText={'Close'}
       />
     </>
   );

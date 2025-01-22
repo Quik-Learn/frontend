@@ -71,6 +71,7 @@ const Sessions = () => {
         events={sessionsData}
         onOpen={onOpen}
         setRange={setRange}
+        type={'tutor'}
         EventsComponent={(props) => (
           <Events
             {...props}

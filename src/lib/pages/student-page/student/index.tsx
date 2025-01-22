@@ -50,11 +50,12 @@ const Dashboard = () => {
       setEmpty(false);
     }, 10000);
   }, []);
+  console.log(data, 'data', data?.bio?.parent === null);
   useEffect(() => {
-    if (!data?.bio?.parent?.firstname) {
+    if (!data?.bio?.parent?.id && !data?.bio?.parent?.email) {
       onOpen();
     }
-  }, [data]);
+  }, [data?.bio?.parent]);
 
   // Helper function to check if a date has an event
   const isDateWithEvent = (date: Date) => {

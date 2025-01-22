@@ -88,6 +88,7 @@ const MySessions = () => {
         events={events}
         onOpen={onOpen}
         setRange={setRange}
+        type={'student'}
         EventsComponent={(props) => {
           console.log('propsevent', props);
           return (

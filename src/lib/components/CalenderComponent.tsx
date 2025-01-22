@@ -22,6 +22,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppSelector } from '../store';
 import { useLeaveMeetingMutation } from '../services/student-mutation';
 import Events from './Events';
+import { useLeaveMeetingTutorMutation } from '../services/tutor-mutation';
 
 const localizer = momentLocalizer(moment);
 
@@ -29,6 +30,7 @@ interface CalenderComponentProps {
   events: any[];
   onOpen: any;
   setRange: ({ start, end }: { start: Date; end: Date }) => void;
+  type: string;
   EventsComponent: React.ComponentType<any>;
   ToolbarComponent: React.ComponentType<any>;
 }
@@ -38,6 +40,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   onOpen,
   setRange,
   EventsComponent,
+  type,
   ToolbarComponent,
 }) => {
   const router = useRouter();
@@ -48,14 +51,20 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   const id = localStorage.getItem('meetingId');
   console.log('event', events, addRandomColorsToEvents(events));
   const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
+  const [leaveMeetingTutor, leaveMeetingDataTutor] =
+    useLeaveMeetingTutorMutation();
   const leaveMeetingInfo = searchParams.get('leaveMeeting');
   const calenderRef = useRef(null);
 
   useEffect(() => {
     if (leaveMeetingInfo) {
-      leaveMeeting(id);
+      if (type === 'student') {
+        leaveMeeting(id);
+      } else {
+        leaveMeetingTutor(id);
+      }
     }
-  }, [leaveMeetingInfo]);
+  }, [leaveMeetingInfo, type]);
 
   useEffect(() => {
     const { data, isError, error, isSuccess } = leaveMeetingData;
@@ -73,6 +82,22 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
       });
     }
   }, [leaveMeetingData]);
+  useEffect(() => {
+    const { data, isError, error, isSuccess } = leaveMeetingDataTutor;
+    if (isSuccess) {
+      onOpen();
+    }
+    if (isError) {
+      toast({
+        title: 'Error',
+        //@ts-ignore
+        description: error?.data?.error?.message || 'An error occurred',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  }, [leaveMeetingDataTutor]);
   console.log(
     new Date(2025, 0, 20, 9, 30, 0, 0),
     'new Date(y, m, d, 9, 30, 0, 0)'
