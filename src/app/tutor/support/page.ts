@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import Support from '~/app/parent/support/page';
+import Support from '~/lib/pages/tutor-page/support';
 
 import Courses from '~/lib/pages/tutor-page/resources';
 

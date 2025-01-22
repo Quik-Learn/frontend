@@ -77,6 +77,7 @@ const Sessions = () => {
             trigger={triggerSessions}
             isOpen={isOpen}
             onClose={onClose}
+            type={'tutor'}
           />
         )}
         ToolbarComponent={(props) => (

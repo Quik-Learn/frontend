@@ -30,7 +30,16 @@ export const AddSubject = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
-      <ModalContent bg={'#fff'} maxH={'80vh'} overflowY={'auto'}>
+      <ModalContent
+        bg={'#fff'}
+        maxH={'80vh'}
+        overflowY={'scroll'}
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
+      >
         <ModalHeader
           color={'#5F5F5F'}
           fontSize={32}

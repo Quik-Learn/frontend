@@ -36,7 +36,14 @@ const useLoginHook = () => {
         document.cookie = `accountType=${data?.data?.user?.account_type}; path=/;`;
         // Set token in Redux state and cookies
         dispatch(setToken(data?.data?.auth_token));
-        dispatch(setType(data?.data?.user?.account_type));
+
+        dispatch(
+          setType(
+            data?.data?.user?.account_type === 'Instructor'
+              ? 'Tutor'
+              : data?.data?.user?.account_type
+          )
+        );
 
         // Redirect user to the originally intended path after login
         if (redirect) {

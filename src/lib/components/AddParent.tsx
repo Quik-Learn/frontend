@@ -9,6 +9,10 @@ import {
   useToast,
   Text,
   ModalFooter,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
 } from '@chakra-ui/react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SuccessModal from './ui/success-modal';
@@ -52,41 +56,7 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
     onClose: onCloseSubject,
   } = useDisclosure();
 
-  const {
-    data: subjects,
-    isLoading: isLoadingSubject,
-    setFilterText,
-    filterText,
-  } = useSetSubjectHook();
-  const [value, setValue] = useState('');
-  const signInSchema = yup.object().shape({
-    firstname: yup.string().required('Please enter first name'),
-
-    lastname: yup.string().required('Please enter last name'),
-    state: yup.string().required('Please enter state '),
-    sex: yup.string().required('Please enter  gender'),
-    email: yup.string().required('Please enter  email address'),
-    DOB: yup.string().required('Please enter date of birth '),
-    address: yup.string().required('Please enter  address'),
-    password: yup.string().required('Please enter password'),
-  });
-
-  const initialValues: any = {
-    firstname: '',
-    lastname: '',
-    state: '',
-    sex: '',
-    email: '',
-    DOB: '',
-    address: '',
-    password: '',
-  };
-
-  useEffect(() => {
-    if (value) {
-      searchWard({ Ward: value });
-    }
-  }, [value]);
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     if (isSuccess) {
@@ -140,7 +110,7 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
 
       setSuccessData({
         title: 'Successful!',
-        description: 'An email as been sent to ward with his login details',
+        description: 'An email as been sent to parent ',
         buttonText: 'Close',
       });
       onOpenn();
@@ -176,6 +146,15 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
       });
     }
   }, [serachWardData]);
+  const onSubmit = () => {
+    onClose();
+    setSuccessData({
+      title: 'Successful!',
+      description: 'An email as been sent to parent ',
+      buttonText: 'Close',
+    });
+    onOpenn();
+  };
 
   return (
     <>
@@ -193,46 +172,29 @@ const AddParent = ({ onOpen, onClose, isOpen, neww, setNew, wards }: any) => {
           <ModalCloseButton borderColor={'#fff'} />
           <ModalBody>
             <Text color={'#5F5F5F'} fontSize={20} textAlign={'center'}>
-              Create a ward account or Add your already registered ward. You
-              stay in control of payment and are able to track their progress.
+              Enter your parents email address to notify them
             </Text>
+            <FormControl mb={5} mt={5}>
+              <Input
+                placeholder="Enter your parents email address"
+                bg="#ffffff"
+                borderWidth={1}
+                borderColor="#E9EAF0"
+                value={email}
+                p={5}
+                color="#1D2026"
+                _placeholder={{ color: '#8C94A3' }}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter flexDir={'column'} gap={5}>
-            <Button
-              bg="#0A52A8"
-              text="Create new ward"
-              onClick={() => setNew('new')}
-            />
-            <Button
-              bg="#0A52A8"
-              text="Add already registered Ward"
-              onClick={() => setNew('old')}
-            />
+            <Button bg="#0A52A8" text="Submit" onClick={onSubmit} />
           </ModalFooter>
         </ModalContent>
       </Modal>
 
-      <AddSubject
-        data={subjects}
-        isOpen={isOpenSubject}
-        onClose={onCloseSubject}
-        selected={selected}
-        filterText={filterText}
-        setFilterText={setFilterText}
-        isLoading={isLoadingSubject}
-        setSelected={setSelected}
-        isLoadingSubmit={addSubjectForWardData?.isLoading}
-        handleSubmit={() => {
-          const subjects = selected?.map((item: any) => {
-            return item?.id;
-          });
-          addSubjectForWard({
-            id,
-            body: { subjects },
-          });
-        }}
-      />
       <SuccessModal
         onClose={onClosee}
         isOpen={isOpenn}

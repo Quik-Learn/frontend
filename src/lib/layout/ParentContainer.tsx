@@ -43,6 +43,11 @@ const ParentContainer = ({ children }: any) => {
       maxH={'100vh'}
       bg={'#fafafa'}
       overflowX={'hidden'}
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+      }}
       overflowY={'scroll'}
     >
       <TopNav />

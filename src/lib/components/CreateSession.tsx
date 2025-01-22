@@ -45,7 +45,7 @@ const CreateSession = ({
     date: yup.string().required('Please enter your date'),
     start_time: yup.string().required('Please enter your start time'),
     end_time: yup.string().required('Please enter your end time'),
-    repeat: yup.boolean().required('Please enter your repeat'),
+    repeat: yup.boolean().optional(),
   });
   const handleSubmit = () => {
     if (formRef.current) {
@@ -58,7 +58,6 @@ const CreateSession = ({
     date: '',
     start_time: '',
     end_time: '',
-    repeat: false,
   });
 
   useEffect(() => {
@@ -69,7 +68,6 @@ const CreateSession = ({
         date: data?.date,
         start_time: data?.start_time,
         end_time: data?.end_time,
-        repeat: false,
       });
     }
   }, [type, data]);
@@ -85,7 +83,11 @@ const CreateSession = ({
             initialValues={initialValues}
             innerRef={formRef}
             onSubmit={(values) => {
-              createSession({ body: values, id });
+              if (type === 'Create') {
+                createSession({ body: values, id });
+              } else {
+                createSession({ body: values, id: data?.id });
+              }
             }}
             validateOnChange={false}
             validateOnBlur={false}
@@ -134,6 +136,26 @@ const CreateSession = ({
                     borderColor="#E9EAF0"
                     value={values.date}
                     p={5}
+                    sx={{
+                      input: {
+                        border: 'none',
+                        boxSizing: 'border-box',
+                        outline: '0',
+                        position: 'relative',
+                      },
+                      '::-webkit-calendar-picker-indicator': {
+                        background: 'transparent',
+                        bottom: '0',
+                        color: 'transparent',
+                        cursor: 'pointer',
+                        height: 'auto',
+                        left: '0',
+                        position: 'absolute',
+                        right: '0',
+                        top: '0',
+                        width: 'auto',
+                      },
+                    }}
                     color="#1D2026"
                     _placeholder={{ color: '#8C94A3' }}
                     onChange={(e) => setFieldValue('date', e.target.value)}
@@ -152,6 +174,26 @@ const CreateSession = ({
                       borderColor="#E9EAF0"
                       value={values.start_time}
                       p={5}
+                      sx={{
+                        input: {
+                          border: 'none',
+                          boxSizing: 'border-box',
+                          outline: '0',
+                          position: 'relative',
+                        },
+                        '::-webkit-calendar-picker-indicator': {
+                          background: 'transparent',
+                          bottom: '0',
+                          color: 'transparent',
+                          cursor: 'pointer',
+                          height: 'auto',
+                          left: '0',
+                          position: 'absolute',
+                          right: '0',
+                          top: '0',
+                          width: 'auto',
+                        },
+                      }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
                       onChange={(e) =>
@@ -171,6 +213,26 @@ const CreateSession = ({
                       borderColor="#E9EAF0"
                       value={values.end_time}
                       p={5}
+                      sx={{
+                        input: {
+                          border: 'none',
+                          boxSizing: 'border-box',
+                          outline: '0',
+                          position: 'relative',
+                        },
+                        '::-webkit-calendar-picker-indicator': {
+                          background: 'transparent',
+                          bottom: '0',
+                          color: 'transparent',
+                          cursor: 'pointer',
+                          height: 'auto',
+                          left: '0',
+                          position: 'absolute',
+                          right: '0',
+                          top: '0',
+                          width: 'auto',
+                        },
+                      }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
                       onChange={(e) =>
@@ -182,26 +244,27 @@ const CreateSession = ({
                     </Text>
                   </FormControl>
                 </HStack>
-                <FormControl>
-                  <Select
-                    placeholder="Repeat"
-                    bg="#ffffff"
-                    disabled={type === 'Create'}
-                    borderWidth={1}
-                    borderColor="#E9EAF0"
-                    value={values.repeat}
-                    p={5}
-                    color="#1D2026"
-                    _placeholder={{ color: '#8C94A3' }}
-                    onChange={(e) => setFieldValue('repeat', e.target.value)}
-                  >
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                  </Select>
-                  <Text color={'red'} fontSize={8}>
-                    {errors.repeat || ''}
-                  </Text>
-                </FormControl>
+                {type === 'Create' && (
+                  <FormControl>
+                    <Select
+                      placeholder="Repeat"
+                      bg="#ffffff"
+                      borderWidth={1}
+                      borderColor="#E9EAF0"
+                      value={values.repeat}
+                      p={5}
+                      color="#1D2026"
+                      _placeholder={{ color: '#8C94A3' }}
+                      onChange={(e) => setFieldValue('repeat', e.target.value)}
+                    >
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </Select>
+                    <Text color={'red'} fontSize={8}>
+                      {errors.repeat || ''}
+                    </Text>
+                  </FormControl>
+                )}
               </Stack>
             )}
           </Formik>

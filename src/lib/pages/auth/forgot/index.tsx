@@ -70,7 +70,12 @@ const Forgot = () => {
       padding={{ base: 5, md: 8, lg: 10 }}
       align={'center'}
       justify={'center'}
-      overflowY="auto"
+      overflowY="scroll"
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+      }}
     >
       <VStack mt={40} w={{ base: '100%', lg: '50%' }}>
         {/* <Image src="/images/logo.svg" alt="logo" h={110} w={110} /> */}

@@ -237,7 +237,7 @@ const Dashboard = () => {
                 gap={4}
                 borderRadius="md"
               >
-                <Image src="/images/pending.svg" w={10} h={10} alt="active" />
+                <Image src="/images/pending.svg" w={8} h={10} alt="active" />
                 <Text
                   fontSize="54px"
                   fontWeight={900}

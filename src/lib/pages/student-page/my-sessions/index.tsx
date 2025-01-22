@@ -63,7 +63,6 @@ const MySessions = () => {
     }
   }, [isSuccess, data, isError]);
 
-  
   useEffect(() => {
     trigger({});
   }, []);
@@ -90,14 +89,16 @@ const MySessions = () => {
         onOpen={onOpen}
         setRange={setRange}
         EventsComponent={(props) => {
-          console.log('propsevent', props)
-          return <Events
-         event={props.event}
-            isOpen={isOpen}
-            onClose={onClose}
-       
-          />}
-        }
+          console.log('propsevent', props);
+          return (
+            <Events
+              event={props.event}
+              isOpen={isOpen}
+              onClose={onClose}
+              type={'student'}
+            />
+          );
+        }}
         ToolbarComponent={(props) => <StudentTool router={router} {...props} />}
       />
       <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>

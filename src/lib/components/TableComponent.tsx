@@ -8,6 +8,7 @@ import {
   Td,
   TableContainer,
   useColorModeValue,
+  Avatar,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import Button from './ui/button';
@@ -43,6 +44,14 @@ const TableComponent: React.FC<TableComponentProps> = ({
       <Table variant="simple">
         <Thead position="sticky" top={0} bg={headerBg} zIndex={1}>
           <Tr>
+            <Th
+              fontSize={14}
+              textTransform={'capitalize'}
+              fontWeight={700}
+              key={''}
+            >
+              Profile Image
+            </Th>
             {columns.map((column) => (
               <Th
                 fontSize={14}
@@ -63,6 +72,11 @@ const TableComponent: React.FC<TableComponentProps> = ({
               bg={rowIndex % 2 === 0 ? evenRowBg : oddRowBg}
               _hover={{ bg: useColorModeValue('gray.100', 'gray.600') }}
             >
+              {row?.hasProfile && (
+                <Td>
+                  <Avatar src={row?.profile} size={'sm'} name={row?.name} />
+                </Td>
+              )}
               {columns.map((column) => (
                 <Td key={`${rowIndex}-${column.key}`}>
                   {column.render

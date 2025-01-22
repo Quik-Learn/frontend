@@ -33,7 +33,7 @@ import { setMeetingId } from '../store/reducers/meeting-id-slice';
 import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
 
-const Events = ({
+const EventsTutor = ({
   event,
   isOpen: isOpenJoin,
   onClose: onCloseJoin,
@@ -71,7 +71,11 @@ const Events = ({
         : 'Ended',
       icon: CiBellOn,
     },
-    { id: 3, name: event?.instructor?.name, icon: TiGroupOutline },
+    {
+      id: 3,
+      name: `${event?.students?.length} students`,
+      icon: TiGroupOutline,
+    },
   ];
   useEffect(() => {
     const checkTimeDifference = () => {
@@ -182,7 +186,7 @@ const Events = ({
                   bg={selected?.color}
                   isDisabled={!event?.meeting_link}
                   isLoading={isLoading}
-                  text="Join Session"
+                  text="View"
                   onClick={() => {
                     if (type === 'tutor') {
                       joinMeetingTutor(event?.meeting_link?.meeting_id);
@@ -210,4 +214,4 @@ const Events = ({
   );
 };
 
-export default Events;
+export default EventsTutor;

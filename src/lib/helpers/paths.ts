@@ -72,13 +72,13 @@ export const convertTo12HourFormatt = (time24: string) => {
   const hourNumber = parseInt(hour, 10);
   const ampm = hourNumber >= 12 ? 'pm' : 'am';
   const hour12 = hourNumber % 12 || 12;
-  return `${hour12}${ampm}`;
+  return `${hour12}:${minute}${ampm}`;
 };
 
 const convertToFullDate = (time: any, date: any) => {
   // Combine date and time into an ISO string
   const dateTimeString = `${date}T${time}`;
-console.log(dateTimeString,'dateTimeString')
+  console.log(dateTimeString, 'dateTimeString');
   // Create a new Date object
   const fullDate = new Date(dateTimeString);
 
@@ -86,30 +86,63 @@ console.log(dateTimeString,'dateTimeString')
 };
 
 export const formatData = (data: any) => {
-  console.log(data,'data')
+  console.log(data, 'data');
 
-  return (
-    data?.map((item: any) => {
-      const formattedStartTime = convertToFullDate(item.start_time, item.date);
-      const formattedEndTime = convertToFullDate(item.end_time, item.date);
+  return data?.map((item: any) => {
+    const formattedStartTime = convertToFullDate(item.start_time, item.date);
+    const formattedEndTime = convertToFullDate(item.end_time, item.date);
 
-      // Combine date with 23:00:00 and append Z for UTC
-      const formattedDate = `${item.date}T23:00:00.000Z`;
-      console.log(formattedStartTime,formattedEndTime,formattedDate,'formattedDate');
+    // Combine date with 23:00:00 and append Z for UTC
+    const formattedDate = `${item.date}T23:00:00.000Z`;
+    console.log(
+      formattedStartTime,
+      formattedEndTime,
+      formattedDate,
+      'formattedDate'
+    );
 
-      return {
-        desc: item?.title,
-        start: formattedStartTime,
-        end: formattedEndTime,
-        date: formattedDate,
-        instructor: item?.instructor,
-        id: item?.id,
-        subject: item?.subject,
-        meeting_link: item?.meeting_link,
-        allDay:false
-      };
-    })
-  );
+    return {
+      desc: item?.title,
+      start: formattedStartTime,
+      end: formattedEndTime,
+      date: formattedDate,
+      instructor: item?.instructor,
+      id: item?.id,
+      subject: item?.subject,
+      meeting_link: item?.meeting_link,
+      allDay: false,
+    };
+  });
+};
+export const formatDataTutor = (data: any) => {
+  console.log(data, 'data');
+
+  return data?.map((item: any) => {
+    const formattedStartTime = convertToFullDate(item.start_time, item.date);
+    const formattedEndTime = convertToFullDate(item.end_time, item.date);
+
+    // Combine date with 23:00:00 and append Z for UTC
+    const formattedDate = `${item.date}T23:00:00.000Z`;
+    console.log(
+      formattedStartTime,
+      formattedEndTime,
+      formattedDate,
+      'formattedDate'
+    );
+
+    return {
+      desc: item?.title,
+      start: formattedStartTime,
+      end: formattedEndTime,
+      date: formattedDate,
+      students: item?.students,
+      id: item?.id,
+      subject: item?.subject,
+      meeting_link: item?.meeting_link,
+      allDay: false,
+      notes: item?.notes,
+    };
+  });
 };
 export const getRandomColor = () => {
   const letters = '0123456789ABCDEF';
@@ -168,7 +201,7 @@ export const addRandomSoftColorsToEvents: any = (data: any) => {
 };
 
 export const eventStyleGetter = (event: any) => {
-  console.log(event,'eeeerr');
+  console.log(event, 'eeeerr');
   const backgroundColor = event.color || 'blue';
   const style = {
     backgroundColor,
@@ -199,4 +232,30 @@ export const customSlotPropGetter = (date: any) => {
       borderColor: 'transparent',
     },
   };
+};
+
+export const sortEventsByDateTime = (events: any[]): any[] => {
+  const now = new Date();
+  // First map to add isPast property
+  const eventsWithPast = events.map((event) => ({
+    ...event,
+    isPast: new Date(event.date) < now,
+  }));
+  return eventsWithPast.sort((a: any, b: any) => {
+    // First compare dates
+    const dateComparison =
+      new Date(b.date).getTime() - new Date(a.date).getTime();
+    if (dateComparison !== 0) return dateComparison;
+
+    // If dates are equal, compare start times
+    const aDateTime = new Date(`${a.date}T${a.start_time}`);
+    const bDateTime = new Date(`${b.date}T${b.start_time}`);
+    const startTimeComparison = bDateTime.getTime() - aDateTime.getTime();
+    if (startTimeComparison !== 0) return startTimeComparison;
+
+    // If start times are equal, compare end times
+    const aEndTime = new Date(`${a.date}T${a.end_time}`);
+    const bEndTime = new Date(`${b.date}T${b.end_time}`);
+    return bEndTime.getTime() - aEndTime.getTime();
+  });
 };

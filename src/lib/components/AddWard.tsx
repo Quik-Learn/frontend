@@ -265,6 +265,26 @@ export const NewWard = ({
                   fontSize={14}
                   value={values.DOB}
                   p={5}
+                  sx={{
+                    input: {
+                      border: 'none',
+                      boxSizing: 'border-box',
+                      outline: '0',
+                      position: 'relative',
+                    },
+                    '::-webkit-calendar-picker-indicator': {
+                      background: 'transparent',
+                      bottom: '0',
+                      color: 'transparent',
+                      cursor: 'pointer',
+                      height: 'auto',
+                      left: '0',
+                      position: 'absolute',
+                      right: '0',
+                      top: '0',
+                      width: 'auto',
+                    },
+                  }}
                   type="date"
                   color="#1D2026"
                   _placeholder={{ color: '#8C94A3' }}
@@ -307,7 +327,16 @@ export const NewWard = ({
 };
 export const AddRegistered = ({ value, setValue, wards, connectWard }: any) => {
   return (
-    <ModalContent bg={'#fff'} maxH={'80vh'} overflowY={'auto'}>
+    <ModalContent
+      bg={'#fff'}
+      maxH={'80vh'}
+      overflowY={'scroll'}
+      sx={{
+        '::-webkit-scrollbar': {
+          display: 'none',
+        },
+      }}
+    >
       <ModalHeader
         color={'#5F5F5F'}
         fontSize={22}

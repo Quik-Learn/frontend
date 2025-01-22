@@ -42,15 +42,19 @@ const PaymentSuccess = () => {
       <VStack
         padding={{ base: 5, md: 8, lg: 10 }}
         maxHeight="100vh"
-        overflowY="auto"
+        overflowY="scroll"
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
         justify="center"
         align="center"
         gap={10}
       >
         {isLoadingData ? (
           <Stack align={'center'} justify={'center'}>
-            <Bars height="80" width="80"   />
-            <Bars height="80" width="80"   />
+            <Bars height="80" width="80" color="#0A52A8" />
           </Stack>
         ) : (
           <>

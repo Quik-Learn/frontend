@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import React, { useEffect, useRef, useState } from 'react';
 import Button from './ui/button';
+
 const AddResources = ({
   isOpen,
   onClose,
@@ -37,8 +38,13 @@ const AddResources = ({
   };
   const handleSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; // Get the selected file
+
     if (file) {
-      console.log(file);
+      if (file.type !== 'application/pdf') {
+        alert('Please select only PDF or DOC files');
+        e.target.value = ''; // Reset input
+        return;
+      }
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
@@ -52,7 +58,18 @@ const AddResources = ({
     }
   };
 
-  const allowedFiles = ['png', 'jpg', 'jpeg'].map((x) => '.' + x).join(',');
+  const allowedFiles = [
+    'png',
+    'jpg',
+    'jpeg',
+    '.pdf',
+    '.docx',
+    '.doc',
+    '.xls',
+    '.xlsx',
+  ]
+    .map((x) => '.' + x)
+    .join(',');
 
   useEffect(() => {
     if (isSuccess) {
@@ -63,11 +80,13 @@ const AddResources = ({
     <Modal isOpen={isOpen} onClose={onClose} size={'xl'}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader textAlign={'center'}>Create a New Resource</ModalHeader>
+        <ModalHeader color={'#161736'} textAlign={'center'}>
+          Create a New Resource
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <FormControl mb={4}>
-            <FormLabel>Enter Resource Title</FormLabel>
+            <FormLabel color={'#161736'}>Enter Resource Title</FormLabel>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
@@ -94,7 +113,6 @@ const AddResources = ({
                 name={'logo-upload'}
                 id={'logo-upload'}
                 display={'none'}
-                accept={allowedFiles}
                 zIndex={200}
               />
               <Stack
@@ -109,8 +127,8 @@ const AddResources = ({
                   <Image src={'/images/upload.svg'} />
                 )}
               </Stack>
-              <Text>Drop files to upload</Text>
-              <Text>or</Text>
+              <Text color={'#161736'}>Drop files to upload</Text>
+              <Text color={'#161736'}>or</Text>
               <Button
                 text="Select Files"
                 width={'100px'}
@@ -120,7 +138,7 @@ const AddResources = ({
             </Stack>
           </FormControl>
           <HStack justifyContent={'flex-end'} flexWrap={'wrap'}>
-            <Text fontSize={{ base: '10px', md: '12px' }}>
+            <Text color={'#161736'} fontSize={{ base: '10px', md: '12px' }}>
               Maximum upload file size: 10 MB.
             </Text>
             <HStack>

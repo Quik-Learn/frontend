@@ -33,7 +33,6 @@ interface CalenderComponentProps {
   ToolbarComponent: React.ComponentType<any>;
 }
 
-
 const CalenderComponent: React.FC<CalenderComponentProps> = ({
   events,
   onOpen,
@@ -47,10 +46,10 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
   const id = localStorage.getItem('meetingId');
-  console.log('event',events,addRandomColorsToEvents(events))
+  console.log('event', events, addRandomColorsToEvents(events));
   const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
   const leaveMeetingInfo = searchParams.get('leaveMeeting');
-  const calenderRef = useRef(null)
+  const calenderRef = useRef(null);
 
   useEffect(() => {
     if (leaveMeetingInfo) {
@@ -74,7 +73,10 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
       });
     }
   }, [leaveMeetingData]);
-console.log(new Date(2025, 0, 20, 9, 30, 0, 0),'new Date(y, m, d, 9, 30, 0, 0)')
+  console.log(
+    new Date(2025, 0, 20, 9, 30, 0, 0),
+    'new Date(y, m, d, 9, 30, 0, 0)'
+  );
   const handleNavigate = (newDate: Date, newView: string) => {
     setCurrentDate(newDate);
 
@@ -92,8 +94,7 @@ console.log(new Date(2025, 0, 20, 9, 30, 0, 0),'new Date(y, m, d, 9, 30, 0, 0)')
     setRange({ start, end });
     console.log(`Start: ${start}, End: ${end}`);
   };
-console.log(calenderRef?.current)
- 
+  console.log(calenderRef?.current);
 
   return (
     <Box p={5} sx={calendarStyle}>
@@ -112,37 +113,50 @@ console.log(calenderRef?.current)
         date={currentDate}
         onNavigate={(newDate) => handleNavigate(newDate, view)}
         view={view}
+        messages={{
+          day: 'Day',
+          week: 'Week',
+          month: 'Month',
+          today: 'Today',
+          previous: 'Previous',
+          next: 'Next',
+          agenda: 'Agenda',
+          event: 'Event',
+          allDay: 'All Day',
+
+          noEventsInRange: 'There are no events in this range.',
+        }}
+        showAllEvents={true}
+        popup={true}
         onView={(e: any) => setView(e)}
         step={60}
-        timeslots={1} 
+        timeslots={1}
         formats={{
-          timeGutterFormat: (date: any, culture: any, localizer: any) =>
-            {
-              console.log(date,'date',culture,localizer?.format(date, 'hh:mm A', culture))
-               return localizer?.format(date, 'hh:mm A', culture)
-            },
-            dayFormat: 'ddd',
+          timeGutterFormat: (date: any, culture: any, localizer: any) => {
+            console.log(
+              date,
+              'date',
+              culture,
+              localizer?.format(date, 'hh:mm A', culture)
+            );
+            return localizer?.format(date, 'hh:mm A', culture);
+          },
+          dayFormat: 'ddd',
         }}
         dayPropGetter={customDayPropGetter}
         slotPropGetter={customSlotPropGetter}
         min={moment().set({ hour: 9, minute: 0 }).toDate()}
         max={moment().set({ hour: 18, minute: 0 }).toDate()}
-        onSelectEvent={(e:any)=>{
-          console.log('e',e)
+        onSelectEvent={(e: any) => {
+          console.log('e', e);
         }}
-        onSelectSlot={(e:any)=>{
-          console.log('slot',e)
+        onSelectSlot={(e: any) => {
+          console.log('slot', e);
         }}
-    
-
         components={{
-        
-          event: ({event}) => {
-            console.log('props', event)
-            return <EventsComponent
-            event={event}
-
-            />
+          event: ({ event }) => {
+            console.log('props', event);
+            return <EventsComponent event={event} />;
           },
           toolbar: (props) => <ToolbarComponent Views={Views} {...props} />,
         }}

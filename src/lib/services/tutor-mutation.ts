@@ -140,7 +140,7 @@ export const tutorService = createApi({
       query: ({ id, body }) => {
         return {
           url: `tutor/edit/session/${id}/`,
-          method: 'POST',
+          method: 'PUT',
           body,
         };
       },
@@ -151,6 +151,24 @@ export const tutorService = createApi({
           url: `tutor/upload/resources/${id}/`,
           method: 'POST',
           body,
+        };
+      },
+    }),
+    joinMeetingTutor: builder.mutation({
+      query: (meeting_id: any) => {
+        return {
+          url: `tutor/join-meeting/${meeting_id}/`,
+          method: 'post',
+          body: {},
+        };
+      },
+    }),
+    leaveMeetingTutor: builder.mutation({
+      query: (meeting_id: any) => {
+        return {
+          url: `tutor/leave-meeting/${meeting_id}/`,
+          method: 'PATCH',
+          body: {},
         };
       },
     }),
@@ -174,4 +192,6 @@ export const {
   useEditSessionMutation,
   useLazyGetResourcesQuery,
   useCreateResourceMutation,
+  useJoinMeetingTutorMutation,
+  useLeaveMeetingTutorMutation,
 } = tutorService;

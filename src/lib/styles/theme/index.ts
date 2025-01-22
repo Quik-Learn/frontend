@@ -8,7 +8,18 @@ import { fonts } from './fonts';
 const customTheme = extendTheme({
   fonts,
   colors,
-  config,
+  config: {
+    initialColorMode: 'light',
+    useSystemColorMode: false,
+  },
+  styles: {
+    global: {
+      body: {
+        bg: 'white',
+        color: 'text.primary',
+      },
+    },
+  },
   components,
 });
 

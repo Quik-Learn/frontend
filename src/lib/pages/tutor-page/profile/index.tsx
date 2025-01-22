@@ -14,6 +14,7 @@ import {
   Box,
   Heading,
   Checkbox,
+  Avatar,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
 import TutorContainer from '~/lib/layout/TutorContainer';
@@ -235,7 +236,18 @@ const Profile = () => {
               zIndex={200}
             />
             <Stack position={'relative'}>
-              <Image src="/images/profilr.svg" alt="upload" />
+              {initialValues?.profile_image ? (
+                <Image
+                  src={initialValues?.profile_image || ''}
+                  alt={initialValues?.firstname || ''}
+                  width={200}
+                  height={200}
+                  objectFit={'cover'}
+                  borderRadius={'md'}
+                />
+              ) : (
+                <Image src="/images/profilr.svg" alt="upload" />
+              )}
               <Flex
                 gap={3}
                 justifyContent={'center'}

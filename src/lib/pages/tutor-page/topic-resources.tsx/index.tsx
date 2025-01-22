@@ -84,16 +84,21 @@ const TopicResources = () => {
                     onClick={onOpen}
                     bg="white"
                     p={4}
-                    maxWidth={'250px'}
+                    alignItems={'center'}
+                    justifyContent={'center'}
+                    maxWidth={'230px'}
+                    h={'230px'}
                     w={{ base: '100%', md: '230px' }}
                   >
                     <Image
                       src={'/images/addres.png'}
-                      width={'100%'}
-                      height={'100%'}
+                      width={'100px'}
+                      height={'100px'}
                       objectFit="contain"
                     />
-                    <Text>Upload New Resources</Text>
+                    <Text mt={4} fontSize={'16px'} fontWeight={500}>
+                      Upload New Resources
+                    </Text>
                   </Card>
                   {resources?.map((topic: any) => (
                     <VStack
@@ -103,7 +108,7 @@ const TopicResources = () => {
                       maxWidth={'250px'}
                       boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
                       w={{ base: '100%', md: '230px' }}
-                      h={'190px'}
+                      h={'230px'}
                     >
                       <VStack
                         alignItems={'center'}
@@ -112,6 +117,7 @@ const TopicResources = () => {
                         w={'100%'}
                         justifyContent={'center'}
                         gap={2}
+                        h={'190px'}
                       >
                         <Image src={'/images/filesearch.png'} />
                         <Text>{topic?.media_type}</Text>

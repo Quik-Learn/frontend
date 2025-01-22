@@ -16,6 +16,8 @@ import {
   useToast,
   useDisclosure,
   Spinner,
+  IconButton,
+  Icon,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
@@ -35,6 +37,7 @@ import {
 } from '~/lib/services/student-mutation';
 import BookSession from '~/lib/components/BookSession';
 import { useAppSelector } from '~/lib/store';
+import { FiArrowLeft } from 'react-icons/fi';
 import { userState } from '~/lib/store/reducers/user-slice';
 
 const SingleCourses = () => {
@@ -126,8 +129,20 @@ const SingleCourses = () => {
   console.log(user);
   return (
     <ParentContainer>
-      <Stack>
-        <VStack py={9} px={9} w={{ lg: '100%' }}>
+      <Stack position={'relative'}>
+        <IconButton
+          icon={<Icon as={FiArrowLeft} />}
+          onClick={() => router.back()}
+          bg={'#02659C'}
+          color={'white'}
+          size={'sm'}
+          aria-label="back"
+          position={'absolute'}
+          top={5}
+          left={10}
+          zIndex={1000}
+        />
+        <VStack py={9} px={9} w={{ lg: '100%' }} mt={10}>
           <Text
             color={'#1D2026'}
             textAlign={'left'}
