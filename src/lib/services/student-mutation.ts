@@ -193,6 +193,20 @@ export const studentService = createApi({
         };
       },
     }),
+    getAnActiveCourse: builder.query({
+      query: (id) => {
+        return {
+          url: `student/get-active-course/${id}`,
+        };
+      },
+    }),
+    getAnCompletedCourse: builder.query({
+      query: (id) => {
+        return {
+          url: `student/get-completed-course/${id}`,
+        };
+      },
+    }),
   }),
 });
 
@@ -214,4 +228,6 @@ export const {
   useLazyGetPastSessionsQuery,
   useLazyGetCalendarQuery,
   useInviteParentMutation,
+  useLazyGetAnActiveCourseQuery,
+  useLazyGetAnCompletedCourseQuery,
 } = studentService;

@@ -172,6 +172,8 @@ const Dashboard = () => {
                 alignItems={'center'}
                 gap={4}
                 borderRadius="md"
+                onClick={() => router?.push('/parent/wards')}
+                cursor="pointer"
               >
                 <Image src="/images/active.svg" w={16} h={16} alt="active" />
                 <Text
@@ -205,6 +207,8 @@ const Dashboard = () => {
                 alignItems={'center'}
                 gap={4}
                 borderRadius="md"
+                onClick={() => router?.push('/parent/courses')}
+                cursor="pointer"
               >
                 <Image src="/images/ongoing.svg" w={16} h={16} alt="active" />
                 <Text
@@ -236,6 +240,8 @@ const Dashboard = () => {
                 alignItems={'center'}
                 gap={4}
                 borderRadius="md"
+                onClick={() => router?.push('/notifications')}
+                cursor="pointer"
               >
                 <Image src="/images/pending.svg" w={8} h={10} alt="active" />
                 <Text

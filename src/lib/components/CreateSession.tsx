@@ -185,7 +185,7 @@ const CreateSession = ({
                       borderColor="#E9EAF0"
                       value={values.start_time}
                       min="09:00"
-                      max="17:00"
+                      max="16:00"
                       p={5}
                       sx={{
                         input: {
@@ -214,10 +214,10 @@ const CreateSession = ({
                         const [hours] = time.split(':');
                         const hourNum = parseInt(hours);
                         console.log(hourNum);
-                        if (hourNum >= 9 && hourNum <= 17) {
+                        if (hourNum >= 9 && hourNum <= 16) {
                           setFieldValue('start_time', time);
                         } else {
-                          alert('Start time must be between 09:00 and 17:00');
+                          alert('Start time must be between 09:00 and 14:00');
                         }
                       }}
                     />
@@ -234,7 +234,7 @@ const CreateSession = ({
                       borderColor="#E9EAF0"
                       value={values.end_time}
                       min="10:00"
-                      max="18:00"
+                      max="17:00"
                       p={5}
                       sx={{
                         input: {
@@ -262,10 +262,10 @@ const CreateSession = ({
                         const time = e.target.value;
                         const [hours] = time.split(':');
                         const hourNum = parseInt(hours);
-                        if (hourNum >= 10 && hourNum <= 18) {
+                        if (hourNum >= 10 && hourNum <= 17) {
                           setFieldValue('end_time', time);
                         } else {
-                          alert('End time must be between 10:00 and 18:00');
+                          alert('End time must be between 10:00 and 17:00');
                         }
                       }}
                     />

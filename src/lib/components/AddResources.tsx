@@ -40,11 +40,6 @@ const AddResources = ({
     const file = e.target.files?.[0]; // Get the selected file
 
     if (file) {
-      if (file.type !== 'application/pdf') {
-        alert('Please select only PDF or DOC files');
-        e.target.value = ''; // Reset input
-        return;
-      }
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {

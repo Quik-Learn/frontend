@@ -75,7 +75,7 @@ const SingleStudent = () => {
           templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']}
           gap={[4, 8]}
         >
-          {sessions.map((item: any) => (
+          {sessions?.reverse()?.map((item: any) => (
             <GridItem key={item?.id} p={3} opacity={item?.isPast ? 0.5 : 1}>
               <HStack justifyContent="space-between" mb={2}>
                 <Text fontSize={[12, 14]} color={'#303354'} fontWeight="bold">

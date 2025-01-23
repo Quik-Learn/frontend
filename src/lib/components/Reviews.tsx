@@ -10,7 +10,7 @@ import {
 import { FaStar } from 'react-icons/fa';
 import React from 'react';
 
-const Reviews = () => {
+const Reviews = ({ data, isLoading }: any) => {
   const dummyReviews = [
     {
       id: 1,

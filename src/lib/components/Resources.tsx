@@ -3,19 +3,19 @@ import React from 'react';
 import { FaFileAlt } from 'react-icons/fa';
 import { TbFileSearch } from 'react-icons/tb';
 
-const Resources = () => {
+const Resources = ({ data, isLoading }: any) => {
   return (
     <VStack spacing={8} align="stretch" w="100%">
       <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={6}>
-        {[1, 2, 3, 4, 5, 6].map((item) => (
-          <VStack key={item} spacing={3} align="center">
+        {data?.map((item: any, index: number) => (
+          <VStack key={index} spacing={3} align="center">
             <Box
               as="button"
               p={2}
               bg="gray.100"
               borderRadius="lg"
               _hover={{ bg: 'gray.200' }}
-              onClick={() => window.open('#', '_blank')}
+              onClick={() => window.open(item?.attachment, '_blank')}
               cursor="pointer"
               w="100%"
               aspectRatio={1}
@@ -25,8 +25,13 @@ const Resources = () => {
             >
               <Icon as={TbFileSearch} boxSize={50} color="#9E9E9E" />
             </Box>
-            <Text fontSize="sm" color="gray.700" fontWeight="medium">
-              Resource Document {item}.pdf
+            <Text
+              fontSize="sm"
+              color="gray.700"
+              fontWeight="medium"
+              textTransform="capitalize"
+            >
+              Resource Document {item?.title || 'No Title'}.{item?.media_type}
             </Text>
           </VStack>
         ))}
