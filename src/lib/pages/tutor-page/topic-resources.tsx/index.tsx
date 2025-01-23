@@ -23,10 +23,16 @@ import useGetResources from './getResources';
 import { PiFileArrowUpLight } from 'react-icons/pi';
 import { TbFileSearch } from 'react-icons/tb';
 import AddResources from '~/lib/components/AddResources';
+
 const TopicResources = () => {
   const { topicId }: any = useParams();
   const router = useRouter();
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const {
+    onOpen: onOpenn,
+    isOpen: isOpenn,
+    onClose: onClosee,
+  } = useDisclosure();
   const {
     resources,
     isLoading,
@@ -34,16 +40,22 @@ const TopicResources = () => {
     createResource,
     createLoading,
     isSuccess,
-  } = useGetResources(topicId);
+  } = useGetResources(topicId, () => {
+    onClose();
+    onOpenn();
+  });
   const onOpenHandler = (topic: any) => {
     if (topic?.attachment) {
-      // Open in new tab for viewing
-      window.open(topic.attachment, '_blank');
-
-      // Create a temporary anchor element for downloading
+      // Create a direct link to download
       const link = document.createElement('a');
       link.href = topic.attachment;
-      link.download = topic.topic || 'document.pdf'; // Use topic name or default name
+
+      // Get filename from URL or use topic name
+      const fileName =
+        topic.topic || topic.attachment.split('/').pop() || 'document';
+      link.setAttribute('download', fileName);
+
+      // Trigger download
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -121,11 +133,12 @@ const TopicResources = () => {
                       alignItems={'center'}
                       justifyContent={'center'}
                       key={topic?.id}
-                      onClick={() => onOpenHandler(topic)}
+                      onClick={() => window.open(topic?.attachment, '_blank')}
                       maxWidth={'250px'}
                       boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
                       w={{ base: '100%', md: '230px' }}
                       h={'230px'}
+                      cursor="pointer"
                     >
                       <VStack
                         alignItems={'center'}
@@ -139,7 +152,7 @@ const TopicResources = () => {
                         <Image src={'/images/filesearch.png'} />
                         <Text>{topic?.media_type}</Text>
                       </VStack>
-                      <Text>{topic?.topic || ' No Topic'}</Text>
+                      <Text>{topic?.title || ' No Topic'}</Text>
                     </VStack>
                   ))}
                 </SimpleGrid>
@@ -148,6 +161,16 @@ const TopicResources = () => {
           </>
         )}
       </Stack>
+      <SuccessModal
+        onClose={() => {
+          onClosee();
+          // fetchData();
+        }}
+        isOpen={isOpenn}
+        title={'Successful'}
+        description={'Resource added Successfully'}
+        buttonText={'Close'}
+      />
       <AddResources
         isOpen={isOpen}
         onClose={onClose}

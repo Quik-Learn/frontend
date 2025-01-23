@@ -15,8 +15,8 @@ import {
 } from '@chakra-ui/react';
 import { FcVideoFile } from 'react-icons/fc';
 import { usePastSessions } from '../hooks/usePastSession';
-const PastSessions = () => {
-  const { pastSessions, isLoading } = usePastSessions();
+import moment from 'moment';
+const CourseSessions = ({ data, isLoading }: any) => {
   return (
     <div>
       <VStack spacing={4} align="stretch" w="100%">
@@ -25,9 +25,9 @@ const PastSessions = () => {
             <Spinner size="xl" color="blue.500" />
           </Stack>
         )}
-        {pastSessions?.map((session: Session, index: number) => (
+        {data?.map((session: any, index: number) => (
           <Stack
-            key={session.id}
+            key={index}
             direction="row"
             align="center"
             spacing={4}
@@ -37,9 +37,11 @@ const PastSessions = () => {
           >
             <Icon as={FcVideoFile} boxSize={6} color="gray.500" />
             <VStack align="flex-start" flex={1}>
-              <Text fontWeight="bold">{session.title}</Text>
+              <Text fontWeight="bold">
+                {session.title} {moment(session.date).format('DD-MM-YYYY')}
+              </Text>
               <Text fontSize="sm" color="gray.600">
-                {session.instructor.name}
+                {session.instructor}
               </Text>
             </VStack>
             {session?.meeting_link && (
@@ -57,11 +59,8 @@ const PastSessions = () => {
           </Stack>
         ))}
       </VStack>
-      {/* {pastSessions?.map((item: any) => (
-        <div key={item?.id}>{item?.title}</div>
-      ))} */}
     </div>
   );
 };
 
-export default PastSessions;
+export default CourseSessions;

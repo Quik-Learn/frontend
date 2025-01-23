@@ -5,7 +5,7 @@ import {
   useCreateResourceMutation,
 } from '~/lib/services/tutor-mutation';
 
-const useGetResources = (id: string) => {
+const useGetResources = (id: string, onClose: () => void) => {
   const [resources, setResources] = useState([]);
   const [topic, setTopic] = useState('');
   const toast = useToast();
@@ -45,13 +45,14 @@ const useGetResources = (id: string) => {
   }, [data]);
   useEffect(() => {
     if (createSuccess) {
-      toast({
-        title: 'Resource created successfully',
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
+      // toast({
+      //   title: 'Resource created successfully',
+      //   status: 'success',
+      //   duration: 9000,
+      //   isClosable: true,
+      //   position: 'top',
+      // });
+      onClose();
       trigger(id);
     }
     if (isCreateError) {

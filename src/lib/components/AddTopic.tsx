@@ -51,7 +51,18 @@ const AddTopic = ({
     }
   };
 
-  const allowedFiles = ['png', 'jpg', 'jpeg'].map((x) => '.' + x).join(',');
+  const allowedFiles = [
+    'png',
+    'jpg',
+    'jpeg',
+    '.pdf',
+    '.docx',
+    '.doc',
+    '.xls',
+    '.xlsx',
+  ]
+    .map((x) => '.' + x)
+    .join(',');
 
   useEffect(() => {
     if (isSuccess) {
