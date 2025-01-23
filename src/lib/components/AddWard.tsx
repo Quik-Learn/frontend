@@ -23,6 +23,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 import Button from './ui/button';
 import PasswordInput from './ui/password-input';
+import useGetCities from '../hooks/useCities';
 
 export const AddWard = ({ setNew }: any) => {
   return (
@@ -66,6 +67,7 @@ export const NewWard = ({
   addWard,
   isLoading,
 }: any) => {
+  const { cities, isLoading: isCityLoading } = useGetCities();
   return (
     <ModalContent bg={'#fff'} maxH={'80vh'} overflowY={'auto'}>
       <ModalHeader
@@ -215,7 +217,7 @@ export const NewWard = ({
               </FormControl>
               <FormControl gridColumn={{ base: 'span 4', md: 'span 4' }}>
                 <FormLabel fontSize={14} color="#1D2026">
-                  State of Residence
+                  City of Residence
                 </FormLabel>
                 <Select
                   placeholder="Enter your state"
@@ -227,7 +229,9 @@ export const NewWard = ({
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e: any) => setFieldValue('state', e.target.value)}
                 >
-                  <option value="Lagos">Lagos</option>
+                  {cities?.map((item: any) => (
+                    <option value={item?.name}>{item?.name}</option>
+                  ))}
                 </Select>
                 <FormErrorMessage fontSize={10} color={'#f00'}>
                   {errors.state || ''}
