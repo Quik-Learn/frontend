@@ -123,9 +123,16 @@ const Subject = () => {
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e) => setFieldValue('state', e.target.value)}
                 >
-                  {cities?.map((item) => (
-                    <option value={item?.city}>{item?.city}</option>
-                  ))}
+                  {isCityLoading ? (
+                    <option value="">Loading...</option>
+                  ) : (
+                    <>
+                      <option value="">Select City</option>
+                      {cities?.map((item) => (
+                        <option value={item?.city}>{item?.city}</option>
+                      ))}
+                    </>
+                  )}
                 </Select>
                 <FormErrorMessage fontSize={10} color={'#f00'}>
                   {errors.state || ''}
