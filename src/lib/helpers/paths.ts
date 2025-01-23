@@ -244,18 +244,18 @@ export const sortEventsByDateTime = (events: any[]): any[] => {
   return eventsWithPast.sort((a: any, b: any) => {
     // First compare dates
     const dateComparison =
-      new Date(b.date).getTime() - new Date(a.date).getTime();
+      new Date(a.date).getTime() - new Date(b.date).getTime(); // Reversed comparison
     if (dateComparison !== 0) return dateComparison;
 
     // If dates are equal, compare start times
     const aDateTime = new Date(`${a.date}T${a.start_time}`);
     const bDateTime = new Date(`${b.date}T${b.start_time}`);
-    const startTimeComparison = bDateTime.getTime() - aDateTime.getTime();
+    const startTimeComparison = aDateTime.getTime() - bDateTime.getTime(); // Reversed comparison
     if (startTimeComparison !== 0) return startTimeComparison;
 
     // If start times are equal, compare end times
     const aEndTime = new Date(`${a.date}T${a.end_time}`);
     const bEndTime = new Date(`${b.date}T${b.end_time}`);
-    return bEndTime.getTime() - aEndTime.getTime();
+    return aEndTime.getTime() - bEndTime.getTime(); // Reversed comparison
   });
 };
