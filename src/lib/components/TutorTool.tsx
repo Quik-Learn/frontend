@@ -49,14 +49,14 @@ const TutorTool = ({
           <option value={Views?.MONTH}>Monthly</option>
         </Select>
       </Flex>
-      <Flex align="center">
+      {/* <Flex align="center">
         <Button
           width={'262px'}
           text="Schedule Availability"
           bg="#0177FB"
           onClick={onOpenSchedule}
         />
-      </Flex>
+      </Flex> */}
     </Flex>
   );
 };

@@ -10,6 +10,8 @@ import {
   VStack,
   Avatar,
   Image,
+  Box,
+  Heading,
 } from '@chakra-ui/react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -105,42 +107,54 @@ const MySessions = () => {
       <Text color={'black'} m={6} fontSize={'26px'} fontWeight={500}>
         Previous Sessions
       </Text>
-      <Grid templateColumns="repeat(3, 1fr)" gap={6} p={6}>
-        {pastSessions?.map((session: Session) => (
-          <GridItem
-            key={session.id}
-            bg="white"
-            p={4}
-            borderRadius="lg"
-            boxShadow="md"
-          >
-            <HStack spacing={4}>
-              <Image
-                src={session.subject?.thumbnail}
-                alt={session.subject?.title}
-                boxSize="60px"
-                objectFit="cover"
-                borderRadius="md"
-              />
-              <VStack align="flex-start" spacing={2}>
-                <Text fontWeight="bold" fontSize="lg">
-                  {session.title}
-                </Text>
-                <HStack spacing={2}>
-                  <Avatar
-                    size="sm"
-                    name={session.instructor.name}
-                    src={session.instructor.name}
-                  />
-                  <Text fontSize="sm" color="gray.600">
-                    {session.instructor.name}
+      {pastSessions?.length > 0 ? (
+        <Grid templateColumns="repeat(3, 1fr)" gap={6} p={6}>
+          {pastSessions?.map((session: Session) => (
+            <GridItem
+              key={session.id}
+              bg="white"
+              p={4}
+              borderRadius="lg"
+              boxShadow="md"
+            >
+              <HStack spacing={4}>
+                <Image
+                  src={session.subject?.thumbnail}
+                  alt={session.subject?.title}
+                  boxSize="60px"
+                  objectFit="cover"
+                  borderRadius="md"
+                />
+                <VStack align="flex-start" spacing={2}>
+                  <Text fontWeight="bold" fontSize="lg">
+                    {session.title}
                   </Text>
-                </HStack>
-              </VStack>
-            </HStack>
-          </GridItem>
-        ))}
-      </Grid>
+                  <HStack spacing={2}>
+                    <Avatar
+                      size="sm"
+                      name={session.instructor.name}
+                      src={session.instructor.name}
+                    />
+                    <Text fontSize="sm" color="gray.600">
+                      {session.instructor.name}
+                    </Text>
+                  </HStack>
+                </VStack>
+              </HStack>
+            </GridItem>
+          ))}
+        </Grid>
+      ) : (
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="50vh"
+          width="60vw"
+        >
+          <Heading>No past sessions found</Heading>
+        </Box>
+      )}
     </ParentContainer>
   );
 };
