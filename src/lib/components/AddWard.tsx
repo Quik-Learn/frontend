@@ -230,7 +230,7 @@ export const NewWard = ({
                   onChange={(e: any) => setFieldValue('state', e.target.value)}
                 >
                   {cities?.map((item: any) => (
-                    <option value={item?.name}>{item?.name}</option>
+                    <option value={item?.city}>{item?.city}</option>
                   ))}
                 </Select>
                 <FormErrorMessage fontSize={10} color={'#f00'}>
