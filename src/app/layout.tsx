@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { useEffect, useState } from 'react';
 import './styles.css';
 import Providers from '~/app/providers';
+import TawkToChat from '~/lib/components/TawkToChat';
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
     <html lang="en" style={{ fontFamily: 'heading' }}>
       <body>
         <Providers>{children}</Providers>
+        <TawkToChat />
       </body>
     </html>
   );
