@@ -40,7 +40,7 @@ const SignUp = () => {
           alignSelf="flex-start"
           onClick={() => router.back()}
         />
-        <Image src="/images/logo.svg" alt="logo" h={110} w={110} />
+        <Image src="/images/tutor-logo.png" alt="logo" h={110} w={110} />
         <Text />
       </HStack>
       <Heading

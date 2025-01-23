@@ -34,6 +34,8 @@ import { addRandomSoftColorsToEvents } from '~/lib/helpers/paths';
 import ActiveCourses from '~/lib/components/ActiveCourses';
 import moment from 'moment';
 import AddParent from '~/lib/components/AddParent';
+import { useAppSelector } from '~/lib/store';
+import { userState } from '~/lib/store/reducers/user-slice';
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -44,20 +46,19 @@ const Dashboard = () => {
   const [value, onChange] = useState<any>(new Date());
   const [neww, setNew] = useState('');
   const [empty, setEmpty] = useState(true);
+  const user = useAppSelector(userState);
 
   useEffect(() => {
     setTimeout(() => {
       setEmpty(false);
     }, 10000);
   }, []);
-  console.log(data, 'data', data?.bio?.parent === null);
+
   useEffect(() => {
-    if (data?.bio?.parent?.id.length === 0) {
+    if (data?.bio?.has_parent === false) {
       onOpen();
-    } else {
-      onClose();
     }
-  }, [data?.bio?.parent]);
+  }, [data?.bio?.has_parent]);
 
   // Helper function to check if a date has an event
   const isDateWithEvent = (date: Date) => {

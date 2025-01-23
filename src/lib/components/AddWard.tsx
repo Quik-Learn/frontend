@@ -229,9 +229,16 @@ export const NewWard = ({
                   _placeholder={{ color: '#8C94A3' }}
                   onChange={(e: any) => setFieldValue('state', e.target.value)}
                 >
-                  {cities?.map((item: any) => (
-                    <option value={item?.city}>{item?.city}</option>
-                  ))}
+                  {isCityLoading ? (
+                    <option value="">Loading...</option>
+                  ) : (
+                    <>
+                      <option value="">Select City</option>
+                      {cities?.map((item: any) => (
+                        <option value={item?.city}>{item?.city}</option>
+                      ))}
+                    </>
+                  )}
                 </Select>
                 <FormErrorMessage fontSize={10} color={'#f00'}>
                   {errors.state || ''}
