@@ -64,15 +64,27 @@ const Events = ({
   const start = convertTo12HourFormat(event?.start);
   const end = convertTo12HourFormat(event?.end);
   const array = [
-    { id: 1, name: `${start} to ${end}`, icon: GoClock },
+    { id: 1, name: `${start} to ${end}`, icon: GoClock, show: true },
     {
       id: 2,
       name: moment().isBefore(moment(event?.start, 'YYYYMMDD'))
         ? `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`
         : 'Ended',
       icon: CiBellOn,
+      show: true,
     },
-    { id: 3, name: event?.instructor?.name, icon: TiGroupOutline },
+    {
+      id: 3,
+      name: event?.instructor?.name,
+      icon: TiGroupOutline,
+      show: type === 'student',
+    },
+    {
+      id: 4,
+      name: `Students: ${event?.students?.map((student: any) => student)}`,
+      icon: RiHomeSmile2Line,
+      show: type === 'tutor',
+    },
   ];
   useEffect(() => {
     const checkTimeDifference = () => {
@@ -189,14 +201,17 @@ const Events = ({
               <Text fontSize="18px" color="#5F5F5FD1" mb={3}>
                 {event?.desc}
               </Text>
-              {array.map((item) => (
-                <HStack gap={5}>
-                  <Icon as={item.icon} size={30} color="#000" />
-                  <Text fontSize={18} color={'#000'} fontWeight={300}>
-                    {item.name}
-                  </Text>
-                </HStack>
-              ))}
+              {array.map(
+                (item) =>
+                  item.show && (
+                    <HStack gap={5}>
+                      <Icon as={item.icon} size={30} color="#000" />
+                      <Text fontSize={18} color={'#000'} fontWeight={300}>
+                        {item.name}
+                      </Text>
+                    </HStack>
+                  )
+              )}
 
               <HStack gap={5}>
                 <Icon as={IoVideocamOutline} size={30} color="#000" />
