@@ -55,7 +55,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (!data?.bio?.has_parent) {
+    if (data?.bio?.has_parent === false) {
       onOpen();
     }
   }, [data?.bio?.has_parent]);
