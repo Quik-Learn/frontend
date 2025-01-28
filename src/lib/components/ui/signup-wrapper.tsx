@@ -33,7 +33,13 @@ const SignupWrapper = ({
         justifyContent="space-between"
         display={{ base: 'none', md: 'flex' }}
       >
-        <Image src={img} width={1000} height={'100%'} alt="signup" />
+        <Image
+          src={img}
+          width={'100%'}
+          height={'100%'}
+          objectFit={'cover'}
+          alt="signup"
+        />
       </VStack>
       <IconButton
         position={'absolute'}

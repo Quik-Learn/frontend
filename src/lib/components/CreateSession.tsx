@@ -62,15 +62,27 @@ const CreateSession = ({
 
   useEffect(() => {
     if (type === 'Edit' && data) {
+      // Format the times to ensure they match the select options format (HH:mm)
+      const formatTime = (time: string) => {
+        if (!time) return '';
+        // Split the time string and take only hours and minutes
+        const timeArray = time.split(':');
+        const hours = timeArray[0].padStart(2, '0');
+        const minutes = timeArray[1].padStart(2, '0');
+        // Return in HH:mm format
+        return `${hours}:${minutes}`;
+      };
+
       setInitialValues({
-        title: data?.title,
-        notes: data?.notes,
-        date: data?.date,
-        start_time: data?.start_time,
-        end_time: data?.end_time,
+        title: data?.title || '',
+        notes: data?.notes || '',
+        date: data?.date || '',
+        start_time: formatTime(data?.start_time),
+        end_time: formatTime(data?.end_time),
       });
     }
   }, [type, data]);
+  console.log(initialValues, 'initialValues');
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -177,98 +189,69 @@ const CreateSession = ({
                 </FormControl>
                 <HStack>
                   <FormControl>
-                    <Input
+                    <Select
                       placeholder="Start Time"
                       bg="#ffffff"
-                      type="time"
                       borderWidth={1}
                       borderColor="#E9EAF0"
                       value={values.start_time}
-                      min="09:00"
-                      max="16:00"
                       p={5}
-                      sx={{
-                        input: {
-                          border: 'none',
-                          boxSizing: 'border-box',
-                          outline: '0',
-                          position: 'relative',
-                        },
-                        '::-webkit-calendar-picker-indicator': {
-                          background: 'transparent',
-                          bottom: '0',
-                          color: 'transparent',
-                          cursor: 'pointer',
-                          height: 'auto',
-                          left: '0',
-                          position: 'absolute',
-                          right: '0',
-                          top: '0',
-                          width: 'auto',
-                        },
-                      }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
-                      onChange={(e) => {
-                        const time = e.target.value;
-                        const [hours] = time.split(':');
-                        const hourNum = parseInt(hours);
-                        console.log(hourNum);
-                        if (hourNum >= 9 && hourNum <= 16) {
-                          setFieldValue('start_time', time);
-                        } else {
-                          alert('Start time must be between 09:00 and 14:00');
-                        }
-                      }}
-                    />
+                      onChange={(e) =>
+                        setFieldValue('start_time', e.target.value)
+                      }
+                    >
+                      <option value="09:00">09:00</option>
+                      <option value="09:30">09:30</option>
+                      <option value="10:00">10:00</option>
+                      <option value="10:30">10:30</option>
+                      <option value="11:00">11:00</option>
+                      <option value="11:30">11:30</option>
+                      <option value="12:00">12:00</option>
+                      <option value="12:30">12:30</option>
+                      <option value="13:00">13:00</option>
+                      <option value="13:30">13:30</option>
+                      <option value="14:00">14:00</option>
+                      <option value="14:30">14:30</option>
+                      <option value="15:00">15:00</option>
+                      <option value="15:30">15:30</option>
+                      <option value="16:00">16:00</option>
+                    </Select>
                     <Text color={'red'} fontSize={8}>
                       {errors.start_time || ''}
                     </Text>
                   </FormControl>
                   <FormControl>
-                    <Input
+                    <Select
                       placeholder="End Time"
                       bg="#ffffff"
-                      type="time"
                       borderWidth={1}
                       borderColor="#E9EAF0"
                       value={values.end_time}
-                      min="10:00"
-                      max="17:00"
                       p={5}
-                      sx={{
-                        input: {
-                          border: 'none',
-                          boxSizing: 'border-box',
-                          outline: '0',
-                          position: 'relative',
-                        },
-                        '::-webkit-calendar-picker-indicator': {
-                          background: 'transparent',
-                          bottom: '0',
-                          color: 'transparent',
-                          cursor: 'pointer',
-                          height: 'auto',
-                          left: '0',
-                          position: 'absolute',
-                          right: '0',
-                          top: '0',
-                          width: 'auto',
-                        },
-                      }}
                       color="#1D2026"
                       _placeholder={{ color: '#8C94A3' }}
-                      onChange={(e) => {
-                        const time = e.target.value;
-                        const [hours] = time.split(':');
-                        const hourNum = parseInt(hours);
-                        if (hourNum >= 10 && hourNum <= 17) {
-                          setFieldValue('end_time', time);
-                        } else {
-                          alert('End time must be between 10:00 and 17:00');
-                        }
-                      }}
-                    />
+                      onChange={(e) =>
+                        setFieldValue('end_time', e.target.value)
+                      }
+                    >
+                      <option value="10:00">10:00</option>
+                      <option value="10:30">10:30</option>
+                      <option value="11:00">11:00</option>
+                      <option value="11:30">11:30</option>
+                      <option value="12:00">12:00</option>
+                      <option value="12:30">12:30</option>
+                      <option value="13:00">13:00</option>
+                      <option value="13:30">13:30</option>
+                      <option value="14:00">14:00</option>
+                      <option value="14:30">14:30</option>
+                      <option value="15:00">15:00</option>
+                      <option value="15:30">15:30</option>
+                      <option value="16:00">16:00</option>
+                      <option value="16:30">16:30</option>
+                      <option value="17:00">17:00</option>
+                    </Select>
                     <Text color={'red'} fontSize={8}>
                       {errors.end_time || ''}
                     </Text>

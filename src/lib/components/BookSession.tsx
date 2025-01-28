@@ -18,7 +18,7 @@ import { IoChevronBackOutline } from 'react-icons/io5';
 import { GrFormNext } from 'react-icons/gr';
 import {
   convertTimeAndAddOneHour,
-  convertTo12HourFormatt,
+  convertTo12HourFormattShort,
   formatToDateString,
 } from '../helpers/paths';
 import { useLazyGetStudentCalenderQuery } from '../services/parent-mutation';
@@ -62,7 +62,7 @@ const BookSession: React.FC<BookSessionProps> = ({
   studentCalenderData,
   setStudentCalenderData,
   hasSubscription,
-  onOpenError
+  onOpenError,
 }: any) => {
   const [selected, setSelected] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -81,12 +81,13 @@ const BookSession: React.FC<BookSessionProps> = ({
     const formattedDate = formatToDateString(selectedDate);
     const bookedSlots = studentCalenderData
       .filter((session: any) => session.date === formattedDate)
-      .map((session: any) => convertTo12HourFormatt(session.start_time));
+      .map((session: any) => convertTo12HourFormattShort(session.start_time));
     console.log(bookedSlots);
 
     return ALL_TIME_SLOTS.filter((slot) => !bookedSlots.includes(slot));
   };
 
+  console.log(getAvailableTimeSlots(), 'getAvailableTimeSlots');
   const tileClassName = ({ date }: { date: Date }) => {
     const classes = [];
 

@@ -44,15 +44,15 @@ const SingleSession = () => {
   const toast = useToast();
   const [studentCalenderData, setStudentCalenderData] = useState<any[]>([]);
   const user = useAppSelector(userState);
-  console.log(user,'user')
+  console.log(user, 'user');
   const [courseData, setCourseData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
     useLazyGetACourseQuery();
-    const {
-      onOpen: onOpenError,
-      isOpen: isOpenError,
-      onClose: onCloseError,
-    } = useDisclosure();
+  const {
+    onOpen: onOpenError,
+    isOpen: isOpenError,
+    onClose: onCloseError,
+  } = useDisclosure();
   const [
     getStudentCalender,
     {
@@ -129,6 +129,7 @@ const SingleSession = () => {
       setStudentCalenderData(transformedData);
     }
   }, [isSuccessCalender]);
+  console.log(courseData, user, studentCalenderData);
   return (
     <ParentContainer>
       <Stack>
@@ -141,7 +142,7 @@ const SingleSession = () => {
             fontWeight={700}
             mb={2}
           >
-            {courseData?.title}
+            {courseData?.subject?.title}
           </Text>
           <Text
             color={'#4E5566'}
@@ -149,7 +150,7 @@ const SingleSession = () => {
             mb={2}
             alignSelf={'flex-start'}
           >
-            {courseData?.short_description}
+            {courseData?.subject?.short_description}
           </Text>
 
           <Tabs w={'100%'}>
@@ -203,7 +204,7 @@ const SingleSession = () => {
                     Description
                   </Heading>
                   <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
-                    {courseData?.description}
+                    {courseData?.subject?.description}
                   </Text>
 
                   <Stack
@@ -233,7 +234,7 @@ const SingleSession = () => {
                         flexWrap={'wrap'}
                         w={'100%'}
                       >
-                        {courseData?.achievements?.map((item: any) => (
+                        {courseData?.subject?.achievements?.map((item: any) => (
                           <ListItem
                             key={item?.id}
                             color={'#4E5566'}
@@ -268,20 +269,18 @@ const SingleSession = () => {
             onClose={onCloseError}
             description="You need to be subscribed to book a session for this course, Notify your parent to subscribe"
             hasAction={false}
-          
           />
           <BookSession
             isOpen={isOpen}
             onClose={onClose}
             id={user?.id}
             subject_id={id}
-            bookSessionFunction={(data: any) =>{ 
-              if(user?.has_subscription){ 
-                bookSession(data)
-
-              }else{
-                onClose()
-                onOpenError()
+            bookSessionFunction={(data: any) => {
+              if (user?.has_subscription) {
+                bookSession(data);
+              } else {
+                onClose();
+                onOpenError();
               }
             }}
             isLoading={isLoadingBook}

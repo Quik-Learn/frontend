@@ -137,7 +137,7 @@ const InvoicesData = ({ data }: any) => {
             </p>
           </div>
         </div>
-        <img src={'/images/logo.svg'} />
+        <img src={'/images/tutor-logo.png'} width={100} height={100} />
       </div>
 
       <div

@@ -75,14 +75,14 @@ const Events = ({
     },
     {
       id: 3,
-      name: event?.instructor?.name,
+      name: `Instructor: ${event?.instructor?.name}`,
       icon: TiGroupOutline,
       show: type === 'student',
     },
     {
       id: 4,
       name: `Students: ${event?.students?.map((student: any) => student)}`,
-      icon: RiHomeSmile2Line,
+      icon: TiGroupOutline,
       show: type === 'tutor',
     },
   ];

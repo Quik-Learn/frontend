@@ -57,7 +57,7 @@ const SignUp = () => {
         Sign Up
       </Heading>
       <Stack>
-        <HStack alignItems={'flex-start'}>
+        <HStack alignItems={'flex-start'} flexDirection={['column', 'row']}>
           <Box borderRadius="10px" boxShadow="md" px={10} pb={10} width="full">
             <VStack width="full" alignItems="center">
               <Image
@@ -139,8 +139,9 @@ const SignUp = () => {
           justify="space-between"
           align="center"
           w="full"
-          mt={-20}
+          mt={[0, -20]}
           pb={10}
+          flexDirection={['column', 'row']}
         >
           <Text color="#666666" fontSize={13.5}>
             Need help? Call us on{' '}
