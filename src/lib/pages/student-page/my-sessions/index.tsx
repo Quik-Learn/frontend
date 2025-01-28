@@ -149,7 +149,7 @@ const MySessions = () => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="50vh"
+          height="30vh"
           width="60vw"
         >
           <Heading>No past sessions found</Heading>

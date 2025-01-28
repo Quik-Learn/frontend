@@ -162,7 +162,7 @@ const SingleCourses = () => {
             fontWeight={700}
             mb={2}
           >
-            {courseData?.title}
+            {courseData?.subject?.title}
           </Text>
           <Text
             color={'#4E5566'}
@@ -172,7 +172,7 @@ const SingleCourses = () => {
             textAlign={'left'}
             alignSelf={'flex-start'}
           >
-            {courseData?.short_description}
+            {courseData?.subject?.short_description}
           </Text>
 
           <Tabs w={'100%'}>
@@ -232,7 +232,7 @@ const SingleCourses = () => {
                       fontSize={{ base: 14, md: 16 }}
                       mb={2}
                     >
-                      {courseData?.description}
+                      {courseData?.subject?.description}
                     </Text>
 
                     <Stack
@@ -259,7 +259,7 @@ const SingleCourses = () => {
                         flexWrap={'wrap'}
                         w={'100%'}
                       >
-                        {courseData?.achievements?.map((item: any) => (
+                        {courseData?.subject?.achievements?.map((item: any) => (
                           <ListItem
                             key={item?.id}
                             color={'#4E5566'}

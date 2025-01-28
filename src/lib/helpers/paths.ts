@@ -74,7 +74,13 @@ export const convertTo12HourFormatt = (time24: string) => {
   const hour12 = hourNumber % 12 || 12;
   return `${hour12}:${minute}${ampm}`;
 };
-
+export const convertTo12HourFormattShort = (time24: string) => {
+  const [hour, minute] = time24?.split(':');
+  const hourNumber = parseInt(hour, 10);
+  const ampm = hourNumber >= 12 ? 'pm' : 'am';
+  const hour12 = hourNumber % 12 || 12;
+  return `${hour12}${ampm}`;
+};
 const convertToFullDate = (time: any, date: any) => {
   // Combine date and time into an ISO string
   const dateTimeString = `${date}T${time}`;

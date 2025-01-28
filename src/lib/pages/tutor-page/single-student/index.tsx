@@ -27,10 +27,12 @@ import {
 } from '~/lib/helpers/paths';
 import moment from 'moment';
 import { AiTwotoneDelete } from 'react-icons/ai';
+import StudentsHook from '../student/students.hook';
 
 const SingleStudent = () => {
   const { id }: { id: string } = useParams();
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const { students } = StudentsHook();
   const {
     onOpen: onEditOpen,
     isOpen: isEditOpen,
@@ -53,15 +55,16 @@ const SingleStudent = () => {
 
     onEditOpen();
   };
-  console.log(sessions);
+  const studentData = students?.find((item: any) => item?.id === id)?.student;
+  console.log(sessions, studentData);
   return (
     <TutorContainer>
       <Stack p={[4, 8]}>
         <HStack justifyContent={'space-between'}>
           <HStack gap={2}>
-            <Avatar size="md" />
+            <Avatar size="md" src={studentData?.profile_image} />
             <Text color={'#303354'} fontSize={[16, 20]}>
-              Kristin Watson
+              {studentData?.firstname || ''} {studentData?.lastname || ''}
             </Text>
           </HStack>
           <Button
@@ -75,7 +78,7 @@ const SingleStudent = () => {
           templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']}
           gap={[4, 8]}
         >
-          {sessions?.reverse()?.map((item: any) => (
+          {sessions?.map((item: any) => (
             <GridItem key={item?.id} p={3} opacity={item?.isPast ? 0.5 : 1}>
               <HStack justifyContent="space-between" mb={2}>
                 <Text fontSize={[12, 14]} color={'#303354'} fontWeight="bold">

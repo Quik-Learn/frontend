@@ -89,9 +89,9 @@ const ChooseWard = ({ isOpen, onClose, handleSelectHandler }: any) => {
                 </VStack>
               ) : (
                 <Grid templateColumns="repeat(2, 1fr)" gap={6} my={6} px={6}>
-                  {wardData?.map((item: any) => (
+                  {wardData?.map((item: any, index: number) => (
                     <GridItem
-                      key={item.id}
+                      key={index}
                       colSpan={[3, 2, 1]}
                       // w={{lg: 410}}
                       h={{ lg: 300 }}

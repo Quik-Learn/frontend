@@ -67,7 +67,18 @@ const Account = () => {
           <Spinner size="xl" />
         </Stack>
       ) : (
-        <VStack p={6} w={'100%'} alignItems={'flex-start'}>
+        <VStack
+          p={6}
+          w={'100%'}
+          alignItems={'flex-start'}
+          maxWidth={'1200px'}
+          overflowX={'scroll'}
+          sx={{
+            '::-webkit-scrollbar': {
+              display: 'none',
+            },
+          }}
+        >
           <ConnectionRequest
             isOpen={isOpen}
             onClose={onClose}
@@ -107,22 +118,40 @@ const Account = () => {
                 accept={allowedFiles}
                 zIndex={200}
               />
-              {isLoading ? <Spinner height="20" width="20" /> : 
-              
-              <>
-              {initialValues?.profile_image
-               ? <Image src={initialValues?.profile_image} alt="upload"  borderRadius={10} objectFit={'cover'} width={100} height={100} /> :   
+              {isLoading ? (
+                <Spinner height="20" width="20" />
+              ) : (
                 <>
-              
-              <Image src="/images/upload.svg"  width={40} height={40} alt="upload" />
-              
-              <Text mt={2} color={'#4C535F'} fontWeight={500} fontSize={10}>
-                Upload your photo
-              </Text>
+                  {initialValues?.profile_image ? (
+                    <Image
+                      src={initialValues?.profile_image}
+                      alt="upload"
+                      borderRadius={10}
+                      objectFit={'cover'}
+                      width={100}
+                      height={100}
+                    />
+                  ) : (
+                    <>
+                      <Image
+                        src="/images/upload.svg"
+                        width={40}
+                        height={40}
+                        alt="upload"
+                      />
+
+                      <Text
+                        mt={2}
+                        color={'#4C535F'}
+                        fontWeight={500}
+                        fontSize={10}
+                      >
+                        Upload your photo
+                      </Text>
+                    </>
+                  )}
                 </>
-              }
-           
-              </>}
+              )}
             </VStack>
           </VStack>
           <Divider />
