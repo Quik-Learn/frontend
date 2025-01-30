@@ -32,14 +32,16 @@ import FeedbackModal from './FeedbackModal';
 import { setMeetingId } from '../store/reducers/meeting-id-slice';
 import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
+import { useRouter } from 'next/navigation';
 
-const EventsTutor = ({
+const EventsOnsite = ({
   event,
   isOpen: isOpenJoin,
   onClose: onCloseJoin,
   type,
 }: any) => {
   console.log('eee', event);
+  const router = useRouter();
   const [isDisabled, setIsDisabled] = useState(true);
   const dispatch = useAppDispatch();
   const [selected, setSelceted] = useState<any>();
@@ -184,14 +186,14 @@ const EventsTutor = ({
                 <Button
                   width={127}
                   bg={selected?.color}
-                  isDisabled={!event?.meeting_link}
+                  // isDisabled={!event?.meeting_link}
                   isLoading={isLoading}
                   text="View"
                   onClick={() => {
                     if (type === 'tutor') {
-                      joinMeetingTutor(event?.meeting_link?.meeting_id);
+                      router.push(`/tutor/sessions/${event?.id}`);
                     } else {
-                      joinMeeting(event?.meeting_link?.meeting_id);
+                      router.push(`/student/my-sessions/${event?.id}`);
                     }
                   }}
                 />
@@ -214,4 +216,4 @@ const EventsTutor = ({
   );
 };
 
-export default EventsTutor;
+export default EventsOnsite;

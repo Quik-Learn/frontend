@@ -170,7 +170,7 @@ const InvoicesData = ({ data }: any) => {
               (612) 856 - 0989
             </Text>
             <Text fontSize={8} color={'#868DA6'}>
-              contact@quiklearn.com
+            contact@backyardtech.co.uk
             </Text>
             <Text fontSize={8} color={'#868DA6'}>
               Pablo Alto, San Francisco, CA 92102, United Kingdom
