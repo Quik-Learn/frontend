@@ -32,7 +32,6 @@ import { GetServerSideProps } from 'next';
 import { requireAuthentication } from '~/lib/helpers/auth';
 import { usePastSessions } from '~/lib/hooks/usePastSession';
 import { Session } from '~/lib/types/data';
-import EventsOnsite from '~/lib/components/EventsOnsite';
 
 const MySessions = () => {
   const toast = useToast();

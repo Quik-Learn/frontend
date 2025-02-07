@@ -166,34 +166,47 @@ const Dashboard = () => {
             ))}
           </SimpleGrid>
         )} */}
-        <SimpleGrid
-          columns={{ base: 1, md: 3 }}
-          spacing={{ base: 5, md: 10 }}
-          mt={7}
-        >
-          {dashboardItems?.map((item) => (
-            <HStack key={item.id} bg={'#fff'} padding={'20px'} gap={5}>
-              <IconButton
-                aria-label="aria"
-                icon={<Image src={item.icon} alt={item.name} />}
-                w={'60px'}
-                h={'60px'}
-                alignItems={'center'}
-                justifyContent={'center'}
-                bg={item.bg}
-                borderRadius={'1px'}
-              />
-              <VStack alignItems={'flex-start'}>
-                <Text color={'#1D2026'} fontSize={24}>
-                  {item.count}
-                </Text>
-                <Text color={'#4E5566'} fontSize={14}>
-                  {item.name}
-                </Text>
-              </VStack>
-            </HStack>
-          ))}
-        </SimpleGrid>
+        {isLoading ? (
+          <SimpleGrid
+            columns={{ base: 1, md: 3 }}
+            spacing={{ base: 5, md: 10 }}
+            mt={7}
+          >
+            {['', '', '']?.map((item, ind) => (
+              <Skeleton key={ind} w={'100%'} h={'65px'}></Skeleton>
+            ))}
+          </SimpleGrid>
+        ) : (
+          <SimpleGrid
+            columns={{ base: 1, md: 3 }}
+            spacing={{ base: 5, md: 10 }}
+            mt={7}
+          >
+            {dashboardItems?.map((item) => (
+              <HStack key={item.id} bg={'#fff'} padding={'20px'} gap={5}>
+                <IconButton
+                  aria-label="aria"
+                  icon={<Image src={item.icon} alt={item.name} />}
+                  w={'60px'}
+                  h={'60px'}
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  bg={item.bg}
+                  borderRadius={'1px'}
+                />
+                <VStack alignItems={'flex-start'}>
+                  <Text color={'#1D2026'} fontSize={24}>
+                    {item.count}
+                  </Text>
+                  <Text color={'#4E5566'} fontSize={14}>
+                    {item.name}
+                  </Text>
+                </VStack>
+              </HStack>
+            ))}
+          </SimpleGrid>
+        )}
+
         {isLoading ? (
           <Grid
             templateColumns={{ base: 'repeat(3, 1fr)', md: 'repeat(9, 1fr)' }}

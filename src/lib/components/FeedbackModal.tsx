@@ -31,7 +31,7 @@ const FeedbackModal = ({
   joinMeeting,
   session_id,
   isJoinLoading,
-  isDisabled,
+  type = 'online',
 }: any) => {
   const toast = useToast();
   const id = localStorage.getItem('meetingId');
@@ -129,23 +129,25 @@ const FeedbackModal = ({
                 icon={<RiHomeSmile2Line color="#9CA3AF" />}
                 onClick={() => router.push('/student')}
               />
-              <Button
-                width={'100%'}
-                bg={'#fff'}
-                text="Rejoin session"
-                my={5}
-                isLoading={isJoinLoading}
-                isDisabled={false}
-                border="#D0D5DD"
-                icon={<TiArrowForwardOutline color="#9CA3AF" />}
-                color="#344054"
-                onClick={() => {
-                  joinMeeting(id);
-                  onClose();
-                }}
-                borderRadius={11}
-                variant="outline"
-              />
+              {type === 'online' && (
+                <Button
+                  width={'100%'}
+                  bg={'#fff'}
+                  text="Rejoin session"
+                  my={5}
+                  isLoading={isJoinLoading}
+                  isDisabled={false}
+                  border="#D0D5DD"
+                  icon={<TiArrowForwardOutline color="#9CA3AF" />}
+                  color="#344054"
+                  onClick={() => {
+                    joinMeeting(id);
+                    onClose();
+                  }}
+                  borderRadius={11}
+                  variant="outline"
+                />
+              )}
             </HStack>
           </VStack>
         </ModalBody>

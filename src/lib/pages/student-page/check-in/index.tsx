@@ -24,14 +24,37 @@ import TutorContainer from '~/lib/layout/TutorContainer';
 import Button from '~/lib/components/ui/button';
 import { IoCloseOutline } from 'react-icons/io5';
 import { IoCheckmarkOutline } from 'react-icons/io5';
-
+import useHomeMeet from './home-meet';
+import { useParams } from 'next/navigation';
+import FeedbackModal from '~/lib/components/FeedbackModal';
 const index = () => {
+  const { id }: { id: string } = useParams();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpen2,
     onOpen: onOpen2,
     onClose: onClose2,
   } = useDisclosure();
+  const {
+    isOpen: isOpenJoin,
+    onOpen: onOpenJoin,
+    onClose: onCloseJoin,
+  } = useDisclosure();
+  const {
+    session,
+    isLoading,
+    checkIn,
+    checkOut,
+    isCheckInLoading,
+    isCheckOutLoading,
+    elapsedTime,
+    remainingTime,
+    isTimeUp,
+    isNearingEnd,
+    tutorCheckIn,
+    isTutorCheckInLoading,
+  } = useHomeMeet(id as string, onOpen, onOpen2, onClose2, onOpenJoin);
+  console.log(session, 'session');
   return (
     <TutorContainer>
       <Stack mx={{ base: 5, md: 10 }}>
@@ -53,7 +76,7 @@ const index = () => {
               Home Tutoring
             </Text>
             <Text color="#000000" fontSize={'14px'}>
-              467, Kingls Street, London, Uk
+              {session?.home_address}
             </Text>
           </VStack>
         </Box>
@@ -73,10 +96,10 @@ const index = () => {
               <Image src="/images/second.svg" alt="five" width={5} height={5} />
               <VStack alignItems={'flex-start'}>
                 <Text color="#000000" fontSize={'16px'} fontWeight={700}>
-                  Mathematics
+                  {session?.subject}
                 </Text>
                 <Text color="#000000" fontSize={'14px'}>
-                  Number Lines, LCM
+                  {session?.title}
                 </Text>
               </VStack>
             </HStack>
@@ -87,12 +110,33 @@ const index = () => {
                   Duration
                 </Text>
                 <Text color="#000000" fontSize={'14px'}>
-                  3:00 PM - 4:00 PM
+                  {session?.start_time} - {session?.end_time}
                 </Text>
               </VStack>
             </HStack>
           </VStack>
-          <Button text="Check In" width={226} bg="#048E12" />
+          <Button
+            text={session?.has_checked_in ? 'Mark as Completed' : 'Check In'}
+            width={226}
+            isLoading={isCheckInLoading || isCheckOutLoading}
+            isDisabled={
+              !session?.has_checked_in &&
+              new Date().getTime() <
+                new Date(session?.date + ' ' + session?.start_time).getTime()
+            }
+            bg={session?.has_checked_in ? '#048E12' : '#0065FF'}
+            onClick={() => {
+              if (session?.has_checked_in) {
+                if (isNearingEnd) {
+                  checkOut(session?.id);
+                } else {
+                  onOpen2();
+                }
+              } else {
+                checkIn(session?.id);
+              }
+            }}
+          />
         </Box>
 
         <Box
@@ -128,7 +172,14 @@ const index = () => {
               gap={2}
               flex={1}
               justifyContent={'center'}
-              onClick={onOpen}
+              onClick={() => {
+                tutorCheckIn({
+                  id: session?.id,
+                  body: {
+                    tutor_available: false,
+                  },
+                });
+              }}
             >
               <IoCloseOutline color="#fff" />
               <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
@@ -145,7 +196,14 @@ const index = () => {
               bg="#0065FF"
               flex={1}
               cursor={'pointer'}
-              onClick={onOpen2}
+              onClick={() => {
+                tutorCheckIn({
+                  id: session?.id,
+                  body: {
+                    tutor_available: true,
+                  },
+                });
+              }}
             >
               <IoCheckmarkOutline color="#fff" />
               <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
@@ -172,7 +230,7 @@ const index = () => {
                 alignSelf={'center'}
               />
               <Text fontSize={'33px'} fontWeight={900} color="#00190B">
-                14: 32
+                {elapsedTime}
               </Text>
               <Text fontSize={'23px'} fontWeight={500} color="#000000">
                 Tutor Availability
@@ -187,12 +245,28 @@ const index = () => {
                   border="#5F5F5F"
                   bg="#fff"
                   color="#5F5F5F"
+                  onClick={() => {
+                    tutorCheckIn({
+                      id: session?.id,
+                      body: {
+                        tutor_available: false,
+                      },
+                    });
+                  }}
                 />
                 <Button
                   text="Present"
                   borderRadius={10}
                   width={'full'}
                   bg="#0065FF"
+                  onClick={() => {
+                    tutorCheckIn({
+                      id: session?.id,
+                      body: {
+                        tutor_available: true,
+                      },
+                    });
+                  }}
                 />
               </HStack>
             </ModalFooter>
@@ -209,7 +283,7 @@ const index = () => {
               gap={5}
             >
               <Text fontSize={'32px'} fontWeight={500} color="#00190B">
-                Number Lines
+                {session?.title}
               </Text>
               <Text fontSize={'23px'} fontWeight={500} color="#000000">
                 Dr. James
@@ -222,7 +296,7 @@ const index = () => {
                 alignSelf={'center'}
               />
               <Text fontSize={'33px'} fontWeight={900} color="#00190B">
-                14: 32
+                {remainingTime}
               </Text>
               <Text fontSize={'23px'} fontWeight={500} color="#000000">
                 Time Left
@@ -234,14 +308,34 @@ const index = () => {
                   text="Check Out"
                   borderRadius={10}
                   width={'full'}
-                  border="#5F5F5F"
-                  bg="#fff"
-                  color="#5F5F5F"
+                  onClick={() => {
+                    if (isNearingEnd) {
+                      checkOut(session?.id);
+                    }
+                  }}
+                  isLoading={isCheckOutLoading}
+                  isDisabled={!isNearingEnd}
+                  border={
+                    isNearingEnd ? '1px solid #5F5F5F' : '1px solid #5F5F5F'
+                  }
+                  bg={isNearingEnd ? '#048E12' : '#fff'}
+                  color={isNearingEnd ? '#fff' : '#5F5F5F'}
                 />
               </HStack>
             </ModalFooter>
           </ModalContent>
         </Modal>
+        <FeedbackModal
+          isOpen={isOpenJoin}
+          onClose={onCloseJoin}
+          session_id={id}
+          isJoinLoading={isLoading}
+          isDisabled={false}
+          type="home"
+          joinMeeting={(id: string) => {
+            console.log(id, 'id');
+          }}
+        />
       </Stack>
     </TutorContainer>
   );
