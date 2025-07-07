@@ -84,10 +84,17 @@ const useHomeMeet = (
 
       if (data.data.start) {
         callback2();
-      } else if (data.data.has_checked_in && data.data.instructor_check_in) {
-        setElapsedTime(formatTime(data.data.instructor_check_in));
-        if (!data.data.student?.has_checked_in) {
-          callback();
+      } else {
+        if (data.data.has_checked_in && data.data.instructor_check_in) {
+          setElapsedTime(formatTime(data.data.instructor_check_in));
+          if (!data.data.student?.has_checked_in) {
+            callback();
+          }
+        }
+        if (formatTime(data.data.student_check_in) === '15:00') {
+          console.log('elapsedTime', elapsedTime);
+
+          onOpenJoin();
         }
       }
     }
@@ -104,6 +111,7 @@ const useHomeMeet = (
     callback2,
     formatTime,
     showToast,
+    elapsedTime,
   ]);
 
   // Status effects combined

@@ -79,7 +79,17 @@ const RecentActivity = ({ activitiesData }: { activitiesData: any }) => {
         </Select>
       </HStack>
 
-      <Stack w={'100%'} minH={'320px'}>
+      <Stack
+        w={'100%'}
+        minH={'320px'}
+        maxHeight={'300px'}
+        overflowY={'scroll'}
+        sx={{
+          '::-webkit-scrollbar': {
+            display: 'none',
+          },
+        }}
+      >
         {activitiesData?.length === 0 ? (
           <Stack
             w={'100%'}

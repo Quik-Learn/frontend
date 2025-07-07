@@ -80,14 +80,28 @@ const useHomeMeet = (
   useEffect(() => {
     if (isSuccess && data?.data) {
       setSession(data.data);
-      setCheckInTime(data.data.instructor_check_in);
+      setCheckInTime(data.data.student_check_in);
 
       if (data.data.start) {
-        callback2();
-      } else if (data.data.has_checked_in && data.data.instructor_check_in) {
-        setElapsedTime(formatTime(data.data.instructor_check_in));
-        if (!data.data.student?.has_checked_in) {
-          callback();
+        if (!data?.data?.end) {
+          callback2();
+        }
+      } else {
+        if (data.data.has_checked_in && data.data.student_check_in) {
+          setElapsedTime(formatTime(data.data.student_check_in));
+          if (!data.data.student?.instructor_check_in) {
+            callback();
+          }
+          console.log(
+            'elapsedTime',
+            elapsedTime,
+            formatTime(data.data.student_check_in)
+          );
+          if (formatTime(data.data.student_check_in) === '15:00') {
+            console.log('elapsedTime', elapsedTime);
+
+            onOpenJoin();
+          }
         }
       }
     }

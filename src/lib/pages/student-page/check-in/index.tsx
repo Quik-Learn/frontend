@@ -115,28 +115,43 @@ const index = () => {
               </VStack>
             </HStack>
           </VStack>
-          <Button
-            text={session?.has_checked_in ? 'Mark as Completed' : 'Check In'}
-            width={226}
-            isLoading={isCheckInLoading || isCheckOutLoading}
-            isDisabled={
-              !session?.has_checked_in &&
-              new Date().getTime() <
-                new Date(session?.date + ' ' + session?.start_time).getTime()
-            }
-            bg={session?.has_checked_in ? '#048E12' : '#0065FF'}
-            onClick={() => {
-              if (session?.has_checked_in) {
-                if (isNearingEnd) {
-                  checkOut(session?.id);
-                } else {
-                  onOpen2();
-                }
-              } else {
-                checkIn(session?.id);
-              }
-            }}
-          />
+          {session?.end ? (
+            <>
+              {!session?.has_checked_in ? (
+                <Button
+                  text={'Mark as Completed'}
+                  width={226}
+                  isLoading={isCheckInLoading || isCheckOutLoading}
+                  isDisabled={!isNearingEnd}
+                  bg={'#048E12'}
+                  onClick={() => {
+                    if (isNearingEnd) {
+                      checkOut(session?.id);
+                    } else {
+                      onOpen2();
+                    }
+                  }}
+                />
+              ) : (
+                <Button
+                  text={'Check In'}
+                  width={226}
+                  isLoading={isCheckInLoading || isCheckOutLoading}
+                  isDisabled={
+                    !session?.has_checked_in &&
+                    new Date().getTime() <
+                      new Date(
+                        session?.date + ' ' + session?.start_time
+                      ).getTime()
+                  }
+                  bg={'#0065FF'}
+                  onClick={() => {
+                    checkIn(session?.id);
+                  }}
+                />
+              )}
+            </>
+          ) : null}
         </Box>
 
         <Box
@@ -155,62 +170,61 @@ const index = () => {
             <Image src="/images/four.svg" alt="five" width={5} height={5} />
             <VStack alignItems={'flex-start'}>
               <Text color="#000000" fontSize={'16px'} fontWeight={700}>
-                Dr. James
+                {session?.instructor}
               </Text>
-              <Text color="#000000" fontSize={'14px'}>
-                Is the Tutor available?
-              </Text>
+              {!session?.start ? (
+                <Text color="#000000" fontSize={'14px'}>
+                  Is the Tutor available?
+                </Text>
+              ) : null}
             </VStack>
           </HStack>
-          <HStack gap={5} alignItems={'center'} w={'full'}>
-            <HStack
-              bg="#B5B5B5"
-              borderRadius={'10px'}
-              p={4}
-              flexDirection={'row'}
-              alignItems={'center'}
-              gap={2}
-              flex={1}
-              justifyContent={'center'}
-              onClick={() => {
-                tutorCheckIn({
-                  id: session?.id,
-                  body: {
-                    tutor_available: false,
-                  },
-                });
-              }}
-            >
-              <IoCloseOutline color="#fff" />
-              <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
-                Waiting for Tutor
-              </Text>
+          {!session?.start ? (
+            <HStack gap={5} alignItems={'center'} w={'full'}>
+              <HStack
+                bg="#B5B5B5"
+                borderRadius={'10px'}
+                p={4}
+                flexDirection={'row'}
+                alignItems={'center'}
+                gap={2}
+                flex={1}
+                justifyContent={'center'}
+                onClick={() => {
+                  onOpen();
+                }}
+              >
+                <IoCloseOutline color="#fff" />
+                <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
+                  Waiting for Tutor
+                </Text>
+              </HStack>
+              <HStack
+                borderRadius={'10px'}
+                p={4}
+                flexDirection={'row'}
+                alignItems={'center'}
+                justifyContent={'center'}
+                gap={2}
+                bg="#0065FF"
+                flex={1}
+                cursor={'pointer'}
+                onClick={() => {
+                  tutorCheckIn({
+                    id: session?.id,
+                    body: {
+                      tutor_available: true,
+                    },
+                  });
+                }}
+              >
+                <IoCheckmarkOutline color="#fff" />
+                <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
+                  Tutor has arrived
+                </Text>
+              </HStack>
             </HStack>
-            <HStack
-              borderRadius={'10px'}
-              p={4}
-              flexDirection={'row'}
-              alignItems={'center'}
-              justifyContent={'center'}
-              gap={2}
-              bg="#0065FF"
-              flex={1}
-              cursor={'pointer'}
-              onClick={() => {
-                tutorCheckIn({
-                  id: session?.id,
-                  body: {
-                    tutor_available: true,
-                  },
-                });
-              }}
-            >
-              <IoCheckmarkOutline color="#fff" />
-              <Text color="#ffffff" fontSize={'16px'} fontWeight={700}>
-                Tutor has arrived
-              </Text>
-            </HStack>
-          </HStack>
+          ) : null}
         </Box>
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay />
@@ -238,36 +252,39 @@ const index = () => {
             </ModalBody>
             <ModalFooter>
               <HStack gap={10} w={'full'}>
-                <Button
-                  text="Absent"
-                  borderRadius={10}
-                  width={'full'}
-                  border="#5F5F5F"
-                  bg="#fff"
-                  color="#5F5F5F"
-                  onClick={() => {
-                    tutorCheckIn({
-                      id: session?.id,
-                      body: {
-                        tutor_available: false,
-                      },
-                    });
-                  }}
-                />
-                <Button
-                  text="Present"
-                  borderRadius={10}
-                  width={'full'}
-                  bg="#0065FF"
-                  onClick={() => {
-                    tutorCheckIn({
-                      id: session?.id,
-                      body: {
-                        tutor_available: true,
-                      },
-                    });
-                  }}
-                />
+                {elapsedTime === '15:00' ? (
+                  <Button
+                    text="Absent"
+                    borderRadius={10}
+                    width={'full'}
+                    border="#5F5F5F"
+                    bg="#fff"
+                    color="#5F5F5F"
+                    onClick={() => {
+                      tutorCheckIn({
+                        id: session?.id,
+                        body: {
+                          tutor_available: false,
+                        },
+                      });
+                    }}
+                  />
+                ) : (
+                  <Button
+                    text="Present"
+                    borderRadius={10}
+                    width={'full'}
+                    bg="#0065FF"
+                    onClick={() => {
+                      tutorCheckIn({
+                        id: session?.id,
+                        body: {
+                          tutor_available: true,
+                        },
+                      });
+                    }}
+                  />
+                )}
               </HStack>
             </ModalFooter>
           </ModalContent>
@@ -286,7 +303,7 @@ const index = () => {
                 {session?.title}
               </Text>
               <Text fontSize={'23px'} fontWeight={500} color="#000000">
-                Dr. James
+                {session?.instructor}
               </Text>
               <Image
                 src="/images/five.svg"
@@ -328,7 +345,7 @@ const index = () => {
         <FeedbackModal
           isOpen={isOpenJoin}
           onClose={onCloseJoin}
-          session_id={id}
+          session_id={session?.session_id}
           isJoinLoading={isLoading}
           isDisabled={false}
           type="home"
