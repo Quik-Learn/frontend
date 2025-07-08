@@ -19,7 +19,7 @@ interface CustomErr {
   status: number;
 }
 
-export const baseUrl = 'https://backend.codemunsta.co/';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const parentService = createApi({
   reducerPath: 'parentService',

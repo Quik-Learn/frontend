@@ -72,15 +72,21 @@ const Sessions = () => {
         onOpen={onOpen}
         setRange={setRange}
         type={'tutor'}
-        EventsComponent={(props) => (
-          <Events
-            {...props}
-            trigger={triggerSessions}
-            isOpen={isOpen}
-            onClose={onClose}
-            type={'tutor'}
-          />
-        )}
+        EventsComponent={(props) => {
+          console.log(props.event, 'props');
+          return isLoading ? (
+            <Skeleton w={'100%'} h={'65px'}></Skeleton>
+          ) : (
+            <Events
+              {...props}
+              trigger={triggerSessions}
+              isOpen={isOpen}
+              onClose={onClose}
+              type={'tutor'}
+              class_type={props.event?.class_type}
+            />
+          );
+        }}
         ToolbarComponent={(props) => (
           <TutorTool onOpenSchedule={onOpenSchedule} {...props} />
         )}

@@ -19,7 +19,7 @@ interface CustomErr {
   status: number;
 }
 
-export const baseUrl = 'https://backend.codemunsta.co/';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const tutorService = createApi({
   reducerPath: 'tutorService',
@@ -180,6 +180,40 @@ export const tutorService = createApi({
         };
       },
     }),
+    getSessionById: builder.query({
+      query: (id) => {
+        return {
+          url: `/tutor/get-home-session/${id}/`,
+        };
+      },
+    }),
+    checkIn: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/tutor/checkin_home_session/${id}/`,
+          method: 'PUT',
+          body: {},
+        };
+      },
+    }),
+    checkOut: builder.mutation({
+      query: (id) => {
+        return {
+          url: `/tutor/checkout_home_session/${id}/`,
+          method: 'PUT',
+          body: {},
+        };
+      },
+    }),
+    markAttendance: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `/tutor/mark_student_attendance/${id}/`,
+          method: 'PUT',
+          body,
+        };
+      },
+    }),
   }),
 });
 
@@ -203,4 +237,8 @@ export const {
   useJoinMeetingTutorMutation,
   useLeaveMeetingTutorMutation,
   useDeleteSessionMutation,
+  useLazyGetSessionByIdQuery,
+  useCheckInMutation,
+  useCheckOutMutation,
+  useMarkAttendanceMutation,
 } = tutorService;

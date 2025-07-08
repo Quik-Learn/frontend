@@ -34,11 +34,13 @@ import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
 import SuccessModal from './ui/success-modal';
 import { useRouter } from 'next/navigation';
+
 const Events = ({
   event,
   isOpen: isOpenJoin,
   onClose: onCloseJoin,
   type,
+  class_type,
 }: any) => {
   console.log('eee', event);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -46,6 +48,7 @@ const Events = ({
   const [selected, setSelceted] = useState<any>();
   const [joinMeeting, { data, isLoading, isSuccess, isError, error, reset }] =
     useJoinMeetingMutation();
+
   const [
     joinMeetingTutor,
     {
@@ -79,9 +82,16 @@ const Events = ({
       icon: TiGroupOutline,
       show: type === 'student',
     },
+
     {
       id: 4,
-      name: `Students: ${event?.students?.map((student: any) => student)}`,
+      name: `Student: ${event?.students?.[0]}`,
+      icon: TiGroupOutline,
+      show: type === 'tutor',
+    },
+    {
+      id: 5,
+      name: `Subject: ${event?.subject?.title}`,
       icon: TiGroupOutline,
       show: type === 'tutor',
     },
@@ -213,23 +223,48 @@ const Events = ({
                   )
               )}
 
-              <HStack gap={5}>
-                <Icon as={IoVideocamOutline} size={30} color="#000" />
-                <Button
-                  width={127}
-                  bg={selected?.color}
-                  isDisabled={!event?.meeting_link}
-                  isLoading={isLoading}
-                  text="Join Session"
-                  onClick={() => {
-                    if (type === 'tutor') {
-                      joinMeetingTutor(event?.meeting_link?.meeting_id);
-                    } else {
-                      joinMeeting(event?.meeting_link?.meeting_id);
-                    }
-                  }}
-                />
-              </HStack>
+              {class_type === 'online' ? (
+                <HStack gap={5}>
+                  <Icon as={IoVideocamOutline} size={30} color="#000" />
+                  <Button
+                    width={127}
+                    bg={selected?.color}
+                    isDisabled={!event?.meeting_link}
+                    isLoading={isLoading}
+                    text="Join Session"
+                    onClick={() => {
+                      if (type === 'tutor') {
+                        joinMeetingTutor(event?.meeting_link?.meeting_id);
+                      } else {
+                        joinMeeting(event?.meeting_link?.meeting_id);
+                      }
+                    }}
+                  />
+                </HStack>
+              ) : (
+                <HStack gap={5}>
+                  <Image src={'/images/home-icon.svg'} w={30} h={30} />
+                  <Button
+                    width={127}
+                    bg={selected?.color}
+                    // isDisabled={!event?.meeting_link}
+                    isLoading={isLoading}
+                    text="View"
+                    onClick={() => {
+                      console.log(event, 'eventt');
+                      if (type === 'tutor') {
+                        router.push(
+                          `/tutor/sessions/${event?.home_meet?.home_meet_id}`
+                        );
+                      } else {
+                        router.push(
+                          `/student/my-sessions/${event?.home_meet?.home_meet_id}`
+                        );
+                      }
+                    }}
+                  />
+                </HStack>
+              )}
             </VStack>
           </ModalBody>
         </ModalContent>
@@ -247,15 +282,13 @@ const Events = ({
         />
       )}
       {type === 'tutor' && (
-        <SuccessModal
-          onClose={onCloseJoin}
+        <FeedbackModal
           isOpen={isOpenJoin}
-          title={'Successful'}
-          description={'Session successfully completed!'}
-          buttonText={'Close'}
-          closeFunction={() => {
-            router.push('/tutor/sessions');
-          }}
+          onClose={onCloseJoin}
+          session_id={event?.id}
+          isJoinLoading={isLoading}
+          isDisabled={isDisabled}
+          joinMeeting={(id: string) => joinMeetingTutor(id)}
         />
       )}
     </Box>

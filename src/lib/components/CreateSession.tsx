@@ -46,6 +46,7 @@ const CreateSession = ({
     start_time: yup.string().required('Please enter your start time'),
     end_time: yup.string().required('Please enter your end time'),
     repeat: yup.boolean().optional(),
+    mode: yup.string().required('Please select your mode'),
   });
   const handleSubmit = () => {
     if (formRef.current) {
@@ -58,6 +59,7 @@ const CreateSession = ({
     date: '',
     start_time: '',
     end_time: '',
+    mode: '',
   });
 
   useEffect(() => {
@@ -79,6 +81,7 @@ const CreateSession = ({
         date: data?.date || '',
         start_time: formatTime(data?.start_time),
         end_time: formatTime(data?.end_time),
+        mode: data?.mode || '',
       });
     }
   }, [type, data]);
@@ -280,6 +283,26 @@ const CreateSession = ({
                     </Text>
                   </FormControl>
                 )}
+                <FormControl>
+                  <FormLabel>Mode</FormLabel>
+                  <HStack spacing={5}>
+                    <Checkbox
+                      isChecked={values.mode === 'online'}
+                      onChange={() => setFieldValue('mode', 'online')}
+                    >
+                      Online
+                    </Checkbox>
+                    <Checkbox
+                      isChecked={values.mode === 'home'}
+                      onChange={() => setFieldValue('mode', 'home')}
+                    >
+                      Home
+                    </Checkbox>
+                  </HStack>
+                  <Text color={'red'} fontSize={8}>
+                    {errors.mode || ''}
+                  </Text>
+                </FormControl>
               </Stack>
             )}
           </Formik>

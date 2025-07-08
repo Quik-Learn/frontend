@@ -1,3 +1,5 @@
+import { TimerResult } from '../types/data';
+
 // utils/auth.ts
 export function isProtectedRoute(pathname: string) {
   const authRegex = /^\/auth\/.*/; // Match any path that starts with /auth/
@@ -117,6 +119,7 @@ export const formatData = (data: any) => {
       subject: item?.subject,
       meeting_link: item?.meeting_link,
       allDay: false,
+      home_meet: item?.home_meet,
     };
   });
 };
@@ -147,6 +150,9 @@ export const formatDataTutor = (data: any) => {
       meeting_link: item?.meeting_link,
       allDay: false,
       notes: item?.notes,
+      class_type: item?.class_type,
+      color: item?.color,
+      home_meet: item?.home_meet,
     };
   });
 };
@@ -242,26 +248,74 @@ export const customSlotPropGetter = (date: any) => {
 
 export const sortEventsByDateTime = (events: any[]): any[] => {
   const now = new Date();
-  // First map to add isPast property
+  // Map to add isPast property, considering both date and time
   const eventsWithPast = events.map((event) => ({
     ...event,
-    isPast: new Date(event.date) < now,
+    isPast:
+      new Date(`${event.date}T${event.start_time}`).getTime() < now.getTime(),
   }));
+
   return eventsWithPast.sort((a: any, b: any) => {
     // First compare dates
     const dateComparison =
-      new Date(a.date).getTime() - new Date(b.date).getTime(); // Reversed comparison
+      new Date(a.date).getTime() - new Date(b.date).getTime();
     if (dateComparison !== 0) return dateComparison;
 
     // If dates are equal, compare start times
     const aDateTime = new Date(`${a.date}T${a.start_time}`);
     const bDateTime = new Date(`${b.date}T${b.start_time}`);
-    const startTimeComparison = aDateTime.getTime() - bDateTime.getTime(); // Reversed comparison
+    const startTimeComparison = aDateTime.getTime() - bDateTime.getTime();
     if (startTimeComparison !== 0) return startTimeComparison;
 
     // If start times are equal, compare end times
     const aEndTime = new Date(`${a.date}T${a.end_time}`);
     const bEndTime = new Date(`${b.date}T${b.end_time}`);
-    return aEndTime.getTime() - bEndTime.getTime(); // Reversed comparison
+    return aEndTime.getTime() - bEndTime.getTime();
   });
+};
+
+export const calculateMeetingTimer = (
+  startTime: string,
+  endTime: string,
+  actualMeetingStartTime: string
+): TimerResult => {
+  try {
+    // Parse times
+    const [startHour, startMin] = startTime.split(':').map(Number);
+    const [endHour, endMin] = endTime.split(':').map(Number);
+
+    // Calculate duration in seconds
+    const durationInSeconds =
+      ((endHour - startHour) * 60 + (endMin - startMin)) * 60;
+
+    // Calculate end timestamp
+    const startTimestamp = new Date(actualMeetingStartTime).getTime();
+    const endTimestamp = startTimestamp + durationInSeconds * 1000;
+
+    // Calculate remaining time
+    const now = Date.now();
+    const remainingSeconds = Math.max(
+      0,
+      Math.floor((endTimestamp - now) / 1000)
+    );
+
+    // Format time
+    const minutes = Math.floor(remainingSeconds / 60);
+    const seconds = remainingSeconds % 60;
+
+    return {
+      remainingTime: `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`,
+      isTimeUp: remainingSeconds <= 0,
+      isNearingEnd: remainingSeconds <= 15 * 60,
+      remainingSeconds,
+    };
+  } catch (error) {
+    console.error('Timer calculation error:', error);
+    return {
+      remainingTime: '00:00',
+      isTimeUp: false,
+      isNearingEnd: false,
+      remainingSeconds: 0,
+    };
+  }
 };

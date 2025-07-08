@@ -18,3 +18,9 @@ export interface Session {
   instructor: Instructor;
   subject: Subject;
 }
+export interface TimerResult {
+  remainingTime: string; // in MM:SS format
+  isTimeUp: boolean;
+  isNearingEnd: boolean;
+  remainingSeconds: number;
+}

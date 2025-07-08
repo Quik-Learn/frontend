@@ -21,7 +21,7 @@ interface CustomErr {
   status: number;
 }
 
-const baseUrl = 'https://backend.codemunsta.co/';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 export const studentService = createApi({
   reducerPath: 'studentService',
@@ -207,6 +207,38 @@ export const studentService = createApi({
         };
       },
     }),
+    checkIn: builder.mutation({
+      query: (id) => {
+        return {
+          url: `student/checkin_home_session/${id}/`,
+          method: 'PUT',
+        };
+      },
+    }),
+    checkOut: builder.mutation({
+      query: (id) => {
+        return {
+          url: `student/checkout_home_session/${id}/`,
+          method: 'PUT',
+        };
+      },
+    }),
+    tutorCheckIn: builder.mutation({
+      query: ({ id, body }) => {
+        return {
+          url: `student/check_tutor_availability/${id}/`,
+          method: 'PUT',
+          body,
+        };
+      },
+    }),
+    getSessionById: builder.query({
+      query: (id) => {
+        return {
+          url: `/student/get-home-session/${id}/`,
+        };
+      },
+    }),
   }),
 });
 
@@ -230,4 +262,8 @@ export const {
   useInviteParentMutation,
   useLazyGetAnActiveCourseQuery,
   useLazyGetAnCompletedCourseQuery,
+  useCheckInMutation,
+  useCheckOutMutation,
+  useTutorCheckInMutation,
+  useLazyGetSessionByIdQuery,
 } = studentService;
