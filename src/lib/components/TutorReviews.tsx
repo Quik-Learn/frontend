@@ -14,64 +14,12 @@ import { useLazyGetSubjectReviewsQuery } from '~/lib/services/student-mutation';
 import Loader from './Loader';
 import moment from 'moment';
 
-const Reviews = ({ id }: any) => {
-  const [trigger, { data, isLoading, isError, error, isSuccess }] =
-    useLazyGetSubjectReviewsQuery();
-  const [reviews, setReviews] = useState<any>([]);
-  const toast = useToast();
-  const dummyReviews = [
-    {
-      id: 1,
-      name: 'John Doe',
-      rating: 5,
-      comment:
-        'This course was excellent! The instructor explained everything clearly and the content was very comprehensive.',
-      image: null,
-    },
-    {
-      id: 2,
-      name: 'Sarah Smith',
-      rating: 4,
-      comment:
-        'Great course overall. Would have liked more practical examples but the theory was well explained.',
-      image: null,
-    },
-    {
-      id: 3,
-      name: 'Mike Johnson',
-      rating: 5,
-      comment:
-        "One of the best online courses I've taken. The instructor was very knowledgeable and engaging.",
-      image: null,
-    },
-  ];
-
+const TutorReviews = ({ reviews, isLoading }: any) => {
   const ratingOptions = [5, 4, 3, 2, 1].map((rating) => ({
     value: rating.toString(),
     label: `${rating} Star${rating === 1 ? '' : 's'}`,
   }));
-
-  useEffect(() => {
-    trigger(id);
-  }, [id]);
-  console.log(data?.data, 'dataYY');
-  useEffect(() => {
-    if (isSuccess) {
-      setReviews(data?.data);
-      console.log(data, 'dataYY');
-    } else if (isError) {
-      toast({
-        //@ts-ignore
-        title: error?.data?.error?.message || 'An error occurred',
-        description: 'An Error occurred.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-        position: 'top',
-      });
-    }
-  }, [isSuccess]);
-
+  console.log(reviews, 'reviews');
   return (
     <VStack spacing={6} align="stretch" w="100%">
       {isLoading ? (
@@ -79,7 +27,7 @@ const Reviews = ({ id }: any) => {
       ) : (
         <>
           <HStack justify="space-between" align="center">
-            <Heading size="lg">Student Reviews</Heading>
+            <Heading size="lg">Your Reviews</Heading>
             <Select maxW="200px" placeholder="Filter by rating">
               {ratingOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -130,4 +78,4 @@ const Reviews = ({ id }: any) => {
   );
 };
 
-export default Reviews;
+export default TutorReviews;

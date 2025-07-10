@@ -29,6 +29,8 @@ import { MdLocationPin } from 'react-icons/md';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import useHomeMeet from './home-meet';
 import FeedbackModal from '~/lib/components/FeedbackModal';
+import FeedbackModalTutor from '~/lib/components/FeedbackModalTutor';
+import Loader from '~/lib/components/Loader';
 const index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -66,11 +68,7 @@ const index = () => {
     <TutorContainer>
       <VStack>
         {isLoading ? (
-          <VStack gap={5} w={'full'}>
-            <Skeleton height={'100px'} width={'100%'} borderRadius={'15px'} />
-            <Skeleton height={'100px'} width={'100%'} borderRadius={'15px'} />
-            <Skeleton height={'100px'} width={'100%'} borderRadius={'15px'} />
-          </VStack>
+          <Loader />
         ) : (
           <Stack
             mx={{ base: 5, md: 10 }}
@@ -78,7 +76,7 @@ const index = () => {
             px={{ base: '15px', md: '30px' }}
           >
             <Heading fontSize={'24px'} my={5} color="#161736">
-              Check In
+              {session?.has_ended ? 'Session Ended' : 'Check In'}
             </Heading>
 
             <Box
@@ -123,144 +121,160 @@ const index = () => {
                 </Text>
               </HStack>
             </Box>
-
-            <Box
-              bg="#fff"
-              borderRadius={'15px'}
-              boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
-              p={5}
-              display={'flex'}
-              alignItems={'center'}
-              justifyContent={'space-between'}
-              gap={5}
-              mt={10}
-            >
-              <VStack gap={5} alignItems={'flex-start'}>
-                <HStack alignItems={'flex-start'} gap={5}>
-                  <Image
-                    src="/images/second.svg"
-                    alt="five"
-                    width={5}
-                    height={5}
-                  />
-                  <VStack alignItems={'flex-start'}>
-                    <Text color="#000000" fontSize={'16px'} fontWeight={700}>
-                      {session?.subject}
-                    </Text>
-                    <Text color="#000000" fontSize={'14px'}>
-                      {session?.title}
-                    </Text>
+            {!session?.has_ended && (
+              <>
+                <Box
+                  bg="#fff"
+                  borderRadius={'15px'}
+                  boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
+                  p={5}
+                  display={'flex'}
+                  alignItems={'center'}
+                  justifyContent={'space-between'}
+                  gap={5}
+                  mt={10}
+                >
+                  <VStack gap={5} alignItems={'flex-start'}>
+                    <HStack alignItems={'flex-start'} gap={5}>
+                      <Image
+                        src="/images/second.svg"
+                        alt="five"
+                        width={5}
+                        height={5}
+                      />
+                      <VStack alignItems={'flex-start'}>
+                        <Text
+                          color="#000000"
+                          fontSize={'16px'}
+                          fontWeight={700}
+                        >
+                          {session?.subject}
+                        </Text>
+                        <Text color="#000000" fontSize={'14px'}>
+                          {session?.title}
+                        </Text>
+                      </VStack>
+                    </HStack>
+                    <HStack alignItems={'flex-start'} gap={5}>
+                      <Image
+                        src="/images/third.svg"
+                        alt="five"
+                        width={5}
+                        height={5}
+                      />
+                      <VStack alignItems={'flex-start'}>
+                        <Text
+                          color="#000000"
+                          fontSize={'16px'}
+                          fontWeight={700}
+                        >
+                          Duration
+                        </Text>
+                        <Text color="#000000" fontSize={'14px'}>
+                          {session?.start_time} - {session?.end_time}
+                        </Text>
+                      </VStack>
+                    </HStack>
                   </VStack>
-                </HStack>
-                <HStack alignItems={'flex-start'} gap={5}>
-                  <Image
-                    src="/images/third.svg"
-                    alt="five"
-                    width={5}
-                    height={5}
-                  />
-                  <VStack alignItems={'flex-start'}>
-                    <Text color="#000000" fontSize={'16px'} fontWeight={700}>
-                      Duration
-                    </Text>
-                    <Text color="#000000" fontSize={'14px'}>
-                      {session?.start_time} - {session?.end_time}
-                    </Text>
-                  </VStack>
-                </HStack>
-              </VStack>
-              <Button
-                text={
-                  session?.has_checked_in ? 'Mark as Completed' : 'Check In'
-                }
-                width={226}
-                isLoading={isCheckInLoading || isCheckOutLoading}
-                isDisabled={
-                  !session?.has_checked_in &&
-                  new Date().getTime() <
-                    new Date(
-                      session?.date + ' ' + session?.start_time
-                    ).getTime()
-                }
-                bg={session?.has_checked_in ? '#048E12' : '#0065FF'}
-                onClick={() => {
-                  if (session?.has_checked_in) {
-                    if (isNearingEnd) {
-                      checkOut(session?.id);
-                    } else {
-                      onOpen2();
+                  <Button
+                    text={
+                      session?.has_checked_in ? 'Mark as Completed' : 'Check In'
                     }
-                  } else {
-                    checkIn(session?.id);
-                  }
-                }}
-              />
-            </Box>
+                    width={226}
+                    isLoading={isCheckInLoading || isCheckOutLoading}
+                    isDisabled={
+                      !session?.has_checked_in &&
+                      new Date().getTime() <
+                        new Date(
+                          session?.date + ' ' + session?.start_time
+                        ).getTime()
+                    }
+                    bg={session?.has_checked_in ? '#048E12' : '#0065FF'}
+                    onClick={() => {
+                      if (session?.has_checked_in) {
+                        if (isNearingEnd) {
+                          checkOut(session?.id);
+                        } else {
+                          onOpen2();
+                        }
+                      } else {
+                        checkIn(session?.id);
+                      }
+                    }}
+                  />
+                </Box>
 
-            <Box
-              bg="#fff"
-              borderRadius={'15px'}
-              boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
-              p={5}
-              display={'flex'}
-              justifyContent={'flex-start'}
-              alignItems={'flex-start'}
-              flexDirection={'column'}
-              gap={10}
-              mt={10}
-            >
-              <HStack gap={3}>
-                <Image src="/images/four.svg" alt="five" width={5} height={5} />
-                <Text flex={1} fontSize="14px">
-                  Student Details
-                </Text>
-              </HStack>
-              <HStack w={'full'} my={3} alignItems="center">
-                <Text flex={1} fontSize="14px">
-                  {session?.student?.name}
-                </Text>
-                <Text flex={1} fontSize="14px">
-                  {session?.student?.is_checked_in
-                    ? 'Present'
-                    : session?.student?.is_checked_out
-                      ? 'Absent'
-                      : 'Not Checked-In'}
-                </Text>
-                <HStack flex={1} spacing={2}>
-                  <Button
-                    text="Absent"
-                    variant="outline"
-                    size="sm"
-                    border="#5F5F5F"
-                    bg="#fff"
-                    color="#5F5F5F"
-                    onClick={() => {
-                      markAttendance({
-                        id: session?.id,
-                        body: {
-                          student_available: false,
-                        },
-                      });
-                    }}
-                    isLoading={isMarkAttendanceLoading}
-                  />
-                  <Button
-                    text="Present"
-                    size="sm"
-                    bg="#0065FF"
-                    onClick={() => {
-                      markAttendance({
-                        id: session?.id,
-                        body: {
-                          student_available: true,
-                        },
-                      });
-                    }}
-                    isLoading={isMarkAttendanceLoading}
-                  />
-                </HStack>
-              </HStack>
-            </Box>
+                <Box
+                  bg="#fff"
+                  borderRadius={'15px'}
+                  boxShadow={'0px 0px 10px 0px rgba(0, 0, 0, 0.1)'}
+                  p={5}
+                  display={'flex'}
+                  justifyContent={'flex-start'}
+                  alignItems={'flex-start'}
+                  flexDirection={'column'}
+                  gap={10}
+                  mt={10}
+                >
+                  <HStack gap={3}>
+                    <Image
+                      src="/images/four.svg"
+                      alt="five"
+                      width={5}
+                      height={5}
+                    />
+                    <Text flex={1} fontSize="14px">
+                      Student Details
+                    </Text>
+                  </HStack>
+                  <HStack w={'full'} my={3} alignItems="center">
+                    <Text flex={1} fontSize="14px">
+                      {session?.student?.name}
+                    </Text>
+                    <Text flex={1} fontSize="14px">
+                      {session?.student?.is_checked_in
+                        ? 'Present'
+                        : session?.student?.is_checked_out
+                          ? 'Absent'
+                          : 'Not Checked-In'}
+                    </Text>
+                    <HStack flex={1} spacing={2}>
+                      <Button
+                        text="Absent"
+                        variant="outline"
+                        size="sm"
+                        border="#5F5F5F"
+                        bg="#fff"
+                        color="#5F5F5F"
+                        onClick={() => {
+                          markAttendance({
+                            id: session?.id,
+                            body: {
+                              student_available: false,
+                            },
+                          });
+                        }}
+                        isLoading={isMarkAttendanceLoading}
+                      />
+                      <Button
+                        text="Present"
+                        size="sm"
+                        bg="#0065FF"
+                        onClick={() => {
+                          markAttendance({
+                            id: session?.id,
+                            body: {
+                              student_available: true,
+                            },
+                          });
+                        }}
+                        isLoading={isMarkAttendanceLoading}
+                      />
+                    </HStack>
+                  </HStack>
+                </Box>
+              </>
+            )}
 
             <Modal isOpen={isOpen} onClose={onClose} isCentered>
               <ModalOverlay />
@@ -318,7 +332,11 @@ const index = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <Modal isOpen={isOpen2} onClose={onClose2} isCentered>
+            <Modal
+              isOpen={isOpen2 && !session?.has_ended}
+              onClose={onClose2}
+              isCentered
+            >
               <ModalOverlay />
               <ModalContent>
                 <ModalBody
@@ -371,7 +389,7 @@ const index = () => {
                 </ModalFooter>
               </ModalContent>
             </Modal>
-            <FeedbackModal
+            <FeedbackModalTutor
               isOpen={isOpenJoin}
               onClose={onCloseJoin}
               session_id={session?.id}
@@ -380,6 +398,7 @@ const index = () => {
               joinMeeting={(id: string) => {
                 console.log(id, 'id');
               }}
+              noJoin={session?.has_ended}
             />
           </Stack>
         )}

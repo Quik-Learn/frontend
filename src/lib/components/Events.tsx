@@ -40,7 +40,6 @@ const Events = ({
   isOpen: isOpenJoin,
   onClose: onCloseJoin,
   type,
-  class_type,
 }: any) => {
   console.log('eee', event);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -160,10 +159,10 @@ const Events = ({
       });
     }
   }, [isSuccessTutor, isErrorTutor, errorTutor, dataTutor, event]);
-
+  console.log(event, 'event');
   return (
     <Box
-      bg={selected?.color}
+      bg={event?.color}
       color="white"
       p={2}
       borderRadius="md"
@@ -223,7 +222,7 @@ const Events = ({
                   )
               )}
 
-              {class_type === 'online' ? (
+              {event?.class_type === 'online' ? (
                 <HStack gap={5}>
                   <Icon as={IoVideocamOutline} size={30} color="#000" />
                   <Button

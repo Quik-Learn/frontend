@@ -17,6 +17,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import AddWardComponent from '~/lib/components/AddWardComponent';
+import Loader from '~/lib/components/Loader';
 import Button from '~/lib/components/ui/button';
 import { requireAuthentication } from '~/lib/helpers/auth';
 import ParentContainer from '~/lib/layout/ParentContainer';
@@ -60,14 +61,7 @@ const Wards = () => {
   return (
     <ParentContainer>
       {isLoading ? (
-        <Stack
-          w={'100%'}
-          h={'350px'}
-          alignItems={'center'}
-          justifyContent={'center'}
-        >
-          <Spinner size={'large'} />
-        </Stack>
+        <Loader />
       ) : (
         <>
           {wardData?.length === 0 ? (

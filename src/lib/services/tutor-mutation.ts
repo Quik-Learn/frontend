@@ -75,9 +75,10 @@ export const tutorService = createApi({
       },
     }),
     getSessions: builder.query({
-      query: (id) => {
+      query: (params) => {
         return {
           url: `tutor/my-sessions/`,
+          params,
         };
       },
     }),
@@ -205,6 +206,15 @@ export const tutorService = createApi({
         };
       },
     }),
+    feedback: builder.mutation({
+      query: ({ body, session_id }: any) => {
+        return {
+          url: `tutor/session-feedback/${session_id}/`,
+          method: 'post',
+          body,
+        };
+      },
+    }),
     markAttendance: builder.mutation({
       query: ({ id, body }) => {
         return {
@@ -241,4 +251,5 @@ export const {
   useCheckInMutation,
   useCheckOutMutation,
   useMarkAttendanceMutation,
+  useFeedbackMutation,
 } = tutorService;

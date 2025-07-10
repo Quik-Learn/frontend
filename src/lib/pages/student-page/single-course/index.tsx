@@ -42,6 +42,7 @@ import { useAppSelector } from '~/lib/store';
 import { FiArrowLeft } from 'react-icons/fi';
 import { userState } from '~/lib/store/reducers/user-slice';
 import CourseSessions from '~/lib/components/CourseSessions';
+import Loader from '~/lib/components/Loader';
 
 const SingleCourses = () => {
   const router = useRouter();
@@ -305,13 +306,13 @@ const SingleCourses = () => {
               <TabPanels>
                 <TabPanel py={8}>
                   {isLoading ? (
-                    <Spinner />
+                    <Loader />
                   ) : (
                     <Overview data={courseData?.subject} />
                   )}
                 </TabPanel>
                 <TabPanel py={8}>
-                  <Reviews />
+                  <Reviews id={id} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -391,7 +392,7 @@ const SingleCourses = () => {
               <TabPanels>
                 <TabPanel py={8}>
                   {isLoading ? (
-                    <Spinner />
+                    <Loader />
                   ) : (
                     <Overview data={courseData?.subject} />
                   )}
@@ -409,7 +410,7 @@ const SingleCourses = () => {
                   />
                 </TabPanel>
                 <TabPanel py={8}>
-                  <Reviews />
+                  <Reviews id={id} />
                 </TabPanel>
               </TabPanels>
             </Tabs>

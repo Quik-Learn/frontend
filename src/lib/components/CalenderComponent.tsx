@@ -49,7 +49,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
   const id = localStorage.getItem('meetingId');
-  console.log('event', events, addRandomColorsToEvents(events));
+  console.log('event tneve', events, addRandomColorsToEvents(events));
   const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
   const [leaveMeetingTutor, leaveMeetingDataTutor] =
     useLeaveMeetingTutorMutation();
@@ -125,7 +125,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     <Box p={5} sx={calendarStyle}>
       <BigCalendar
         localizer={localizer}
-        events={addRandomColorsToEvents(events)}
+        events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: '800px' }}

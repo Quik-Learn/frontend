@@ -27,6 +27,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import useGetCourses from './getCourses';
 import Pagination from '~/lib/components/ui/pagination';
 import { useEffect, useState } from 'react';
+import Loader from '~/lib/components/Loader';
 
 const Courses = () => {
   const router = useRouter();
@@ -112,14 +113,7 @@ const Courses = () => {
         </Text>
       </HStack>
       {isLoading ? (
-        <Stack
-          w={'100%'}
-          h={'350px'}
-          alignItems={'center'}
-          justifyContent={'center'}
-        >
-          <Spinner size={'large'} />
-        </Stack>
+        <Loader />
       ) : (
         <>
           <Grid

@@ -38,6 +38,7 @@ import useGetCourses from './getCourses';
 import Pagination from '~/lib/components/ui/pagination';
 import CourseCard from '~/lib/components/CourseCard';
 import CourseCardAll from '~/lib/components/CourseCardAll';
+import Loader from '~/lib/components/Loader';
 
 const Courses = () => {
   const router = useRouter();
@@ -146,11 +147,7 @@ const Courses = () => {
         <TabPanels>
           <Box m={6}>
             {isLoading ? (
-              <Stack w={'100%'} height={'50vh'}>
-                {['', '', '', '', '', '', '', '', '', ''].map((item, index) => (
-                  <Skeleton height="20px" key={index} />
-                ))}
-              </Stack>
+              <Loader />
             ) : (
               <Grid
                 templateColumns={{

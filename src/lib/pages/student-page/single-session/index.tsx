@@ -16,6 +16,8 @@ import {
   TabPanels,
   TabPanel,
   useToast,
+  IconButton,
+  Icon,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import ParentContainer from '~/lib/layout/ParentContainer';
@@ -37,13 +39,15 @@ import {
   useLazyGetCalendarQuery,
 } from '~/lib/services/student-mutation';
 import BookError from '~/lib/components/BookError';
+import { FiArrowLeft } from 'react-icons/fi';
+import Loader from '~/lib/components/Loader';
 
 const SingleSession = () => {
   const router = useRouter();
   const { id }: any = useParams();
   const toast = useToast();
   const [studentCalenderData, setStudentCalenderData] = useState<any[]>([]);
-  const user = useAppSelector(userState);
+  const { user } = useAppSelector(userState);
   console.log(user, 'user');
   const [courseData, setCourseData] = useState<any>([]);
   const [trigger, { data, isLoading, isError, error, isSuccess }] =
@@ -53,6 +57,7 @@ const SingleSession = () => {
     isOpen: isOpenError,
     onClose: onCloseError,
   } = useDisclosure();
+  console.log(user, 'id');
   const [
     getStudentCalender,
     {
@@ -132,163 +137,192 @@ const SingleSession = () => {
   console.log(courseData, user, studentCalenderData);
   return (
     <ParentContainer>
-      <Stack>
-        <VStack py={9} px={9} w={{ lg: '100%' }}>
-          <Text
-            color={'#1D2026'}
-            textAlign={'left'}
-            alignSelf={'flex-start'}
-            fontSize={'36px'}
-            fontWeight={700}
-            mb={2}
-          >
-            {courseData?.subject?.title}
-          </Text>
-          <Text
-            color={'#4E5566'}
-            fontSize={'24px'}
-            mb={2}
-            alignSelf={'flex-start'}
-          >
-            {courseData?.subject?.short_description}
-          </Text>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <Stack position={'relative'}>
+            <IconButton
+              icon={<Icon as={FiArrowLeft} />}
+              onClick={() => router.back()}
+              bg={'#02659C'}
+              color={'white'}
+              size={'sm'}
+              aria-label="back"
+              position={'absolute'}
+              top={5}
+              left={10}
+              zIndex={1000}
+            />
 
-          <Tabs w={'100%'}>
-            <TabList border={'none'}>
-              <Tab
-                fontSize={{
-                  base: 16,
-                  sm: 18,
-                  md: 18,
-                }}
-                _selected={{
-                  color: '#1D2026',
-                  borderBottomWidth: 2,
-                  borderColor: '#FF6636',
-                }}
-                fontFamily="heading"
-                fontWeight="500"
-                color={'#4E5566'}
+            <VStack py={9} px={9} w={{ lg: '100%' }} mt={5}>
+              <Text
+                color={'#1D2026'}
+                textAlign={'left'}
+                alignSelf={'flex-start'}
+                fontSize={'36px'}
+                fontWeight={700}
+                mb={2}
               >
-                Overview
-              </Tab>
-
-              <Tab
-                fontSize={{
-                  base: 16,
-                  sm: 18,
-                  md: 18,
-                }}
-                _selected={{
-                  color: '#1D2026',
-                  borderBottomWidth: 2,
-                  borderColor: '#FF6636',
-                }}
-                fontFamily="heading"
-                fontWeight="500"
+                {courseData?.subject?.title}
+              </Text>
+              <Text
                 color={'#4E5566'}
+                fontSize={'24px'}
+                mb={2}
+                alignSelf={'flex-start'}
               >
-                Review
-              </Tab>
-            </TabList>
+                {courseData?.subject?.short_description}
+              </Text>
 
-            <TabPanels>
-              <TabPanel py={8}>
-                <Stack>
-                  <Heading
-                    color={'#1D2026'}
-                    fontSize={'26px'}
-                    fontWeight={700}
-                    mb={2}
+              <Tabs w={'100%'}>
+                <TabList border={'none'}>
+                  <Tab
+                    fontSize={{
+                      base: 16,
+                      sm: 18,
+                      md: 18,
+                    }}
+                    _selected={{
+                      color: '#1D2026',
+                      borderBottomWidth: 2,
+                      borderColor: '#FF6636',
+                    }}
+                    fontFamily="heading"
+                    fontWeight="500"
+                    color={'#4E5566'}
                   >
-                    Description
-                  </Heading>
-                  <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
-                    {courseData?.subject?.description}
-                  </Text>
+                    Overview
+                  </Tab>
 
-                  <Stack
-                    mt={4}
-                    justify={'space-between'}
-                    align={'center'}
-                    padding={4}
-                    bg="rgba(225, 247, 227, 0.4)"
+                  <Tab
+                    fontSize={{
+                      base: 16,
+                      sm: 18,
+                      md: 18,
+                    }}
+                    _selected={{
+                      color: '#1D2026',
+                      borderBottomWidth: 2,
+                      borderColor: '#FF6636',
+                    }}
+                    fontFamily="heading"
+                    fontWeight="500"
+                    color={'#4E5566'}
                   >
-                    <Text
-                      color="#1D2026"
-                      fontSize={28}
-                      fontWeight={600}
-                      alignSelf={'flex-start'}
-                      textAlign={'left'}
-                      mb={2}
-                    >
-                      Topics covered
-                    </Text>
-                    <VStack
-                      justifyContent={'space-between'}
-                      alignItems={'center'}
-                    >
-                      <List
-                        spacing={2}
-                        display={'flex'}
-                        flexWrap={'wrap'}
-                        w={'100%'}
+                    Review
+                  </Tab>
+                </TabList>
+
+                <TabPanels>
+                  <TabPanel py={8}>
+                    <Stack>
+                      <Heading
+                        color={'#1D2026'}
+                        fontSize={'26px'}
+                        fontWeight={700}
+                        mb={2}
                       >
-                        {courseData?.subject?.achievements?.map((item: any) => (
-                          <ListItem
-                            key={item?.id}
-                            color={'#4E5566'}
-                            w={'45%'}
-                            fontSize={{ base: 14, md: 16 }}
-                          >
-                            <ListIcon as={FaCircleCheck} color="#009933" />
-                            {item.description}
-                          </ListItem>
-                        ))}
-                      </List>
-                    </VStack>
-                  </Stack>
-                </Stack>
-              </TabPanel>
+                        Description
+                      </Heading>
+                      <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
+                        {courseData?.subject?.description}
+                      </Text>
 
-              <TabPanel py={8}>
-                <Reviews />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
-          <Stack
-            justifyContent={'flex-end'}
-            alignItems={'flex-end'}
-            w={'100%'}
-            mt={30}
-          >
-            <Button text="Next" bg="#02659C" width={'279px'} onClick={onOpen} />
+                      <Stack
+                        mt={4}
+                        justify={'space-between'}
+                        align={'center'}
+                        padding={4}
+                        bg="rgba(225, 247, 227, 0.4)"
+                      >
+                        <Text
+                          color="#1D2026"
+                          fontSize={28}
+                          fontWeight={600}
+                          alignSelf={'flex-start'}
+                          textAlign={'left'}
+                          mb={2}
+                        >
+                          Topics covered
+                        </Text>
+                        <VStack
+                          justifyContent={'space-between'}
+                          alignItems={'center'}
+                        >
+                          <List
+                            spacing={2}
+                            display={'flex'}
+                            flexWrap={'wrap'}
+                            w={'100%'}
+                          >
+                            {courseData?.subject?.achievements?.map(
+                              (item: any) => (
+                                <ListItem
+                                  key={item?.id}
+                                  color={'#4E5566'}
+                                  w={'45%'}
+                                  fontSize={{ base: 14, md: 16 }}
+                                >
+                                  <ListIcon
+                                    as={FaCircleCheck}
+                                    color="#009933"
+                                  />
+                                  {item.description}
+                                </ListItem>
+                              )
+                            )}
+                          </List>
+                        </VStack>
+                      </Stack>
+                    </Stack>
+                  </TabPanel>
+
+                  <TabPanel py={8}>
+                    <Reviews />
+                  </TabPanel>
+                </TabPanels>
+              </Tabs>
+              <Stack
+                justifyContent={'flex-end'}
+                alignItems={'flex-end'}
+                w={'100%'}
+                mt={30}
+              >
+                <Button
+                  text="Next"
+                  bg="#02659C"
+                  width={'279px'}
+                  onClick={onOpen}
+                />
+              </Stack>
+              <BookError
+                isOpen={isOpenError}
+                onClose={onCloseError}
+                description="You need to be subscribed to book a session for this course, Notify your parent to subscribe"
+                hasAction={false}
+              />
+              <BookSession
+                isOpen={isOpen}
+                onClose={onClose}
+                id={user?.id}
+                subject_id={id}
+                bookSessionFunction={(data: any) => {
+                  if (user?.has_subscription) {
+                    bookSession(data);
+                  } else {
+                    onClose();
+                    onOpenError();
+                  }
+                }}
+                isLoading={isLoadingBook}
+                studentCalenderData={studentCalenderData}
+                setStudentCalenderData={setStudentCalenderData}
+              />
+            </VStack>
           </Stack>
-          <BookError
-            isOpen={isOpenError}
-            onClose={onCloseError}
-            description="You need to be subscribed to book a session for this course, Notify your parent to subscribe"
-            hasAction={false}
-          />
-          <BookSession
-            isOpen={isOpen}
-            onClose={onClose}
-            id={user?.id}
-            subject_id={id}
-            bookSessionFunction={(data: any) => {
-              if (user?.has_subscription) {
-                bookSession(data);
-              } else {
-                onClose();
-                onOpenError();
-              }
-            }}
-            isLoading={isLoadingBook}
-            studentCalenderData={studentCalenderData}
-            setStudentCalenderData={setStudentCalenderData}
-          />
-        </VStack>
-      </Stack>
+        </>
+      )}
     </ParentContainer>
   );
 };

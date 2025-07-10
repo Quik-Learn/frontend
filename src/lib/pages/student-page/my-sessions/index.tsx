@@ -92,7 +92,7 @@ const MySessions = () => {
         setRange={setRange}
         type={'student'}
         EventsComponent={(props) => {
-          console.log('propsevent', props);
+          console.log('propsevent', props.event);
           return (
             <Events
               event={props.event}

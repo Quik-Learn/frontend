@@ -60,8 +60,11 @@ const InvoicesData = ({ data }: any) => {
   //     };
   //     html2pdf().from(element).set(options).save();
   //   };
-  const handleDownload = (invoice: Invoice) => {
-    setSelectedInvoice(invoice); // Populate content in hidden div
+  const handleDownload = async (invoice: Invoice) => {
+    setSelectedInvoice(invoice);
+
+    // Wait for state update and DOM re-render
+    await new Promise((resolve) => setTimeout(resolve, 100));
 
     const options = {
       margin: 0.5,
@@ -71,8 +74,12 @@ const InvoicesData = ({ data }: any) => {
       jsPDF: { unit: 'in', format: 'A4', orientation: 'portrait' },
     };
 
-    // Generate PDF from the hidden div content
-    html2pdf().from(invoiceRef.current).set(options).save();
+    // Check if element exists and has content
+    if (invoiceRef.current && invoiceRef.current.innerHTML.trim()) {
+      html2pdf().from(invoiceRef.current).set(options).save();
+    } else {
+      console.error('Invoice content not ready');
+    }
   };
 
   const InvoiceContent = ({
@@ -170,7 +177,7 @@ const InvoicesData = ({ data }: any) => {
               (612) 856 - 0989
             </Text>
             <Text fontSize={8} color={'#868DA6'}>
-            contact@backyardtech.co.uk
+              contact@backyardtech.co.uk
             </Text>
             <Text fontSize={8} color={'#868DA6'}>
               Pablo Alto, San Francisco, CA 92102, United Kingdom
