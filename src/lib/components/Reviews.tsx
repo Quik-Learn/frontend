@@ -95,7 +95,7 @@ const Reviews = ({ id }: any) => {
               {reviews.map((review: any) => (
                 <HStack key={review.id} spacing={4} p={4} borderRadius="lg">
                   <Avatar
-                    name={review?.name || 'N/A'}
+                    name={review?.student || 'N/A'}
                     src={review?.image || undefined}
                     size="md"
                   />
@@ -103,7 +103,7 @@ const Reviews = ({ id }: any) => {
                     <HStack>
                       <Text fontWeight="bold">{review.name}</Text>
                       <Text color="#6E7485">
-                        {moment(review.created_at).fromNow()}
+                        {moment(review?.created_at).fromNow()}
                       </Text>
                     </HStack>
 
@@ -113,12 +113,12 @@ const Reviews = ({ id }: any) => {
                           key={index}
                           as={FaStar}
                           color={
-                            index < review.rating ? 'yellow.400' : 'gray.200'
+                            index < review?.rating ? 'yellow.400' : 'gray.200'
                           }
                         />
                       ))}
                     </HStack>
-                    <Text color="gray.600">{review.review}</Text>
+                    <Text color="gray.600">{review?.review}</Text>
                   </VStack>
                 </HStack>
               ))}
