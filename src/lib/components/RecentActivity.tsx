@@ -143,7 +143,7 @@ const RecentActivity = ({ activitiesData }: { activitiesData: any }) => {
                     </Text>
                   </Text>
                   <Text fontSize="xs" color="gray.400">
-                    {moment(item.created_at).format('DD MMMM YYYY')}
+                    {moment(item.created_at).utc().format('DD MMMM YYYY')}
                   </Text>
                 </Box>
               </Flex>

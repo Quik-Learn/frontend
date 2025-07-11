@@ -34,6 +34,7 @@ import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
 import SuccessModal from './ui/success-modal';
 import { useRouter } from 'next/navigation';
+import FeedbackModalTutor from './FeedbackModalTutor';
 
 const Events = ({
   event,
@@ -69,8 +70,8 @@ const Events = ({
     { id: 1, name: `${start} to ${end}`, icon: GoClock, show: true },
     {
       id: 2,
-      name: moment().isBefore(moment(event?.start, 'YYYYMMDD'))
-        ? `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`
+      name: moment().utc().isBefore(moment(event?.start, 'YYYYMMDD'))
+        ? `Starts in ${moment(event?.start, 'YYYYMMDD').utc().fromNow()}`
         : 'Ended',
       icon: CiBellOn,
       show: true,
@@ -281,7 +282,7 @@ const Events = ({
         />
       )}
       {type === 'tutor' && (
-        <FeedbackModal
+        <FeedbackModalTutor
           isOpen={isOpenJoin}
           onClose={onCloseJoin}
           session_id={event?.id}

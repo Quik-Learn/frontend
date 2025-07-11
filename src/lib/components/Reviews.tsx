@@ -103,7 +103,7 @@ const Reviews = ({ id }: any) => {
                     <HStack>
                       <Text fontWeight="bold">{review.name}</Text>
                       <Text color="#6E7485">
-                        {moment(review?.created_at).fromNow()}
+                        {moment(review?.created_at).utc().fromNow()}
                       </Text>
                     </HStack>
 

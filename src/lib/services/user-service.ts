@@ -77,6 +77,15 @@ export const userService = createApi({
       //@ts-ignore
       invalidatesTags: ['cleanUp'],
     }),
+    getANotification: builder.query({
+      query: (id: string) => {
+        return {
+          url: `accounts/user/get/notification/${id}`,
+        };
+      },
+      //@ts-ignore
+      invalidatesTags: ['cleanUp'],
+    }),
 
     getConnection: builder.query({
       query: (token) => {
@@ -114,4 +123,5 @@ export const {
   useSendFedbackMutation,
   useChangePasswordMutation,
   useLazyGetCitiesQuery,
+  useLazyGetANotificationQuery,
 } = userService;
