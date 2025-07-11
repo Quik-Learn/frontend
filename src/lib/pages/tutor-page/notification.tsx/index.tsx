@@ -86,28 +86,7 @@ const TutorNotifications = () => {
           Notifications
         </Heading>
         {(isLoadingNotification || isLoading) && <Loader />}
-        {/* <HStack>
-          <Button
-            bg={selected === 'All' ? '#555555' : '#BDBDBD'}
-            color={'white'}
-            borderRadius={10}
-            fontSize={['12px', '14px']}
-            fontWeight={700}
-            onClick={() => setSelected('All')}
-          >
-            All
-          </Button>
-          <Button
-            bg={selected === 'Unread' ? '#555555' : '#BDBDBD'}
-            color={'white'}
-            borderRadius={10}
-            fontWeight={700}
-            fontSize={['12px', '14px']}
-            onClick={() => setSelected('Unread')}
-          >
-            Unread
-          </Button>
-        </HStack> */}
+
         <VStack spacing={4} align="stretch" w="100%" mt={6}>
           {notifications.length === 0 && (
             <Stack align="center" justify="center" h="200px" w="100%">
