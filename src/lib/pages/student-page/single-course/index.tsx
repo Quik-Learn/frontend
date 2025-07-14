@@ -515,14 +515,16 @@ const SingleCourses = () => {
               </TabPanels>
             </Tabs>
           )}
-          <Stack align={'flex-end'} w={'100%'} mt={4}>
-            <Button
-              width={'279px'}
-              bg={'#02659C'}
-              onClick={onOpen}
-              text="Next"
-            />
-          </Stack>
+          {type !== 'active' && (
+            <Stack align={'flex-end'} w={'100%'} mt={4}>
+              <Button
+                width={'279px'}
+                bg={'#02659C'}
+                onClick={onOpen}
+                text="Next"
+              />
+            </Stack>
+          )}
         </VStack>
         <BookSession
           isOpen={isOpen}
