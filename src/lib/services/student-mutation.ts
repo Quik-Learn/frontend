@@ -104,6 +104,13 @@ export const studentService = createApi({
         };
       },
     }),
+    getSubjectReviews: builder.query({
+      query(id) {
+        return {
+          url: `subjects/${id}/reviews`,
+        };
+      },
+    }),
     getPastSessions: builder.query({
       query() {
         return {
@@ -266,4 +273,5 @@ export const {
   useCheckOutMutation,
   useTutorCheckInMutation,
   useLazyGetSessionByIdQuery,
+  useLazyGetSubjectReviewsQuery,
 } = studentService;

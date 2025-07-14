@@ -7,6 +7,7 @@ import { useVerifyPaymentMutation } from '~/lib/services/parent-mutation';
 import { Image } from '@chakra-ui/react';
 import ParentContainer from '~/lib/layout/ParentContainer';
 import { Bars } from 'react-loader-spinner';
+import Loader from '~/lib/components/Loader';
 
 const PaymentSuccess = () => {
   const router = useRouter();
@@ -53,9 +54,7 @@ const PaymentSuccess = () => {
         gap={10}
       >
         {isLoadingData ? (
-          <Stack align={'center'} justify={'center'}>
-            <Bars height="80" width="80" color="#0A52A8" />
-          </Stack>
+          <Loader />
         ) : (
           <>
             {isSuccess ? (

@@ -3,24 +3,14 @@
 import {
   Box,
   Text,
-  Flex,
   Heading,
   VStack,
   HStack,
-  Divider,
-  Icon,
-  Link,
-  Button as ChakraButton,
   useToast,
   Stack,
-  Spinner,
 } from '@chakra-ui/react';
-import { MdDownload } from 'react-icons/md';
 import Button from '~/lib/components/ui/button';
 import ParentContainer from '~/lib/layout/ParentContainer';
-import { BiSolidFilePdf } from 'react-icons/bi';
-import { TbFileSearch } from 'react-icons/tb';
-
 import { useParams, useRouter } from 'next/navigation';
 import {
   useLazyGetAPaymentQuery,
@@ -29,6 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 import moment from 'moment';
 import InvoicesData from '~/lib/components/InvoicesData';
+import Loader from '~/lib/components/Loader';
 const SubscriptionPage = () => {
   const router = useRouter();
   const { id } = useParams();
@@ -83,21 +74,11 @@ const SubscriptionPage = () => {
       });
     }
   }, [subscriptionData]);
-  const invoices = [
-    { id: 'Invoice_JD1124', date: '19th, November 2024' },
-    { id: 'Invoice_JD1024', date: '19th, October 2024' },
-    { id: 'Invoice_JD0924', date: '19th, September 2024' },
-    { id: 'Invoice_JD0824', date: '19th, August 2024' },
-    { id: 'Invoice_JD0724', date: '19th, July 2024' },
-    { id: 'Invoice_JD0624', date: '19th, June 2024' },
-  ];
 
   return (
     <ParentContainer>
       {isLoading ? (
-        <Stack justifyContent={'center'} alignItems={'center'}>
-          <Spinner size="xl" />
-        </Stack>
+        <Loader />
       ) : (
         <Box p={8} bg="gray.50" minH="100vh">
           {/* Subscription Details */}
@@ -176,7 +157,7 @@ const SubscriptionPage = () => {
                   Next Payment
                 </Text>
                 <Text fontSize={20} fontWeight={700} color={'#000'}>
-                  {moment(paymentData?.subscription?.next_payment).format('ll')}
+                  {moment(paymentData?.subscription?.end_date).format('ll')}
                 </Text>
               </Stack>
               <Button

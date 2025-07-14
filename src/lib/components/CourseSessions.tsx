@@ -38,7 +38,8 @@ const CourseSessions = ({ data, isLoading }: any) => {
             <Icon as={FcVideoFile} boxSize={6} color="gray.500" />
             <VStack align="flex-start" flex={1}>
               <Text fontWeight="bold">
-                {session.title} {moment(session.date).format('DD-MM-YYYY')}
+                {session.title}{' '}
+                {moment(session.date).utc().format('DD-MM-YYYY')}
               </Text>
               <Text fontSize="sm" color="gray.600">
                 {session.instructor}

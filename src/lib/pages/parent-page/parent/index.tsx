@@ -307,6 +307,7 @@ const Dashboard = () => {
                 bg={'#0065FF'}
                 color={'#fff'}
                 size="lg"
+                src={data?.profile_image}
                 name={`${data?.firstname} ${data?.lastname}`}
               />
 

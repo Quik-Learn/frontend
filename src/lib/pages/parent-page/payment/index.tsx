@@ -33,6 +33,7 @@ import { useRouter } from 'next/navigation';
 import { useGetAllWardsQuery } from '~/lib/services/parent-mutation';
 import AddWardComponent from '~/lib/components/AddWardComponent';
 import ProgressBar from '~/lib/components/ui/progress-bar';
+import Loader from '~/lib/components/Loader';
 const data = [
   {
     id: 1,
@@ -129,9 +130,7 @@ const Payment = () => {
   return (
     <ParentContainer>
       {isLoading ? (
-        <Stack justifyContent={'center'} alignItems={'center'} flex={1}>
-          <Spinner size="xl" />
-        </Stack>
+        <Loader />
       ) : (
         <Stack padding={6} bg={'#fafafa'}>
           {/* <Heading color={'#000'} fontSize={32} fontWeight={700} mb={8}>

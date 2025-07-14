@@ -9,6 +9,7 @@ import { VStack, Image, Text, Stack, useToast } from '@chakra-ui/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { memo, useEffect, useMemo, useRef, useState } from 'react';
 import { Bars } from 'react-loader-spinner';
+import Loader from '~/lib/components/Loader';
 
 import SignupWrapper from '~/lib/components/ui/signup-wrapper';
 import {
@@ -84,9 +85,7 @@ const VerifyWard = () => {
         }}
       >
         {isLoadingData ? (
-          <Stack align={'center'} justify={'center'}>
-            <Bars height="80" width="80" color="#0A52A8" />
-          </Stack>
+          <Loader />
         ) : (
           <VStack
             alignItems="center"

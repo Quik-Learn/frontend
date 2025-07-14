@@ -73,8 +73,8 @@ const MySessions = () => {
   useEffect(() => {
     if (range?.start && range?.end) {
       const params = {
-        start_date: moment(range?.start).format('YYYY-MM-DD'),
-        end_date: moment(range?.end).format('YYYY-MM-DD'),
+        start_date: moment(range?.start).utc().format('YYYY-MM-DD'),
+        end_date: moment(range?.end).utc().format('YYYY-MM-DD'),
       };
       trigger(params);
     }
@@ -92,7 +92,7 @@ const MySessions = () => {
         setRange={setRange}
         type={'student'}
         EventsComponent={(props) => {
-          console.log('propsevent', props);
+          console.log('propsevent', props.event);
           return (
             <Events
               event={props.event}

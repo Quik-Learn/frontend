@@ -34,13 +34,13 @@ import { useAppDispatch } from '../store';
 import { useJoinMeetingTutorMutation } from '../services/tutor-mutation';
 import SuccessModal from './ui/success-modal';
 import { useRouter } from 'next/navigation';
+import FeedbackModalTutor from './FeedbackModalTutor';
 
 const Events = ({
   event,
   isOpen: isOpenJoin,
   onClose: onCloseJoin,
   type,
-  class_type,
 }: any) => {
   console.log('eee', event);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -70,8 +70,8 @@ const Events = ({
     { id: 1, name: `${start} to ${end}`, icon: GoClock, show: true },
     {
       id: 2,
-      name: moment().isBefore(moment(event?.start, 'YYYYMMDD'))
-        ? `Starts in ${moment(event?.start, 'YYYYMMDD').fromNow()}`
+      name: moment().utc().isBefore(moment(event?.start, 'YYYYMMDD'))
+        ? `Starts in ${moment(event?.start, 'YYYYMMDD').utc().fromNow()}`
         : 'Ended',
       icon: CiBellOn,
       show: true,
@@ -160,10 +160,10 @@ const Events = ({
       });
     }
   }, [isSuccessTutor, isErrorTutor, errorTutor, dataTutor, event]);
-
+  console.log(event, 'event');
   return (
     <Box
-      bg={selected?.color}
+      bg={event?.color}
       color="white"
       p={2}
       borderRadius="md"
@@ -223,7 +223,7 @@ const Events = ({
                   )
               )}
 
-              {class_type === 'online' ? (
+              {event?.class_type === 'online' ? (
                 <HStack gap={5}>
                   <Icon as={IoVideocamOutline} size={30} color="#000" />
                   <Button
@@ -282,7 +282,7 @@ const Events = ({
         />
       )}
       {type === 'tutor' && (
-        <FeedbackModal
+        <FeedbackModalTutor
           isOpen={isOpenJoin}
           onClose={onCloseJoin}
           session_id={event?.id}

@@ -42,6 +42,7 @@ import { useAppSelector } from '~/lib/store';
 import { FiArrowLeft } from 'react-icons/fi';
 import { userState } from '~/lib/store/reducers/user-slice';
 import CourseSessions from '~/lib/components/CourseSessions';
+import Loader from '~/lib/components/Loader';
 
 const SingleCourses = () => {
   const router = useRouter();
@@ -305,13 +306,13 @@ const SingleCourses = () => {
               <TabPanels>
                 <TabPanel py={8}>
                   {isLoading ? (
-                    <Spinner />
+                    <Loader />
                   ) : (
                     <Overview data={courseData?.subject} />
                   )}
                 </TabPanel>
                 <TabPanel py={8}>
-                  <Reviews />
+                  <Reviews id={id} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -391,7 +392,7 @@ const SingleCourses = () => {
               <TabPanels>
                 <TabPanel py={8}>
                   {isLoading ? (
-                    <Spinner />
+                    <Loader />
                   ) : (
                     <Overview data={courseData?.subject} />
                   )}
@@ -409,7 +410,7 @@ const SingleCourses = () => {
                   />
                 </TabPanel>
                 <TabPanel py={8}>
-                  <Reviews />
+                  <Reviews id={id} />
                 </TabPanel>
               </TabPanels>
             </Tabs>
@@ -514,14 +515,16 @@ const SingleCourses = () => {
               </TabPanels>
             </Tabs>
           )}
-          <Stack align={'flex-end'} w={'100%'} mt={4}>
-            <Button
-              width={'279px'}
-              bg={'#02659C'}
-              onClick={onOpen}
-              text="Next"
-            />
-          </Stack>
+          {type !== 'active' && (
+            <Stack align={'flex-end'} w={'100%'} mt={4}>
+              <Button
+                width={'279px'}
+                bg={'#02659C'}
+                onClick={onOpen}
+                text="Next"
+              />
+            </Stack>
+          )}
         </VStack>
         <BookSession
           isOpen={isOpen}

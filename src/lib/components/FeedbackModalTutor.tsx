@@ -23,7 +23,7 @@ import Button from './ui/button';
 import { RiHomeSmile2Line } from 'react-icons/ri';
 import { TiArrowForwardOutline } from 'react-icons/ti';
 import RatingInput from './RatingInput';
-import { useFeedbackMutation } from '../services/student-mutation';
+import { useFeedbackMutation } from '../services/tutor-mutation';
 import { useRouter } from 'next/navigation';
 const FeedbackModalTutor = ({
   isOpen,
@@ -32,6 +32,7 @@ const FeedbackModalTutor = ({
   session_id,
   isJoinLoading,
   isDisabled,
+  noJoin,
 }: any) => {
   const toast = useToast();
   const id = localStorage.getItem('meetingId');
@@ -47,7 +48,7 @@ const FeedbackModalTutor = ({
   useEffect(() => {
     if (isSuccess) {
       onClose();
-      router.push('/student/my-sessions');
+      router.push('/tutor/sessions');
     }
     if (isError) {
       console.log(error);
@@ -83,7 +84,7 @@ const FeedbackModalTutor = ({
             </Text>
 
             <Text fontSize="18px" color="#5F5F5FD1" mb={3}>
-              Please rate your experience with our Tutor below
+              Please rate your session with the student below
             </Text>
             <RatingInput rate={rate} handleClick={handleClick} />
             <Text
@@ -110,6 +111,7 @@ const FeedbackModalTutor = ({
               bg={'#02659C'}
               text="Submit feedback"
               my={5}
+              isDisabled={!rate || !text}
               isLoading={isLoading}
               onClick={() =>
                 feedback({ session_id, body: { rating: rate, review: text } })
@@ -127,25 +129,27 @@ const FeedbackModalTutor = ({
                 variant="outline"
                 borderRadius={11}
                 icon={<RiHomeSmile2Line color="#9CA3AF" />}
-                onClick={() => router.push('/student')}
+                onClick={() => router.push('/tutor')}
               />
-              <Button
-                width={'100%'}
-                bg={'#fff'}
-                text="Rejoin session"
-                my={5}
-                isLoading={isJoinLoading}
-                isDisabled={false}
-                border="#D0D5DD"
-                icon={<TiArrowForwardOutline color="#9CA3AF" />}
-                color="#344054"
-                onClick={() => {
-                  joinMeeting(id);
-                  onClose();
-                }}
-                borderRadius={11}
-                variant="outline"
-              />
+              {!noJoin && (
+                <Button
+                  width={'100%'}
+                  bg={'#fff'}
+                  text="Rejoin session"
+                  my={5}
+                  isLoading={isJoinLoading}
+                  isDisabled={false}
+                  border="#D0D5DD"
+                  icon={<TiArrowForwardOutline color="#9CA3AF" />}
+                  color="#344054"
+                  onClick={() => {
+                    joinMeeting(id);
+                    onClose();
+                  }}
+                  borderRadius={11}
+                  variant="outline"
+                />
+              )}
             </HStack>
           </VStack>
         </ModalBody>

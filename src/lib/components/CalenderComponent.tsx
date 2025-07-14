@@ -49,7 +49,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
   const [view, setView] = React.useState(Views.WEEK);
   const [currentDate, setCurrentDate] = useState(new Date());
   const id = localStorage.getItem('meetingId');
-  console.log('event', events, addRandomColorsToEvents(events));
+  console.log('event tneve', events, addRandomColorsToEvents(events));
   const [leaveMeeting, leaveMeetingData] = useLeaveMeetingMutation();
   const [leaveMeetingTutor, leaveMeetingDataTutor] =
     useLeaveMeetingTutorMutation();
@@ -109,11 +109,11 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     let start;
     let end;
     if (newView === Views.WEEK) {
-      start = moment(newDate).startOf('week').toDate();
-      end = moment(newDate).endOf('week').toDate();
+      start = moment(newDate).utc().startOf('week').toDate();
+      end = moment(newDate).utc().endOf('week').toDate();
     } else if (newView === Views.MONTH) {
-      start = moment(newDate).startOf('month').toDate();
-      end = moment(newDate).endOf('month').toDate();
+      start = moment(newDate).utc().startOf('month').toDate();
+      end = moment(newDate).utc().endOf('month').toDate();
     }
     //@ts-ignore
     setRange({ start, end });
@@ -125,7 +125,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     <Box p={5} sx={calendarStyle}>
       <BigCalendar
         localizer={localizer}
-        events={addRandomColorsToEvents(events)}
+        events={events}
         startAccessor="start"
         endAccessor="end"
         style={{ height: '800px' }}
@@ -170,8 +170,8 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
         }}
         dayPropGetter={customDayPropGetter}
         slotPropGetter={customSlotPropGetter}
-        min={moment().set({ hour: 9, minute: 0 }).toDate()}
-        max={moment().set({ hour: 18, minute: 0 }).toDate()}
+        min={moment().utc().set({ hour: 9, minute: 0 }).toDate()}
+        max={moment().utc().set({ hour: 18, minute: 0 }).toDate()}
         onSelectEvent={(e: any) => {
           console.log('e', e);
         }}

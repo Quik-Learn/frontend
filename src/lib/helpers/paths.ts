@@ -114,12 +114,8 @@ export const formatData = (data: any) => {
       start: formattedStartTime,
       end: formattedEndTime,
       date: formattedDate,
-      instructor: item?.instructor,
-      id: item?.id,
-      subject: item?.subject,
-      meeting_link: item?.meeting_link,
       allDay: false,
-      home_meet: item?.home_meet,
+      ...item,
     };
   });
 };
