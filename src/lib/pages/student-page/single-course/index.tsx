@@ -184,9 +184,14 @@ const SingleCourses = () => {
           <Heading color={'#1D2026'} fontSize={'26px'} fontWeight={700} mb={2}>
             Description
           </Heading>
-          <Text color={'#4E5566'} fontSize={'16px'} mb={2}>
-            {courseData?.subject?.description}
-          </Text>
+          <Text
+            dangerouslySetInnerHTML={{
+              __html: courseData?.subject?.description,
+            }}
+            color={'#4E5566'}
+            fontSize={'16px'}
+            mb={2}
+          />
 
           <Stack
             mt={4}
@@ -255,14 +260,20 @@ const SingleCourses = () => {
           >
             {courseData?.subject?.title}
           </Text>
+          <p
+            dangerouslySetInnerHTML={{
+              __html: courseData?.subject?.description,
+            }}
+          />
           <Text
             color={'#4E5566'}
             fontSize={'24px'}
             mb={2}
             alignSelf={'flex-start'}
-          >
-            {courseData?.subject?.short_description}
-          </Text>
+            dangerouslySetInnerHTML={{
+              __html: courseData?.subject?.short_description,
+            }}
+          />
 
           {type === 'all' ? (
             <Tabs w={'100%'}>
