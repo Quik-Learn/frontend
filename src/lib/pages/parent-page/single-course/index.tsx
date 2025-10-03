@@ -172,9 +172,10 @@ const SingleCourses = () => {
             fontWeight={300}
             textAlign={'left'}
             alignSelf={'flex-start'}
-          >
-            {courseData?.subject?.short_description}
-          </Text>
+            dangerouslySetInnerHTML={{
+              __html: courseData?.subject?.short_description,
+            }}
+          />
           {isLoading ? (
             <Loader />
           ) : (
@@ -232,9 +233,10 @@ const SingleCourses = () => {
                         color={'#4E5566'}
                         fontSize={{ base: 14, md: 16 }}
                         mb={2}
-                      >
-                        {courseData?.subject?.description}
-                      </Text>
+                        dangerouslySetInnerHTML={{
+                          __html: courseData?.subject?.description,
+                        }}
+                      />
 
                       <Stack
                         mt={4}
