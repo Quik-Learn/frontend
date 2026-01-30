@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -12,12 +16,17 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "baseUrl": "src",
     "paths": {
-      "~/*": ["./*"]
+      "~/*": [
+        "./*"
+      ]
     },
-    "typeRoots": ["./src/types", "node_modules/@types"],
+    "typeRoots": [
+      "./src/types",
+      "node_modules/@types"
+    ],
     "incremental": true,
     "plugins": [
       {
@@ -34,7 +43,10 @@
     "commitlint.config.js",
     ".next/types/**/*.ts",
     "**/*.css",
-    "src/app/styles.css"
+    "src/app/styles.css",
+    ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

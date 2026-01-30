@@ -1,5 +1,5 @@
+
 import type { Metadata, Viewport } from 'next';
-import { useEffect, useState } from 'react';
 import './styles.css';
 import Providers from '~/app/providers';
 import TawkToChat from '~/lib/components/TawkToChat';
